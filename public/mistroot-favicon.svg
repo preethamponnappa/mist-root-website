@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <rect width="32" height="32" rx="7" fill="#0C0A07"/>
+  <g fill="none" stroke="#F5EAD9" stroke-linecap="round" stroke-linejoin="round">
+    <!-- the ridge: the M of the MistRoot mark -->
+    <path d="M4.5 22.5 10.5 9.5l4.6 6.4 4.4-6.4 6.6 13" stroke-width="2.3"/>
+    <!-- the root that gives the brand its name -->
+    <path d="M19.5 12.5v10.5" stroke-width="1.9"/>
+    <path d="M19.5 22.5c-1.6.6-2.4 1.6-3 3M19.5 22.5c1.6.6 2.4 1.6 3 3M19.5 23.5v3.5"
+          stroke-width="1.35" opacity=".92"/>
+  </g>
+</svg>

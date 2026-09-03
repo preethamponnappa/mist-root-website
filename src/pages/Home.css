@@ -1,0 +1,424 @@
+/* =========================================================== manifesto === */
+.manifesto {
+  position: relative;
+  overflow: hidden;
+  /* it opens directly under the hero blend — no top padding, no seam */
+  padding-top: clamp(3.5rem, 8vw, 7rem);
+}
+
+.manifesto__mist {
+  position: absolute;
+  inset: -30% -20% auto -20%;
+  height: 90%;
+  pointer-events: none;
+  background: radial-gradient(
+    54% 50% at 30% 30%,
+    rgba(var(--gold-rgb), 0.11),
+    transparent 68%
+  );
+  filter: blur(10px);
+}
+
+.manifesto__inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.manifesto .sechead__title {
+  font-size: var(--step-3);
+  max-width: 15ch;
+}
+
+.manifesto__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding-top: 0.6rem;
+}
+
+.manifesto__sign {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin-top: var(--space-xs);
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--cream-12);
+}
+
+/* ================================================================ lots === */
+.lots__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.lot {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(1.6rem, 2.4vw, 2.25rem);
+  background: linear-gradient(170deg, var(--ink-card), rgba(12, 10, 7, 0.85));
+  border: 1px solid var(--cream-12);
+  border-radius: 3px;
+}
+
+/* Contour lines — the ridge, drawn the way a survey map would draw it. */
+.lot__contours {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0.5;
+  background: repeating-radial-gradient(
+    ellipse 130% 95% at 86% 122%,
+    transparent 0 15px,
+    rgba(var(--gold-rgb), 0.16) 15px 16px
+  );
+  mask-image: linear-gradient(to top, black, transparent 72%);
+  -webkit-mask-image: linear-gradient(to top, black, transparent 72%);
+}
+
+.lot__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.lot__roast {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.lot__roast-tick {
+  width: 16px;
+  height: 2px;
+  background: var(--cream-12);
+  border-radius: 2px;
+}
+
+.lot__roast-tick.is-on {
+  background: var(--gold);
+}
+
+.lot__name {
+  font-size: var(--step-2);
+  letter-spacing: -0.01em;
+}
+
+.lot__latin {
+  margin-top: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  letter-spacing: var(--tracking-mid);
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.lot__copy {
+  margin-top: var(--space-sm);
+  font-size: var(--step--1);
+  line-height: 1.78;
+  color: var(--cream-50);
+}
+
+.lot__spec {
+  display: flex;
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0 0;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--cream-06);
+}
+
+.lot__spec dt {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: var(--tracking-mid);
+  text-transform: uppercase;
+  color: var(--cream-30);
+}
+
+.lot__spec dd {
+  margin: 0.3rem 0 0;
+  font-size: var(--step--1);
+  color: var(--cream);
+}
+
+.lot__notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: var(--space-sm) 0 var(--space-sm);
+  padding: 0;
+  list-style: none;
+}
+
+.lot__notes li {
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-70);
+  border: 1px solid var(--cream-12);
+  border-radius: 999px;
+  padding: 0.4rem 0.8rem;
+}
+
+.lot__rule {
+  display: block;
+  height: 1px;
+  margin-top: auto;
+  background: linear-gradient(90deg, var(--gold), var(--gold-deep));
+  transform-origin: left center;
+}
+
+/* =============================================================== facts === */
+.facts {
+  border-block: 1px solid var(--cream-06);
+  padding-block: clamp(2.5rem, 5vw, 4rem);
+}
+
+.facts__row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-sm);
+}
+
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-left: var(--space-sm);
+  border-left: 1px solid var(--cream-12);
+}
+
+.fact__value {
+  font-size: var(--step-3);
+  line-height: 1;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+}
+
+.fact__unit {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--step--1);
+  color: var(--gold);
+}
+
+.fact__label {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cream-30);
+  margin-top: 0.4rem;
+}
+
+/* ============================================================= rituals === */
+.rituals__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.rituals .sechead {
+  align-items: center;
+  text-align: center;
+}
+
+.rituals .sechead__kicker {
+  align-self: center;
+}
+
+.rituals .sechead__title,
+.rituals .sechead__lede {
+  margin-inline: auto;
+}
+
+.rituals__row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  width: 100%;
+  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+}
+
+.ritual {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: var(--space-sm) var(--space-xs);
+}
+
+.ritual__art {
+  color: var(--cream-30);
+}
+
+.ritual__drawing {
+  width: clamp(96px, 12vw, 132px);
+  height: auto;
+}
+
+.ritual__name {
+  font-size: var(--step-1);
+  margin-top: var(--space-xs);
+}
+
+.ritual__line {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-30);
+}
+
+.rituals__cta {
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+
+/* ============================================================== invite === */
+.invite__inner {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: clamp(2.5rem, 6vw, 6rem);
+  align-items: center;
+}
+
+.invite__left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  align-items: flex-start;
+}
+
+.invite__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.invite__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-sm);
+  padding-block: var(--space-sm);
+  border-top: 1px solid var(--cream-12);
+}
+
+.invite__list > *:last-child .invite__item {
+  border-bottom: 1px solid var(--cream-12);
+}
+
+.invite__icon {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 1px solid var(--cream-12);
+  border-radius: 999px;
+  color: var(--gold);
+  flex: none;
+}
+
+.invite__name {
+  font-size: var(--step-1);
+}
+
+.invite__line {
+  margin-top: 0.3rem;
+  font-size: var(--step--1);
+  color: var(--cream-50);
+  max-width: 42ch;
+}
+
+.invite__arrow {
+  color: var(--gold);
+}
+
+/* ============================================================= closing === */
+.closing {
+  position: relative;
+  padding-block: clamp(5rem, 11vw, 10rem);
+  text-align: center;
+  overflow: hidden;
+  background:
+    radial-gradient(90% 120% at 50% 120%, rgba(var(--gold-rgb), 0.16), transparent 62%),
+    var(--ink);
+  border-top: 1px solid var(--cream-06);
+}
+
+.closing__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.closing__title {
+  max-width: 18ch;
+  font-size: var(--step-4);
+  font-weight: 300;
+}
+
+.closing__title em {
+  color: var(--gold-bright);
+}
+
+.closing__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-sm);
+}
+
+/* ========================================================= responsive === */
+@media (max-width: 1000px) {
+  .manifesto__inner,
+  .invite__inner {
+    grid-template-columns: 1fr;
+  }
+  .manifesto .sechead__title {
+    max-width: 20ch;
+  }
+  .lots__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .facts__row {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-md) var(--space-sm);
+  }
+}
+
+@media (max-width: 720px) {
+  .lots__grid,
+  .rituals__row {
+    grid-template-columns: 1fr;
+  }
+  .rituals__row {
+    gap: var(--space-md);
+  }
+  .invite__item {
+    grid-template-columns: auto 1fr;
+    gap: var(--space-xs);
+  }
+  .invite__arrow {
+    display: none;
+  }
+  .invite__icon {
+    width: 48px;
+    height: 48px;
+  }
+}

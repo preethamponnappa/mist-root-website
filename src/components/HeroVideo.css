@@ -1,0 +1,213 @@
+.hero {
+  position: relative;
+  height: 100svh;
+  min-height: 620px;
+  width: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  isolation: isolate;
+}
+
+/* --- footage ------------------------------------------------------------ */
+.hero__viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.hero__parallax {
+  position: absolute;
+  /* headroom so the parallax drift never exposes an edge */
+  inset: -8% 0 -8% 0;
+  will-change: transform;
+}
+
+.hero__video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 42%;
+  background: var(--ink);
+  /* Tuned, not blended: the footage keeps its own colour, just seated a touch
+     deeper so it sits in the same register as the rest of the site. */
+  filter: saturate(0.94) contrast(1.06) brightness(0.9);
+}
+
+/* --- static overlays (never parallax — they hold the seam still) --------- */
+.hero__topscrim {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 34%;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--ink-rgb), 0.82) 0%,
+    rgba(var(--ink-rgb), 0.42) 42%,
+    rgba(var(--ink-rgb), 0) 100%
+  );
+}
+
+.hero__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(72% 56% at 50% 56%, rgba(var(--ink-rgb), 0.66), transparent 72%),
+    radial-gradient(120% 100% at 50% 50%, transparent 48%, rgba(var(--ink-rgb), 0.6) 100%);
+}
+
+/* THE BLEND — the bottom third of the footage dissolves into the exact page
+   background, so the hero has no bottom edge at all. Stops are eased rather
+   than linear to keep the ramp from banding across the dark greens. */
+.hero__blend {
+  position: absolute;
+  inset: auto 0 -1px 0;
+  height: 34%;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(var(--ink-rgb), 0) 0%,
+    rgba(20, 17, 10, 0.16) 20%,
+    rgba(18, 15, 9, 0.42) 42%,
+    rgba(var(--ink-rgb), 0.72) 62%,
+    rgba(var(--ink-rgb), 0.92) 80%,
+    rgba(var(--ink-rgb), 1) 96%,
+    rgba(var(--ink-rgb), 1) 100%
+  );
+}
+
+/* --- copy --------------------------------------------------------------- */
+.hero__content {
+  position: relative;
+  z-index: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--space-sm);
+  padding-top: var(--nav-h);
+  padding-bottom: clamp(4rem, 12vh, 8rem);
+  will-change: transform;
+}
+
+.hero__eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  font-weight: 400;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.hero__lockup {
+  width: clamp(220px, 27vw, 360px);
+  height: auto;
+  filter: drop-shadow(0 18px 46px rgba(0, 0, 0, 0.7));
+}
+
+.hero__tagline {
+  max-width: 21ch;
+  font-family: var(--font-serif);
+  font-size: var(--step-2);
+  font-weight: 300;
+  line-height: 1.28;
+  letter-spacing: 0.005em;
+  color: var(--cream);
+  margin-top: calc(var(--space-2xs) * -1);
+}
+
+.hero__tagline em {
+  color: var(--gold-bright);
+}
+
+/* word-reveal masks */
+.wr__mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  padding-bottom: 0.06em;
+}
+
+.wr__mask + .wr__mask {
+  margin-left: 0.26em;
+}
+
+.wr__word {
+  display: inline-block;
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs);
+  margin-top: var(--space-2xs);
+}
+
+/* --- scroll cue --------------------------------------------------------- */
+.hero__cue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(1.75rem, 4vh, 3rem);
+  transform: translateX(-50%);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.65rem;
+  color: var(--cream-50);
+}
+
+.hero__cue-label {
+  font-family: var(--font-sans);
+  font-size: 0.62rem;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.hero__cue-icon {
+  display: block;
+}
+
+/* --- responsive --------------------------------------------------------- */
+@media (max-width: 900px) {
+  .hero {
+    min-height: 560px;
+  }
+  .hero__video {
+    object-position: center 46%;
+  }
+  .hero__blend {
+    height: 38%;
+  }
+  .hero__tagline {
+    max-width: 17ch;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero__lockup {
+    width: min(74vw, 260px);
+  }
+  .hero__actions .btn {
+    padding-inline: 1.4rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 560px) {
+  .hero__content {
+    gap: var(--space-xs);
+  }
+  .hero__lockup {
+    width: 180px;
+  }
+  .hero__cue {
+    display: none;
+  }
+}

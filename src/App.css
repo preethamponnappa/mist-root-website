@@ -1,0 +1,19 @@
+/* App shell layout. Page-level styling lives with each page/component. */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  width: 100%;
+  overflow-x: clip;
+}
+
+.app__main {
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+/* Inner pages open under the fixed nav rather than behind it. */
+.page-top {
+  padding-top: calc(var(--nav-h) + clamp(3rem, 8vw, 6.5rem));
+}

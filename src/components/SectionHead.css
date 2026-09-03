@@ -1,0 +1,40 @@
+.sechead {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.sechead__kicker {
+  align-self: flex-start;
+}
+
+.sechead--center {
+  align-items: center;
+  text-align: center;
+}
+
+.sechead--center .sechead__kicker {
+  align-self: center;
+}
+
+.sechead__title {
+  max-width: 20ch;
+  font-weight: 300;
+}
+
+.sechead--center .sechead__title {
+  max-width: 24ch;
+}
+
+.sechead__lede {
+  max-width: 52ch;
+}
+
+.sechead--center .sechead__lede {
+  max-width: 60ch;
+}
+
+.sechead__title em {
+  color: var(--gold-bright);
+  font-weight: 300;
+}
