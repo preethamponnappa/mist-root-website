@@ -100,11 +100,10 @@ export default function Home() {
         />
         <div className="shell manifesto__inner">
           <SectionHead
-            kicker="The mist belt"
+            kicker="Our story"
             title={
               <>
-                Coffee grown in mist is <em>slower</em>, and slowness is the
-                whole flavour.
+                Three generations of coffee. <em>One new way of experiencing it.</em>
               </>
             }
           />
@@ -113,18 +112,20 @@ export default function Home() {
             style={reduced ? undefined : { y: quoteY }}
           >
             <Reveal as="p" delay={0.1}>
-              On this slope the mist does not sit on the peaks — it pools. It comes up past
-              Bhagamandala at half past four and does not leave until the sun has properly
-              committed. Our cherries ripen two to three weeks behind the open country
-              below. Nobody planned that. The slope decided it.
+              Coffee has never been just a crop to us. It has been part of our family for
+              generations — grown in the hills of Coorg, among rain, shade, pepper vines and
+              old trees. Up here the mist does not sit on the peaks; it pools. It comes up
+              past Bhagamandala at half past four and does not leave until the sun has
+              properly committed.
             </Reveal>
             <Reveal as="p" delay={0.18}>
-              What it gives us is density — sugars laid down in unhurried layers, acidity
-              that stays bright instead of turning sharp. What it costs us is certainty. We
-              go back over the same rows for weeks and throw away more than we keep.
+              Our roots are in farming; our curiosity took us further — into other origins,
+              other processing methods, other ways of brewing the same bean. That curiosity
+              became the MistRoot Coffee Club, where coffee is not intimidating or
+              complicated, just something you explore one cup at a time.
             </Reveal>
             <Reveal delay={0.26} className="manifesto__sign">
-              <span className="numeral">Since the early 1990s</span>
+              <span className="numeral">Three generations · Coorg</span>
               <ArrowLink to="/story">Read how it started</ArrowLink>
             </Reveal>
           </motion.div>
