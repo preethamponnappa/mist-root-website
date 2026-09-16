@@ -8,9 +8,11 @@ import ArrowLink from '../components/ArrowLink';
 import { EASE_OUT } from '../lib/motion';
 import {
   AeroPressDrawing,
+  ColdBrewDrawing,
   EspressoDrawing,
   Flame,
   FrenchPressDrawing,
+  MokaPotDrawing,
   PourOverDrawing,
 } from '../components/Icons';
 import './Brewing.css';
@@ -27,7 +29,7 @@ const METHODS = [
     dose: '22 g / 350 g',
     temp: '94 °C',
     time: '3:30',
-    best: 'Cloudline',
+    best: 'Mist Veil',
     body: 'A cone strips a coffee of anywhere to hide. If a lot has a jasmine tail or a mineral edge, this is where you will find it — and if it has a flaw, this is where that shows up too. We cup on a V60 for exactly that reason.',
     steps: [
       { t: '0:00', d: 'Rinse the paper with boiling water, discard, add 22 g of grounds and level the bed.' },
@@ -48,7 +50,7 @@ const METHODS = [
     dose: '17 g / 220 g',
     temp: '88 °C',
     time: '2:10',
-    best: 'Ridge Ember',
+    best: 'Canopy Reserve',
     body: 'Immersion plus a little pressure. Lower temperature than you think, because the contact is total — 88 °C keeps the honey lots sweet instead of pulling them bitter. Inverted, always, whatever the internet says.',
     steps: [
       { t: '0:00', d: 'Inverted. 17 g in, 220 g of 88 °C water straight down the middle.' },
@@ -69,7 +71,7 @@ const METHODS = [
     dose: '40 g / 600 g',
     temp: '96 °C',
     time: '8:00',
-    best: 'Nightjar',
+    best: 'Forest Floor',
     body: 'The only method that keeps every oil the roast produced. It will not give you clarity and it is not trying to. What it gives you is body — the closest thing to drinking the coffee the way the cupping table drinks it.',
     steps: [
       { t: '0:00', d: '40 g coarse, 600 g of water just off the boil, poured hard to break the bed.' },
@@ -77,6 +79,48 @@ const METHODS = [
       { t: '4:00–8:00', d: 'Lid on, plunger resting on the surface. Do not press yet.' },
       { t: '8:00', d: 'Press slowly to just below the surface — never all the way to the bottom.' },
       { t: '8:30', d: 'Decant everything immediately. Coffee left on the grounds turns to ash.' },
+    ],
+  },
+  {
+    id: 'moka-pot',
+    name: 'Moka Pot',
+    Drawing: MokaPotDrawing,
+    tagline: 'The one most Indian kitchens already own.',
+    grind: 'Fine-medium',
+    grindPos: 24,
+    ratio: '1 : 8',
+    dose: '18 g / 150 g',
+    temp: 'Pre-boiled',
+    time: '4:00',
+    best: 'Monsoon Brew',
+    body: 'Unfairly maligned, usually because people start it cold and walk away. Fill the boiler with water that has already boiled, keep the flame low, and take it off the heat the moment the stream turns pale. Done properly it is closer to a rich filter coffee than to espresso, and it is very hard to beat on a wet morning.',
+    steps: [
+      { t: 'Prep', d: 'Fill the boiler to just below the valve with water off the boil. Use a towel — it is hot.' },
+      { t: '0:00', d: '18 g in the basket, levelled, never tamped. Screw the top on and set a low flame.' },
+      { t: '2:30–3:30', d: 'Coffee should arrive as a slow, dark stream. A violent sputter means the flame is too high.' },
+      { t: '4:00', d: 'The moment the stream goes pale and hisses, off the heat and onto a wet cloth.' },
+      { t: 'After', d: 'Stir the pot before pouring — the first and last of the extraction are not the same coffee.' },
+    ],
+  },
+  {
+    id: 'cold-brew',
+    name: 'Cold Brew',
+    Drawing: ColdBrewDrawing,
+    tagline: 'For everyone who says they dislike black coffee.',
+    grind: 'Coarse',
+    grindPos: 88,
+    ratio: '1 : 8',
+    dose: '100 g / 800 g',
+    temp: 'Room, then cold',
+    time: '16 hrs',
+    best: 'Forest Floor',
+    body: 'The most forgiving thing on this list and the best convincer we own. No heat means almost none of the acidity that puts people off, so what is left is sweetness and body. Make it as a concentrate and cut it to taste — over ice, with water, with milk, with tonic if it is April.',
+    steps: [
+      { t: '0:00', d: '100 g coarse into 800 g of filtered water at room temperature. Stir once to wet it all.' },
+      { t: '0:00–4:00', d: 'Leave it on the counter. The first hours at room temperature do most of the extracting.' },
+      { t: '4:00–16:00', d: 'Into the fridge for the rest. Beyond about twenty hours it turns woody.' },
+      { t: '16:00', d: 'Strain through a cloth, then once more through paper. Do not squeeze the grounds.' },
+      { t: 'Serving', d: 'This is a concentrate. Start at one part coffee to two parts water or milk, then adjust.' },
     ],
   },
   {
@@ -90,8 +134,8 @@ const METHODS = [
     dose: '18 g / 40 g',
     temp: '93 °C',
     time: '28 s',
-    best: 'Ridge Ember',
-    body: 'Our lots are washed and high-grown, which means they push back against a dark roast. We pull them light and long — 1:2.2 rather than 1:2 — so the acidity has room to become fruit instead of sourness.',
+    best: 'Monsoon Brew',
+    body: 'Most of what we source is washed and high-grown, which means it pushes back against a dark roast. We pull light and long — 1:2.2 rather than 1:2 — so the acidity has room to become fruit instead of sourness.',
     steps: [
       { t: 'Prep', d: '18 g in a clean basket. Distribute, then tamp level. Level matters more than hard.' },
       { t: '0:00', d: 'Lock in and start immediately. A hot basket sitting idle scorches the puck.' },
@@ -120,12 +164,12 @@ export default function Brewing() {
         kicker="Brewing"
         title={
           <>
-            Four ways in. <em>None of them wrong.</em>
+            Six ways in. <em>None of them wrong.</em>
           </>
         }
-        lede="These are the recipes our cupping table actually uses, written down exactly as they are taped to the wall of the roastery. Start here, then move one variable at a time."
+        lede="The same bean can become six different drinks. These are the recipes we actually use at the table and at every pop-up — start here, then move one variable at a time and taste what it did."
         meta={[
-          { label: 'Methods', value: 'Four' },
+          { label: 'Methods', value: 'Six' },
           { label: 'Water', value: '60–80 ppm' },
           { label: 'Rest', value: '7–14 days' },
           { label: 'Rule', value: 'Weigh everything' },

@@ -7,17 +7,32 @@ import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
 import { EASE_OUT } from '../lib/motion';
-import { Basket, Compass, Cup } from '../components/Icons';
+import { Basket, Compass, Cup, Droplet } from '../components/Icons';
 import './Experiences.css';
 
 const EXPERIENCES = [
   {
     no: '01',
+    id: 'popup',
+    Icon: Droplet,
+    name: 'Pop-Ups & Brew Sessions',
+    sub: 'The club, wherever we can carry it',
+    body: 'A grinder, six brewers, whatever is in the current release and a table you are welcome to crowd around. We pour the same coffee two ways so you can taste what the method did, and we will happily settle the argument about whether you actually dislike black coffee. No booking, no jargon, no minimum knowledge.',
+    detail: [
+      { k: 'Duration', v: 'Drop in' },
+      { k: 'Where', v: 'Bengaluru & Coorg' },
+      { k: 'Group', v: 'Anyone' },
+      { k: 'Season', v: 'Announced monthly' },
+      { k: 'From', v: 'Free' },
+    ],
+  },
+  {
+    no: '02',
     id: 'walk',
     Icon: Compass,
     name: 'Estate Walks',
     sub: 'The two-hour version of everything',
-    body: 'We leave the tasting room at 06:15, while the cloud is still lying in the valley below the pulping shed. You will walk the four Cloudline blocks, put your hand on a rosewood that predates the estate by a century, and learn to tell a ripe cherry from a nearly-ripe one by squeezing it. It ends at the nursery with a cup of whatever came off the drum that week.',
+    body: 'We leave the tasting room at 06:15, while the cloud is still lying in the valley below the pulping shed. You will walk the shade blocks that go into Mist Veil, put your hand on a rosewood that predates the estate by a century, and learn to tell a ripe cherry from a nearly-ripe one by squeezing it. It ends at the nursery with a cup of whatever came off the drum that week.',
     detail: [
       { k: 'Duration', v: '2 hours' },
       { k: 'Starts', v: '06:15, Thu–Sun' },
@@ -27,7 +42,7 @@ const EXPERIENCES = [
     ],
   },
   {
-    no: '02',
+    no: '03',
     id: 'harvest',
     Icon: Basket,
     name: 'Harvest Experience',
@@ -42,7 +57,7 @@ const EXPERIENCES = [
     ],
   },
   {
-    no: '03',
+    no: '04',
     id: 'bean',
     Icon: Cup,
     name: 'Bean-to-Cup Journey',
@@ -61,7 +76,7 @@ const EXPERIENCES = [
 const PRACTICAL = [
   {
     q: 'Getting here',
-    a: 'Four hours from Bengaluru by road, ninety minutes from Chikkamagaluru town. The last two kilometres are unsealed and steep — a hatchback manages it in dry weather, not in monsoon.',
+    a: 'Six hours from Bengaluru by road, an hour north-west of Madikeri. The last two kilometres are unsealed and steep — a hatchback manages it in dry weather, not in monsoon.',
   },
   {
     q: 'What to wear',
@@ -79,7 +94,7 @@ const PRACTICAL = [
 
 export default function Experiences() {
   const reduced = useReducedMotion();
-  const [open, setOpen] = useState('walk');
+  const [open, setOpen] = useState('popup');
   const listRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -97,7 +112,7 @@ export default function Experiences() {
             Come up before dawn. <em>Leave smelling of it.</em>
           </>
         }
-        lede="Three ways onto the ridge, all of them hands-on and none of them a tour. You will be given something to carry."
+        lede="Four ways in — one that comes to your city and three that bring you up to Coorg. All of them hands-on, none of them a tour. You will be given something to carry."
         meta={[
           { label: 'Open', value: 'Thu – Sun' },
           { label: 'First light', value: '06:15' },

@@ -32,8 +32,8 @@ const SOCIALS = [
 const CHANNELS = [
   {
     title: 'The estate',
-    lines: ['Kalamandi Ridge Estate', 'Attigundi Post, Chikkamagaluru', 'Karnataka 577 132'],
-    note: '13.3861° N, 75.7167° E · 1,540 m',
+    lines: ['MistRoot Estate', 'Brahmagiri Range, Kodagu (Coorg)', 'Karnataka 571 247'],
+    note: '12.3833° N, 75.5167° E · 800–1,200 m',
   },
   {
     title: 'Tasting room',
@@ -42,7 +42,7 @@ const CHANNELS = [
   },
   {
     title: 'Direct',
-    lines: ['hello@mistroot.coffee', 'wholesale@mistroot.coffee', '+91 82122 90140'],
+    lines: ['mistrootcoffeeclub@gmail.com', '+91 70229 19007'],
     note: 'We answer within two working days',
   },
 ];
@@ -103,7 +103,7 @@ export default function Contact() {
         meta={[
           { label: 'Reply within', value: '2 working days' },
           { label: 'Tasting room', value: 'Thu – Sun' },
-          { label: 'Phone', value: '+91 82122 90140' },
+          { label: 'Phone', value: '+91 70229 19007' },
         ]}
       />
 

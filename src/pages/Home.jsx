@@ -10,58 +10,52 @@ import { EASE_OUT } from '../lib/motion';
 import {
   ArrowRight,
   Basket,
+  ColdBrewDrawing,
   Compass,
   Cup,
   PourOverDrawing,
   FrenchPressDrawing,
-  EspressoDrawing,
 } from '../components/Icons';
 import './Home.css';
 
 const LOTS = [
   {
     no: '01',
-    name: 'Cloudline',
-    latin: 'Selection 9 · Washed',
-    altitude: '1,540 m',
-    pick: 'Third pass, December',
-    notes: ['White peach', 'Wet slate', 'Jasmine tail'],
-    roast: 1,
-    copy: 'The lot that made us stubborn. Picked only from the four blocks that sit inside the cloud for six hours a day, fermented cold for 38 hours, dried on raised beds under muslin.',
+    name: 'Mist Veil',
+    origin: 'Coorg · Washed',
+    profile: 'Clean · Bright · Layered',
   },
   {
     no: '02',
-    name: 'Ridge Ember',
-    latin: 'Sln 795 · Honey',
-    altitude: '1,460 m',
-    pick: 'Second pass, January',
-    notes: ['Burnt sugar', 'Fig leaf', 'Cocoa nib'],
-    roast: 2,
-    copy: 'Mucilage left on for eleven days of slow, cool drying. It arrives with the weight of a red wine and finishes like something you smoked over pimento wood.',
+    name: 'Forest Floor',
+    origin: 'Chikmagalur · Natural',
+    profile: 'Deep · Fruited · Wild',
   },
   {
     no: '03',
-    name: 'Nightjar',
-    latin: 'Robusta · Anaerobic',
-    altitude: '1,180 m',
-    pick: 'Single pass, February',
-    notes: ['Black cardamom', 'Molasses', 'Wet earth'],
-    roast: 3,
-    copy: 'Named for the bird that calls across the drying yard at 3 a.m. Fermented sealed for 96 hours. Loud, low and unrepentant — the one our roaster drinks.',
+    name: 'Monsoon Brew',
+    origin: 'Malabar · Monsooned',
+    profile: 'Bold · Low-acid · Spiced',
+  },
+  {
+    no: '04',
+    name: 'Canopy Reserve',
+    origin: 'Single lot · Anaerobic',
+    profile: 'Rare · Complex · Loud',
   },
 ];
 
 const FACTS = [
-  { value: '1,540', unit: 'metres', label: 'Highest picking block' },
+  { value: '3', unit: 'generations', label: 'Of Coorg coffee behind us' },
+  { value: '6', unit: 'methods', label: 'On the brew bar' },
   { value: '14', unit: 'species', label: 'Native shade canopy' },
-  { value: '9', unit: 'passes', label: 'Selective hand pickings' },
-  { value: '15', unit: 'kilos', label: 'Batch size, never more' },
+  { value: '4', unit: 'coffees', label: 'In the current release' },
 ];
 
 const RITUALS = [
   { name: 'Pour Over', Drawing: PourOverDrawing, line: 'Clarity. 3:30 total.' },
   { name: 'French Press', Drawing: FrenchPressDrawing, line: 'Body. 8:00 steep.' },
-  { name: 'Espresso', Drawing: EspressoDrawing, line: 'Pressure. 28 seconds.' },
+  { name: 'Cold Brew', Drawing: ColdBrewDrawing, line: 'Sweetness. 16 hours.' },
 ];
 
 const INVITES = [
@@ -82,16 +76,6 @@ const INVITES = [
   },
 ];
 
-function RoastMeter({ level }) {
-  return (
-    <span className="lot__roast" aria-label={`Roast level ${level} of 3`}>
-      {[1, 2, 3].map((i) => (
-        <span key={i} className={`lot__roast-tick ${i <= level ? 'is-on' : ''}`} />
-      ))}
-    </span>
-  );
-}
-
 export default function Home() {
   const reduced = useReducedMotion();
   const manifestoRef = useRef(null);
@@ -104,7 +88,7 @@ export default function Home() {
   const quoteY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   return (
-    <Page title="MistRoot Coffee — Grown in the cloud line">
+    <Page title="MistRoot Coffee — Mist. Mountains. Memories.">
       <HeroVideo />
 
       {/* ---------------------------------------------------- manifesto --- */}
@@ -119,7 +103,7 @@ export default function Home() {
             kicker="The mist belt"
             title={
               <>
-                Coffee grown in cloud is <em>slower</em>, and slowness is the
+                Coffee grown in mist is <em>slower</em>, and slowness is the
                 whole flavour.
               </>
             }
@@ -129,17 +113,18 @@ export default function Home() {
             style={reduced ? undefined : { y: quoteY }}
           >
             <Reveal as="p" delay={0.1}>
-              At 1,540 metres the cloud comes up the valley at half past four and does not
-              leave until the sun has properly committed. Our cherries ripen two to three
-              weeks behind the plains below us. Nobody planned that. The ridge decided it.
+              On this slope the mist does not sit on the peaks — it pools. It comes up past
+              Bhagamandala at half past four and does not leave until the sun has properly
+              committed. Our cherries ripen two to three weeks behind the open country
+              below. Nobody planned that. The slope decided it.
             </Reveal>
             <Reveal as="p" delay={0.18}>
               What it gives us is density — sugars laid down in unhurried layers, acidity
-              that stays bright instead of turning sharp. What it costs us is certainty.
-              Every year we pick nine separate times and throw away more than we keep.
+              that stays bright instead of turning sharp. What it costs us is certainty. We
+              go back over the same rows for weeks and throw away more than we keep.
             </Reveal>
             <Reveal delay={0.26} className="manifesto__sign">
-              <span className="numeral">Since 2016</span>
+              <span className="numeral">Since the early 1990s</span>
               <ArrowLink to="/story">Read how it started</ArrowLink>
             </Reveal>
           </motion.div>
@@ -150,66 +135,53 @@ export default function Home() {
       <section className="section section--raised lots">
         <div className="shell">
           <SectionHead
-            kicker="Signature lots"
-            title={<>Three coffees, one ridge, nine pickings.</>}
-            lede="We release small and we release late. What is on this list is what the estate actually gave us this season — when a lot runs out, it stays out until next harvest."
+            kicker="Coffees worth discovering"
+            title={<>Selected for what they bring to the cup, not where they come from.</>}
+            lede="Small batches, some from our own hills in Coorg and some from growers we have spent years getting to know. When one runs out it stays out until it is good again."
           />
 
-          <RevealGroup className="lots__grid" each={0.12}>
+          <RevealGroup className="lots__list" each={0.08}>
             {LOTS.map((lot) => (
               <RevealItem key={lot.name}>
-                <motion.article
+                <motion.div
                   className="lot"
                   initial="rest"
                   whileHover="hover"
                   animate="rest"
-                  variants={{
-                    rest: { y: 0 },
-                    hover: { y: -10, transition: { duration: 0.5, ease: EASE_OUT } },
-                  }}
                 >
-                  <div className="lot__contours" aria-hidden="true" />
-                  <header className="lot__head">
-                    <span className="numeral">{lot.no}</span>
-                    <RoastMeter level={lot.roast} />
-                  </header>
-
-                  <h3 className="lot__name">{lot.name}</h3>
-                  <p className="lot__latin">{lot.latin}</p>
-                  <p className="lot__copy">{lot.copy}</p>
-
-                  <dl className="lot__spec">
-                    <div>
-                      <dt>Altitude</dt>
-                      <dd>{lot.altitude}</dd>
-                    </div>
-                    <div>
-                      <dt>Picked</dt>
-                      <dd>{lot.pick}</dd>
-                    </div>
-                  </dl>
-
-                  <ul className="lot__notes">
-                    {lot.notes.map((n) => (
-                      <li key={n}>{n}</li>
-                    ))}
-                  </ul>
-
+                  <span className="numeral lot__no">{lot.no}</span>
+                  <motion.h3
+                    className="lot__name"
+                    variants={{
+                      rest: { x: 0 },
+                      hover: { x: 10, transition: { duration: 0.5, ease: EASE_OUT } },
+                    }}
+                  >
+                    {lot.name}
+                  </motion.h3>
+                  <span className="lot__origin">{lot.origin}</span>
+                  <span className="lot__profile">{lot.profile}</span>
                   <motion.span
                     className="lot__rule"
                     variants={{
-                      rest: { scaleX: 0.12, opacity: 0.4 },
+                      rest: { scaleX: 0.06, opacity: 0.45 },
                       hover: {
                         scaleX: 1,
                         opacity: 1,
-                        transition: { duration: 0.6, ease: EASE_OUT },
+                        transition: { duration: 0.65, ease: EASE_OUT },
                       },
                     }}
                   />
-                </motion.article>
+                </motion.div>
               </RevealItem>
             ))}
           </RevealGroup>
+
+          <Reveal delay={0.2} className="lots__cta">
+            <ButtonLink to="/club" variant="ghost">
+              Meet the Coffee Club
+            </ButtonLink>
+          </Reveal>
         </div>
       </section>
 
@@ -238,7 +210,7 @@ export default function Home() {
                 We will tell you exactly how we brew it. <em>Then ignore us.</em>
               </>
             }
-            lede="Every lot ships with the recipe our cupping table settled on — grind, ratio, temperature, time. It is a starting point, not a rule."
+            lede="Every coffee ships with the recipe we settled on at the table — grind, ratio, temperature, time. It is a starting point, not a rule, and the fun begins when you ignore it."
           />
 
           <RevealGroup className="rituals__row" each={0.12}>
@@ -273,7 +245,7 @@ export default function Home() {
 
           <Reveal delay={0.2} className="rituals__cta">
             <ButtonLink to="/brewing" variant="ghost">
-              All four methods
+              All six methods
             </ButtonLink>
           </Reveal>
         </div>
@@ -339,15 +311,15 @@ export default function Home() {
       <section className="closing">
         <div className="shell closing__inner">
           <Reveal preset="fadeUp">
-            <p className="closing__kicker eyebrow eyebrow--bare">Subscribe to the ridge</p>
+            <p className="closing__kicker eyebrow eyebrow--bare">Join the club</p>
           </Reveal>
           <Reveal delay={0.08}>
             <h2 className="closing__title">
-              Nine pickings a year. <em>Four of them are worth waiting for.</em>
+              Come curious. <em>Leave with a story.</em>
             </h2>
           </Reveal>
           <Reveal delay={0.16} className="closing__actions">
-            <ButtonLink to="/contact">Join the harvest list</ButtonLink>
+            <ButtonLink to="/contact">Get the release list</ButtonLink>
             <ArrowLink to="/story" className="closing__alt">
               Or read our story first
             </ArrowLink>

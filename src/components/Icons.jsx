@@ -232,6 +232,45 @@ export function EspressoDrawing(p) {
   );
 }
 
+export function MokaPotDrawing(p) {
+  return (
+    <Stage {...p}>
+      {/* knob + lid */}
+      <circle cx="60" cy="35" r="4.5" />
+      <path d="M32 50 36 40h48l4 10z" />
+      {/* upper chamber, flaring upward */}
+      <path d="M38 87 34 50h52l-4 37z" />
+      {/* waist collar */}
+      <rect x="35" y="87" width="50" height="9" rx="2" />
+      {/* boiler, flaring downward */}
+      <path d="M34 96h52l5 49a5 5 0 0 1-5 5H34a5 5 0 0 1-5-5z" />
+      <path d="M31 126h58" opacity="0.35" />
+      {/* spout */}
+      <path d="M85 53l13-5-3 9-11 5" />
+      {/* handle */}
+      <path d="M29 104c-15 3-19 11-19 19s5 16 19 19" />
+    </Stage>
+  );
+}
+
+export function ColdBrewDrawing(p) {
+  return (
+    <Stage {...p}>
+      {/* cap */}
+      <rect x="48" y="14" width="24" height="10" rx="3" />
+      {/* neck, shoulder and body in one outline */}
+      <path d="M51 24v18c0 10-17 12-17 26v78a8 8 0 0 0 8 8h36a8 8 0 0 0 8-8V68c0-14-17-16-17-26V24" />
+      {/* brew level */}
+      <path d="M35 84h50" opacity="0.5" />
+      <path d="M39 76c9 4 33 4 42 0" opacity="0.3" />
+      {/* ice */}
+      <rect x="44" y="96" width="16" height="16" rx="2" transform="rotate(-12 52 104)" />
+      <rect x="63" y="114" width="14" height="14" rx="2" transform="rotate(9 70 121)" />
+      <path d="M34 136h52" opacity="0.3" />
+    </Stage>
+  );
+}
+
 /* -------------------------------------------------------------- social */
 
 export function InstagramIcon({ size = 18, ...p }) {

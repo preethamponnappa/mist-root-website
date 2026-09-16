@@ -6,11 +6,17 @@ import './ArrowLink.css';
 
 const MotionLink = motion.create(Link);
 
-/** Quiet text link: the rule draws itself in and the arrow steps forward. */
-export default function ArrowLink({ to, children, className = '', ...rest }) {
+/**
+ * Quiet text link: the rule draws itself in and the arrow steps forward.
+ * Pass `href` instead of `to` for same-page anchors — Router's Link changes the
+ * hash without scrolling, whereas a real anchor gets the browser's smooth jump.
+ */
+export default function ArrowLink({ to, href, children, className = '', ...rest }) {
+  const Tag = href ? motion.a : MotionLink;
+
   return (
-    <MotionLink
-      to={to}
+    <Tag
+      {...(href ? { href } : { to })}
       className={`arrowlink ${className}`}
       initial="rest"
       animate="rest"
@@ -37,6 +43,6 @@ export default function ArrowLink({ to, children, className = '', ...rest }) {
       >
         <ArrowRight size={15} />
       </motion.span>
-    </MotionLink>
+    </Tag>
   );
 }

@@ -5,85 +5,55 @@ import PageHero from '../components/PageHero';
 import SectionHead from '../components/SectionHead';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
+import ButtonLink from '../components/ButtonLink';
 import heroVideo from '../../assests/video/hero_section.mp4';
 import { EASE_OUT } from '../lib/motion';
 import { Droplet, Hourglass, Leaf, Mountain } from '../components/Icons';
 import './Story.css';
 
-const VALUES = [
+const LESSONS = [
+  {
+    Icon: Droplet,
+    name: 'Rain',
+    body: 'The south-west monsoon arrives in June and does not really let go until October. It decides the flowering, the ripening and — more than once — the entire harvest calendar.',
+  },
   {
     Icon: Mountain,
     name: 'Altitude',
-    body: 'Every block sits between 1,180 and 1,540 metres — high enough that the cherry takes its time, low enough that frost never finds us.',
-  },
-  {
-    Icon: Hourglass,
-    name: 'Patience',
-    body: 'Nine selective passes a season. A picker walks the same row nine times, taking only what is fully red. Slower, dearer, and the entire difference.',
+    body: 'Between 800 and 1,200 metres the cherry takes its time. Slow is the whole point: sugars laid down in unhurried layers rather than rushed into being.',
   },
   {
     Icon: Leaf,
     name: 'Shade',
-    body: 'Fourteen native species stand over the coffee — rosewood, jackfruit, silver oak, wild fig. The canopy is not decoration; it is the cooling system.',
+    body: 'Rosewood, jackfruit, silver oak, wild fig, and pepper climbing up their trunks. Coorg coffee grows under a forest, not in rows under the sun. The canopy is the cooling system.',
   },
   {
-    Icon: Droplet,
-    name: 'Water',
-    body: 'Every litre used in washing is recirculated three times, then filtered through a reed bed before it rejoins the stream our neighbours drink from.',
-  },
-];
-
-const TIMELINE = [
-  {
-    year: '2016',
-    title: 'A failed cardamom plot',
-    body: 'Ninety acres of exhausted cardamom on a ridge nobody wanted, bought with a loan and a great deal of optimism. The first thing we did was stop planting and spend a year watching where the cloud sat.',
-  },
-  {
-    year: '2018',
-    title: 'The first honest harvest',
-    body: 'Four hundred kilos of parchment. Most of it was mediocre and one lot — from the four blocks nearest the escarpment — was startling. That lot is now called Cloudline.',
-  },
-  {
-    year: '2020',
-    title: 'The drying yard',
-    body: 'We stopped selling cherry to the curing works and built forty raised beds under muslin. Losing the middleman meant learning to dry properly. It took two seasons and one heartbreaking mould event.',
-  },
-  {
-    year: '2022',
-    title: 'Roasting on the ridge',
-    body: 'A 15 kg drum roaster arrived on the back of a jeep in monsoon. Since then nothing has left this estate green. Every bag is roasted within nine hundred metres of where it grew.',
-  },
-  {
-    year: '2024',
-    title: 'Opening the gate',
-    body: 'The tasting room opened in the old pulping shed. We started walking guests through the shade blocks because explaining it on a label was never going to work.',
-  },
-  {
-    year: 'Today',
-    title: 'Ninety acres, fourteen canopies',
-    body: 'Thirty-one people work the ridge, twenty-two of them year-round. We still throw away more cherry than we keep, and we still have not found a reason to stop.',
+    Icon: Hourglass,
+    name: 'Patience',
+    body: 'You cannot argue with a hillside about timing. Every good coffee we have ever tasted came from somebody who was willing to wait for it.',
   },
 ];
 
-const PEOPLE = [
+const JOURNEY = [
   {
-    initials: 'AK',
-    name: 'Anjali Kadamba',
-    role: 'Founder · Agronomy',
-    line: 'Spent eleven years in soil science before deciding the only honest lab was a hillside. Keeps the shade census by hand, in pencil.',
+    step: 'Grow',
+    title: 'Where it began',
+    body: 'Three generations in the hills of Coorg, among rain, shade, pepper vines and old trees. Coffee was never a product in our house. It was the season, the weather report and most of the conversation.',
   },
   {
-    initials: 'RD',
-    name: 'Rohan D’Costa',
-    role: 'Head of Processing',
-    line: 'Learned fermentation from his grandmother’s vinegar barrels. Sleeps beside the drying yard through February and is not joking about it.',
+    step: 'Source',
+    title: 'Curiosity beyond the estate',
+    body: 'Our roots are in farming; our curiosity took us further. We began looking at other origins, varieties and processing methods — Arabica and Robusta, washed, natural and experimental — and buying the lots that genuinely excited us.',
   },
   {
-    initials: 'MT',
-    name: 'Mercy Thomas',
-    role: 'Roaster · Cupping',
-    line: 'Runs the drum, runs the table, and has final say on what ships. Has rejected two entire lots since 2022. Both times she was right.',
+    step: 'Brew',
+    title: 'The same bean, six ways',
+    body: 'A V60 can turn a familiar coffee into something unrecognisable. A cold brew can change the mind of someone who has always said they dislike black coffee. Once you have seen that happen, it is difficult to stop experimenting.',
+  },
+  {
+    step: 'Share',
+    title: 'The part we were actually after',
+    body: 'People are fascinated by coffee the moment somebody takes the time to explain it. That realisation is the whole reason MistRoot exists as a club rather than simply a bag with a label on it.',
   },
 ];
 
@@ -110,67 +80,98 @@ export default function Story() {
         kicker="Our story"
         title={
           <>
-            Ninety acres that were <em>never meant</em> to grow coffee.
+            Rooted in Coorg. <em>Made for the journey.</em>
           </>
         }
-        lede="MistRoot began as an argument about altitude and turned into an estate. This is the honest version — the bad first harvest included."
+        lede="Three generations of coffee. One new way of experiencing it."
         meta={[
-          { label: 'Founded', value: '2016' },
-          { label: 'Elevation', value: '1,180 – 1,540 m' },
-          { label: 'Shade species', value: '14 native' },
-          { label: 'Crew', value: '31 people' },
+          { label: 'Home', value: 'Coorg, Karnataka' },
+          { label: 'Generations', value: 'Three' },
+          { label: 'Grown at', value: '800 – 1,200 m' },
+          { label: 'Now', value: 'A coffee club' },
         ]}
       />
 
       {/* ------------------------------------------------------- origin --- */}
       <section className="section story-origin">
-        <div className="shell story-origin__inner">
+        <div className="shell">
           <div className="story-origin__col">
             <SectionHead
               kicker="How it started"
-              title={<>We bought the wrong hill, then spent a year listening to it.</>}
+              title={<>Coffee has never been just a crop to us.</>}
             />
             <Reveal as="p" delay={0.12} className="story-origin__body">
-              The broker described it as cardamom land with potential. What it actually was:
-              a north-east facing spur that catches the valley cloud at half past four every
-              afternoon from June to January, and holds it until the following morning. For
-              cardamom that is a fungal nightmare. For coffee it is a gift nobody had
-              thought to unwrap.
+              It has been part of our family for generations — grown in the hills of Coorg,
+              surrounded by rain, shade, pepper vines, old trees and the unmistakable rhythm
+              of the Western Ghats.
             </Reveal>
             <Reveal as="p" delay={0.18} className="story-origin__body">
-              We planted nothing in the first year. We put up four cheap weather loggers,
-              walked the boundary every week, and drew a map of where the mist actually
-              sat — which turned out to be nothing like the contour lines suggested. Those
-              four blocks became the Cloudline lot. The rest of the estate was planted to
-              serve them.
+              We grew up seeing coffee not as something that begins in a packet, but as
+              something that begins much earlier — in the soil, in the hands that cultivate
+              it, and in the patience it takes to bring a cherry from blossom to bean.
+            </Reveal>
+            <Reveal as="p" delay={0.24} className="story-origin__body story-origin__body--lead">
+              MistRoot was born from that connection.
+            </Reveal>
+            <Reveal as="p" delay={0.3} className="story-origin__body">
+              We wanted to take what we love about Coorg coffee and make something beyond
+              another coffee brand. Something people could taste, learn, experience and
+              remember.
             </Reveal>
           </div>
+        </div>
+      </section>
 
-          <Reveal className="story-quote" delay={0.14} preset="fadeUp">
-            <blockquote>
-              <p>
-                “Everyone told us to clear the shade trees and double the yield. We counted
-                them instead. There were two hundred and six.”
-              </p>
-              <footer>
-                <span className="story-quote__name">Anjali Kadamba</span>
-                <span className="story-quote__role">Founder</span>
-              </footer>
-            </blockquote>
+      {/* --------------------------------------------------- pull quote --- */}
+      <section className="story-pull">
+        <div className="shell">
+          <Reveal preset="fadeUp">
+            <p className="story-pull__text">
+              From the estate to the cup, every coffee has a story worth slowing down for.
+            </p>
           </Reveal>
         </div>
       </section>
 
-      {/* ------------------------------------------------------- values --- */}
+      {/* ---------------------------------------------------- film band --- */}
+      <section className="story-band" ref={bandRef}>
+        <div className="story-band__media">
+          <motion.video
+            className="story-band__video"
+            src={heroVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="metadata"
+            aria-hidden="true"
+            tabIndex={-1}
+            style={reduced ? undefined : { y: bandY, scale: bandScale }}
+          />
+        </div>
+        <div className="story-band__scrim" aria-hidden="true" />
+        <div className="shell story-band__copy">
+          <Reveal preset="fadeUp">
+            <p className="story-band__quote">
+              The hills decide the harvest. We just try to keep up with them.
+            </p>
+          </Reveal>
+          <Reveal delay={0.12}>
+            <p className="story-band__caption">Coorg, first light · Western Ghats</p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------ lessons --- */}
       <section className="section section--raised story-values">
         <div className="shell">
           <SectionHead
-            kicker="What we hold to"
-            title={<>Four rules, and we have broken none of them.</>}
-            lede="They are not marketing lines. Each one costs us money every single season, which is how we know they are real."
+            kicker="What the hills taught us"
+            title={<>Place matters. Every detail leaves its mark.</>}
+            lede="Rainfall, altitude, shade, soil, harvest, processing — change any one of them and you change what ends up in the cup. It was the first thing we learned here, and it is still the first thing we look for in any coffee we buy."
           />
           <RevealGroup className="story-values__grid" each={0.1}>
-            {VALUES.map(({ Icon, name, body }) => (
+            {LESSONS.map(({ Icon, name, body }) => (
               <RevealItem key={name}>
                 <motion.article
                   className="value"
@@ -207,43 +208,13 @@ export default function Story() {
         </div>
       </section>
 
-      {/* ---------------------------------------------------- film band --- */}
-      <section className="story-band" ref={bandRef}>
-        <div className="story-band__media">
-          <motion.video
-            className="story-band__video"
-            src={heroVideo}
-            autoPlay
-            loop
-            muted
-            playsInline
-            preload="metadata"
-            aria-hidden="true"
-            tabIndex={-1}
-            style={reduced ? undefined : { y: bandY, scale: bandScale }}
-          />
-        </div>
-        <div className="story-band__scrim" aria-hidden="true" />
-        <div className="shell story-band__copy">
-          <Reveal preset="fadeUp">
-            <p className="story-band__quote">
-              The ridge decides the harvest. We just try to keep up with it.
-            </p>
-          </Reveal>
-          <Reveal delay={0.12}>
-            <p className="story-band__caption">
-              Block 4, first light · November
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ----------------------------------------------------- timeline --- */}
+      {/* ---------------------------------------------------- community --- */}
       <section className="section story-time">
         <div className="shell">
           <SectionHead
-            kicker="Ten years, roughly"
-            title={<>A slow, occasionally humiliating education.</>}
+            kicker="From growing coffee to building a community"
+            title={<>Our roots are in coffee farming. Our curiosity took us further.</>}
+            lede="That curiosity became the MistRoot Coffee Club — a place where coffee is not intimidating or overly complicated, but something you explore with friends, discover one cup at a time, and eventually make your own."
           />
 
           <div className="story-time__track" ref={trackRef}>
@@ -255,60 +226,41 @@ export default function Story() {
             </div>
 
             <RevealGroup className="story-time__list" each={0.06}>
-              {TIMELINE.map((t) => (
-                <RevealItem className="story-time__item" key={t.year}>
+              {JOURNEY.map((j) => (
+                <RevealItem className="story-time__item" key={j.step}>
                   <span className="story-time__dot" aria-hidden="true" />
-                  <span className="story-time__year display">{t.year}</span>
+                  <span className="story-time__year display">{j.step}</span>
                   <div className="story-time__text">
-                    <h3 className="story-time__title">{t.title}</h3>
-                    <p>{t.body}</p>
+                    <h3 className="story-time__title">{j.title}</h3>
+                    <p>{j.body}</p>
                   </div>
                 </RevealItem>
               ))}
             </RevealGroup>
           </div>
+
+          <Reveal delay={0.2} className="story-time__cta">
+            <ArrowLink to="/club">What the Coffee Club actually is</ArrowLink>
+          </Reveal>
         </div>
       </section>
 
-      {/* ------------------------------------------------------- people --- */}
-      <section className="section section--raised story-people">
-        <div className="shell">
-          <SectionHead
-            kicker="Who is up there"
-            title={<>Thirty-one people. Three of them answer the phone.</>}
-          />
-          <RevealGroup className="story-people__grid" each={0.1}>
-            {PEOPLE.map((p) => (
-              <RevealItem key={p.name}>
-                <motion.article
-                  className="person"
-                  initial="rest"
-                  whileHover="hover"
-                  animate="rest"
-                >
-                  <motion.span
-                    className="person__monogram display"
-                    variants={{
-                      rest: { scale: 1, borderColor: 'rgba(245,234,217,0.12)' },
-                      hover: {
-                        scale: 1.04,
-                        borderColor: 'rgba(200,164,90,0.55)',
-                        transition: { duration: 0.5, ease: EASE_OUT },
-                      },
-                    }}
-                  >
-                    {p.initials}
-                  </motion.span>
-                  <h3 className="person__name">{p.name}</h3>
-                  <p className="person__role">{p.role}</p>
-                  <p className="person__line">{p.line}</p>
-                </motion.article>
-              </RevealItem>
-            ))}
-          </RevealGroup>
-
-          <Reveal delay={0.2} className="story-people__cta">
-            <ArrowLink to="/experiences">Come and meet them</ArrowLink>
+      {/* ------------------------------------------------------ closing --- */}
+      <section className="section section--raised story-close">
+        <div className="shell story-close__inner">
+          <Reveal preset="fadeUp">
+            <p className="eyebrow eyebrow--bare">Where MistRoot begins</p>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <h2 className="story-close__title display">Mist. Mountains. Memories.</h2>
+          </Reveal>
+          <Reveal as="p" delay={0.16} className="story-close__body">
+            That is not just a tagline. It is the place we come from, and the reason any of
+            this exists.
+          </Reveal>
+          <Reveal delay={0.24} className="story-close__actions">
+            <ButtonLink to="/club">Meet the Coffee Club</ButtonLink>
+            <ArrowLink to="/experiences">Or come up to Coorg</ArrowLink>
           </Reveal>
         </div>
       </section>

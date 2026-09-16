@@ -1,11 +1,4 @@
 /* ============================================================== origin === */
-.story-origin__inner {
-  display: grid;
-  grid-template-columns: 1.15fr 0.85fr;
-  gap: clamp(2.5rem, 6vw, 5.5rem);
-  align-items: start;
-}
-
 .story-origin__col {
   display: flex;
   flex-direction: column;
@@ -16,57 +9,48 @@
   max-width: 58ch;
 }
 
-.story-quote {
-  position: relative;
-  padding: clamp(2rem, 3vw, 3rem);
-  background: linear-gradient(160deg, var(--ink-card), rgba(12, 10, 7, 0.6));
-  border: 1px solid var(--cream-12);
-  border-radius: 3px;
-}
-
-.story-quote::before {
-  content: '';
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: 2px;
-  background: linear-gradient(to bottom, var(--gold), transparent);
-}
-
-.story-quote blockquote {
-  margin: 0;
-}
-
-.story-quote p {
-  font-family: var(--font-serif);
+/* The one line the whole page turns on, set a size up from the rest. */
+.story-origin__body--lead {
   font-size: var(--step-1);
   font-style: italic;
-  line-height: 1.5;
+  color: var(--gold-bright);
+}
+
+/* ========================================================== pull quote === */
+.story-pull {
+  padding-block: clamp(3.5rem, 7vw, 6.5rem);
+  text-align: center;
+}
+
+.story-pull__text {
+  position: relative;
+  max-width: 26ch;
+  margin-inline: auto;
+  padding-block: clamp(2rem, 4vw, 3rem);
+  font-family: var(--font-serif);
+  font-size: var(--step-3);
+  font-style: italic;
+  line-height: 1.26;
   color: var(--cream);
 }
 
-.story-quote footer {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  margin-top: var(--space-sm);
-  padding-top: var(--space-sm);
-  border-top: 1px solid var(--cream-12);
+.story-pull__text::before,
+.story-pull__text::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  translate: -50% 0;
+  width: clamp(3rem, 8vw, 5.5rem);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
 
-.story-quote__name {
-  font-family: var(--font-sans);
-  font-size: var(--step--1);
-  letter-spacing: var(--tracking-mid);
-  text-transform: uppercase;
-  color: var(--gold);
+.story-pull__text::before {
+  top: 0;
 }
 
-.story-quote__role {
-  font-family: var(--font-sans);
-  font-size: var(--step--2);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--cream-30);
+.story-pull__text::after {
+  bottom: 0;
 }
 
 /* ============================================================== values === */
@@ -250,71 +234,43 @@
   color: var(--cream-50);
 }
 
-/* ============================================================== people === */
-.story-people__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(1.5rem, 3vw, 2.75rem);
-  margin-top: clamp(2.5rem, 5vw, 4.5rem);
+.story-time__cta {
+  margin-top: clamp(2rem, 4vw, 3rem);
 }
 
-.person {
+/* ============================================================= closing === */
+.story-close__inner {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  height: 100%;
-  padding-top: var(--space-sm);
-  border-top: 1px solid var(--cream-12);
+  align-items: center;
+  text-align: center;
+  gap: var(--space-sm);
 }
 
-.person__monogram {
-  display: grid;
-  place-items: center;
-  width: 66px;
-  height: 66px;
-  border: 1px solid var(--cream-12);
-  border-radius: 999px;
-  font-size: 1rem;
-  letter-spacing: 0.12em;
-  color: var(--gold);
-  margin-bottom: var(--space-sm);
+.story-close__title {
+  font-size: var(--step-4);
+  letter-spacing: 0.06em;
+  line-height: 1.1;
 }
 
-.person__name {
-  font-size: var(--step-1);
+.story-close__body {
+  max-width: 44ch;
+  color: var(--cream-70);
 }
 
-.person__role {
-  margin-top: 0.35rem;
-  font-family: var(--font-sans);
-  font-size: var(--step--2);
-  letter-spacing: var(--tracking-mid);
-  text-transform: uppercase;
-  color: var(--gold-deep);
-}
-
-.person__line {
+.story-close__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
   margin-top: var(--space-xs);
-  font-size: var(--step--1);
-  line-height: 1.78;
-  color: var(--cream-50);
-}
-
-.story-people__cta {
-  margin-top: clamp(2rem, 4vw, 3rem);
 }
 
 /* ========================================================== responsive === */
 @media (max-width: 1000px) {
-  .story-origin__inner {
-    grid-template-columns: 1fr;
-  }
   .story-values__grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-  .story-people__grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-md);
   }
 }
 

@@ -18,18 +18,19 @@ const COLUMNS = [
     title: 'Wander',
     links: [
       { label: 'Our Story', to: '/story' },
+      { label: 'Coffee Club', to: '/club' },
       { label: 'Brewing', to: '/brewing' },
       { label: 'Experiences', to: '/experiences' },
       { label: 'Contact', to: '/contact' },
     ],
   },
   {
-    title: 'The Estate',
+    title: 'The Coffee',
     links: [
-      { label: 'Kalamandi Ridge', to: '/story' },
+      { label: 'The current release', to: '/club' },
+      { label: 'Brew recipes', to: '/brewing' },
       { label: 'Harvest calendar', to: '/experiences' },
-      { label: 'Shade census', to: '/story' },
-      { label: 'Cupping lab', to: '/brewing' },
+      { label: 'Coorg & Brahmagiri', to: '/story' },
     ],
   },
 ];
@@ -43,8 +44,9 @@ export default function Footer() {
           <RevealItem className="footer__brand">
             <img src={wordmark} alt="MistRoot Coffee" className="footer__wordmark" />
             <p className="footer__blurb">
-              Single-estate coffee from the mist belt of the Western Ghats. Picked ripe, dried
-              slow, roasted in fifteen-kilo batches on the ridge where it grew.
+              Three generations of coffee in the hills of Coorg, now a club for anyone
+              curious enough to taste it properly. Sourced from our own hills and beyond,
+              roasted in small batches, shared slowly.
             </p>
             <ul className="footer__socials">
               {SOCIALS.map(({ label, href, Icon }) => (
@@ -98,17 +100,17 @@ export default function Footer() {
           <RevealItem className="footer__col footer__col--find">
             <h4 className="footer__col-title">Find us</h4>
             <address>
-              Kalamandi Ridge Estate
+              MistRoot Estate
               <br />
-              Attigundi Post, Chikkamagaluru
+              Brahmagiri Range, Kodagu (Coorg)
               <br />
-              Karnataka 577 132
+              Karnataka 571 247
             </address>
             <p className="footer__hours">
               Tasting room · Thu–Sun · 08:00–17:00
               <br />
-              <a href="tel:+918212290140" className="footer__phone">
-                +91 82122 90140
+              <a href="tel:+917022919007" className="footer__phone">
+                +91 70229 19007
               </a>
             </p>
           </RevealItem>
@@ -117,9 +119,9 @@ export default function Footer() {
         <Reveal className="footer__base" preset="fadeIn">
           <p>© {new Date().getFullYear()} MistRoot Coffee Estates LLP</p>
           <p className="footer__base-mid">
-            Elevation 1,540 m · 13.3861° N, 75.7167° E
+            Elevation 800 – 1,200 m · 12.3833° N, 75.5167° E
           </p>
-          <p>Roasted on the ridge. Never shipped green.</p>
+          <p>Mist. Mountains. Memories.</p>
         </Reveal>
       </div>
     </footer>

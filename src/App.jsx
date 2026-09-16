@@ -6,6 +6,7 @@ import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
 import Home from './pages/Home';
 import Story from './pages/Story';
+import Club from './pages/Club';
 import Brewing from './pages/Brewing';
 import Experiences from './pages/Experiences';
 import Contact from './pages/Contact';
@@ -34,6 +35,7 @@ function App() {
           <Routes location={location} key={location.pathname}>
             <Route path="/" element={<Home />} />
             <Route path="/story" element={<Story />} />
+            <Route path="/club" element={<Club />} />
             <Route path="/brewing" element={<Brewing />} />
             <Route path="/experiences" element={<Experiences />} />
             <Route path="/contact" element={<Contact />} />

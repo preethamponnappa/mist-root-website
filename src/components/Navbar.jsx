@@ -11,6 +11,7 @@ const MotionNavLink = motion.create(NavLink);
 const NAV_LINKS = [
   { to: '/', label: 'Home' },
   { to: '/story', label: 'Our Story' },
+  { to: '/club', label: 'Coffee Club' },
   { to: '/brewing', label: 'Brewing' },
   { to: '/experiences', label: 'Experiences' },
   { to: '/contact', label: 'Contact' },
@@ -198,7 +199,7 @@ export default function Navbar() {
               animate={{ opacity: 1, transition: { delay: 0.5 } }}
               exit={{ opacity: 0 }}
             >
-              Kalamandi Ridge Estate · 1,540 m · Western Ghats
+              MistRoot Estate · Brahmagiri Range, Kodagu · 800–1,200 m
             </motion.p>
           </motion.div>
         )}

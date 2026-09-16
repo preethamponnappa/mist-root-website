@@ -98,7 +98,7 @@ export default function HeroVideo() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, ease: EASE_OUT, delay: 0.35 }}
         >
-          Western Ghats · Shade Grown · 1,540&nbsp;m
+          Western Ghats · Shade Grown · 800–1,200&nbsp;m
         </motion.p>
 
         <motion.img
