@@ -29,7 +29,7 @@ const METHODS = [
     dose: '20 g / 320 g',
     temp: '92 °C',
     time: '3:15–3:30',
-    best: 'Mist Veil',
+    best: 'MistRoot Highland Reserve',
     body: 'A cone strips a coffee of anywhere to hide. If a lot has a jasmine tail or a mineral edge, this is where you will find it — and if it has a flaw, this is where that shows up too. We cup on a V60 for exactly that reason.',
     steps: [
       { t: '0:00', d: 'Rinse the paper with boiling water, discard, add 20 g of grounds and level the bed.' },
@@ -50,7 +50,7 @@ const METHODS = [
     dose: '17 g / 220 g',
     temp: '90 °C',
     time: '2:10',
-    best: 'Canopy Reserve',
+    best: 'MistRoot Highland Arabica',
     body: 'Immersion plus a little pressure. Lower temperature than you think, because the contact is total — 90 °C keeps the sweetness in place instead of pulling it bitter. Inverted, always, whatever the internet says.',
     steps: [
       { t: '0:00', d: 'Inverted. 17 g in, 220 g of 90 °C water straight down the middle.' },
@@ -71,7 +71,7 @@ const METHODS = [
     dose: '40 g / 600 g',
     temp: '96 °C',
     time: '8:00',
-    best: 'Forest Floor',
+    best: 'MistRoot Forest Reserve',
     body: 'The only method that keeps every oil the roast produced. It will not give you clarity and it is not trying to. What it gives you is body — the closest thing to drinking the coffee the way the cupping table drinks it.',
     steps: [
       { t: '0:00', d: '40 g coarse, 600 g of water just off the boil, poured hard to break the bed.' },
@@ -92,7 +92,7 @@ const METHODS = [
     dose: '18 g / 150 g',
     temp: 'Pre-boiled',
     time: '4:00',
-    best: 'Monsoon Brew',
+    best: 'MistRoot Estate Robusta',
     body: 'Unfairly maligned, usually because people start it cold and walk away. Fill the boiler with water that has already boiled, keep the flame low, and take it off the heat the moment the stream turns pale. Done properly it is closer to a rich filter coffee than to espresso, and it is very hard to beat on a wet morning.',
     steps: [
       { t: 'Prep', d: 'Fill the boiler to just below the valve with water off the boil. Use a towel — it is hot.' },
@@ -113,7 +113,7 @@ const METHODS = [
     dose: '100 g / 800 g',
     temp: 'Room, then cold',
     time: '16 hrs',
-    best: 'Forest Floor',
+    best: 'MistRoot Forest Reserve',
     body: 'The most forgiving thing on this list and the best convincer we own. No heat means almost none of the acidity that puts people off, so what is left is sweetness and body. Make it as a concentrate and cut it to taste — over ice, with water, with milk, with tonic if it is April.',
     steps: [
       { t: '0:00', d: '100 g coarse into 800 g of filtered water at room temperature. Stir once to wet it all.' },
@@ -134,8 +134,8 @@ const METHODS = [
     dose: '18 g / 40 g',
     temp: '93 °C',
     time: '28 s',
-    best: 'Monsoon Brew',
-    body: 'Most of what we source is washed and high-grown, which means it pushes back against a dark roast. We pull light and long — 1:2.2 rather than 1:2 — so the acidity has room to become fruit instead of sourness.',
+    best: 'MistRoot Estate Robusta',
+    body: 'A good Robusta pulls the best shot we make — low acidity, heavy body, and a crema that actually holds. We go slightly long at 1:2.2 rather than 1:2, which keeps the chocolate sweet instead of letting it turn to ash. The Arabicas work here too; they simply want a finer grind and more patience.',
     steps: [
       { t: 'Prep', d: '18 g in a clean basket. Distribute, then tamp level. Level matters more than hard.' },
       { t: '0:00', d: 'Lock in and start immediately. A hot basket sitting idle scorches the puck.' },

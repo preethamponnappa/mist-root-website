@@ -32,7 +32,7 @@ const EXPERIENCES = [
     Icon: Compass,
     name: 'Estate Walks',
     sub: 'The two-hour version of everything',
-    body: 'We leave the tasting room at 06:15, while the cloud is still lying in the valley below the pulping shed. You will walk the shade blocks that go into Mist Veil, put your hand on a rosewood that predates the estate by a century, and learn to tell a ripe cherry from a nearly-ripe one by squeezing it. It ends at the nursery with a cup of whatever came off the drum that week.',
+    body: 'We leave the tasting room at 06:15, while the cloud is still lying in the valley below the pulping shed. You will walk the shade blocks that go into Highland Reserve, put your hand on a rosewood that predates the estate by a century, and learn to tell a ripe cherry from a nearly-ripe one by squeezing it. It ends at the nursery with a cup of whatever came off the drum that week.',
     detail: [
       { k: 'Duration', v: '2 hours' },
       { k: 'Starts', v: '06:15, Thu–Sun' },

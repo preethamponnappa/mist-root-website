@@ -98,6 +98,32 @@
 }
 
 /* ============================================================= coffees === */
+.club-coffees__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.club-coffees__aside p {
+  font-family: var(--font-serif);
+  font-size: var(--step-1);
+  font-style: italic;
+  line-height: 1.32;
+  text-align: right;
+  color: var(--gold-bright);
+}
+
+/* A hairline under the phrase, echoing the rules around the pull quote. */
+.club-coffees__aside p::after {
+  content: '';
+  display: block;
+  margin: var(--space-sm) 0 0 auto;
+  width: 4rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold));
+}
+
 .club-coffees__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -264,6 +290,17 @@
 @media (max-width: 1080px) {
   .club-coffees__grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .club-coffees__head {
+    grid-template-columns: 1fr;
+  }
+  .club-coffees__aside p,
+  .club-coffees__aside p::after {
+    text-align: left;
+    margin-inline: 0 auto;
   }
 }
 

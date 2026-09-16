@@ -21,27 +21,27 @@ import './Home.css';
 const LOTS = [
   {
     no: '01',
-    name: 'Mist Veil',
-    origin: 'Coorg · Washed',
-    profile: 'Clean · Bright · Layered',
+    name: 'MistRoot Highland Reserve',
+    origin: 'Coorg · Arabica AAA',
+    profile: 'Elegant · Complex · Refined',
   },
   {
     no: '02',
-    name: 'Forest Floor',
-    origin: 'Chikmagalur · Natural',
-    profile: 'Deep · Fruited · Wild',
+    name: 'MistRoot Highland Arabica',
+    origin: 'Coorg · Arabica AA',
+    profile: 'Smooth · Balanced · Versatile',
   },
   {
     no: '03',
-    name: 'Monsoon Brew',
-    origin: 'Malabar · Monsooned',
-    profile: 'Bold · Low-acid · Spiced',
+    name: 'MistRoot Forest Reserve',
+    origin: 'Coorg · Robusta AAA',
+    profile: 'Bold · Rich · Full-bodied',
   },
   {
     no: '04',
-    name: 'Canopy Reserve',
-    origin: 'Single lot · Anaerobic',
-    profile: 'Rare · Complex · Loud',
+    name: 'MistRoot Estate Robusta',
+    origin: 'Coorg · Robusta AA',
+    profile: 'Bold · Smooth · Dependable',
   },
 ];
 
@@ -136,9 +136,13 @@ export default function Home() {
       <section className="section section--raised lots">
         <div className="shell">
           <SectionHead
-            kicker="Coffees worth discovering"
-            title={<>Selected for what they bring to the cup, not where they come from.</>}
-            lede="Small batches, some from our own hills in Coorg and some from growers we have spent years getting to know. When one runs out it stays out until it is good again."
+            kicker="Our coffees"
+            title={
+              <>
+                Distinct Origins. <em>Unforgettable Cups.</em>
+              </>
+            }
+            lede="Four coffees from the hills of Coorg, released in small batches. Two Arabica, two Robusta, each shaped by the land, the people and the way it is grown."
           />
 
           <RevealGroup className="lots__list" each={0.08}>

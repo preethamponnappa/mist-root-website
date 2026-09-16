@@ -14,11 +14,11 @@ const PILLARS = [
     no: '01',
     Icon: Mountain,
     name: 'Source',
-    line: 'From Coorg and beyond.',
-    body: 'We work with coffees that excite us — starting with our own roots in Coorg, and reaching out to Arabica and Robusta lots from growers whose work deserves a wider audience.',
+    line: 'From the hills of Coorg.',
+    body: 'We work with coffees that excite us — from our own family plantations and from growers across Coorg whose work deserves a wider audience. Arabica and Robusta, AA and AAA, every lot kept apart so its character survives the trip to your cup.',
     points: [
       'Quality and character before pedigree',
-      'Traceable to a farm, not a region',
+      'Traceable to a plantation, not a region',
       'Small lots, bought when they are good',
     ],
     href: '#coffees',
@@ -57,43 +57,43 @@ const PILLARS = [
 const COFFEES = [
   {
     no: '01',
-    name: 'Mist Veil',
-    origin: 'Coorg · Washed Arabica',
-    profile: 'Clean · Bright · Layered',
-    notes: ['White peach', 'Jasmine', 'Wet slate'],
-    intensity: 1,
+    name: 'MistRoot Highland Reserve',
+    origin: 'Coorg · Arabica AAA · Plantation',
+    profile: 'Elegant · Complex · Refined',
+    notes: ['Floral', 'Citrus', 'Honey'],
+    intensity: 2,
     brew: 'Pour Over',
-    copy: 'The one we hand to people who say they only drink coffee with milk. Delicate, floral, and unmistakably high-grown — a washed lot from the shade blocks that spend the longest inside the cloud.',
+    copy: 'Our finest Arabica, grown in the high-altitude plantations of Coorg. Handpicked and carefully processed to bring out a clean, layered cup with floral notes and a lingering sweetness.',
   },
   {
     no: '02',
-    name: 'Forest Floor',
-    origin: 'Chikmagalur · Natural',
-    profile: 'Deep · Fruited · Wild',
-    notes: ['Ripe fig', 'Cocoa nib', 'Damp earth'],
-    intensity: 3,
-    brew: 'French Press · Cold Brew',
-    copy: 'Dried whole on raised beds until the fruit turns to leather. Big, sweet and slightly feral — the coffee that most often makes someone stop mid-sentence and look at the cup.',
+    name: 'MistRoot Highland Arabica',
+    origin: 'Coorg · Arabica AA',
+    profile: 'Smooth · Balanced · Versatile',
+    notes: ['Chocolate', 'Nutty', 'Caramel'],
+    intensity: 2,
+    brew: 'AeroPress · Pour Over',
+    copy: 'A well-rounded Arabica with bright acidity, gentle sweetness and a smooth finish. Perfect for everyday brewing, yet special enough to savour slowly.',
   },
   {
     no: '03',
-    name: 'Monsoon Brew',
-    origin: 'Malabar Coast · Monsooned',
-    profile: 'Bold · Low-acid · Spiced',
-    notes: ['Black cardamom', 'Malt', 'Toasted nut'],
+    name: 'MistRoot Forest Reserve',
+    origin: 'Coorg · Robusta AAA',
+    profile: 'Bold · Rich · Full-bodied',
+    notes: ['Dark chocolate', 'Spice', 'Earthy'],
     intensity: 4,
-    brew: 'Moka Pot · Espresso',
-    copy: 'Green beans left open to the south-west monsoon for weeks until they swell and turn pale gold. A genuinely Indian process and nothing else tastes like it: almost no acidity, enormous body, and a finish like spice cupboard.',
+    brew: 'French Press · Cold Brew',
+    copy: 'A premium Robusta with depth and character. Grown under native shade, it delivers a strong cup with rich crema, earthy notes and a comforting finish.',
   },
   {
     no: '04',
-    name: 'Canopy Reserve',
-    origin: 'Single lot · Anaerobic',
-    profile: 'Rare · Complex · Loud',
-    notes: ['Passion fruit', 'Rose', 'Dark honey'],
-    intensity: 2,
-    brew: 'AeroPress · Espresso',
-    copy: 'Our limited slot. Fermented sealed before drying, released once or twice a year, and gone quickly. When it is on the list it is because it beat everything else on the table that month.',
+    name: 'MistRoot Estate Robusta',
+    origin: 'Coorg · Robusta AA',
+    profile: 'Bold · Smooth · Dependable',
+    notes: ['Cocoa', 'Malt', 'Roasted nut'],
+    intensity: 3,
+    brew: 'Espresso · Moka Pot',
+    copy: 'A classic Robusta with a rich, full-bodied profile. Low acidity, with deep chocolate notes — ideal for espresso, milk-based drinks or a strong morning cup.',
   },
 ];
 
@@ -186,11 +186,24 @@ export default function Club() {
       {/* ------------------------------------------------------- coffees --- */}
       <section className="section section--raised club-coffees" id="coffees">
         <div className="shell">
-          <SectionHead
-            kicker="Coffees worth discovering"
-            title={<>Chosen for what they bring to the cup, not where they come from.</>}
-            lede="We release in small batches. Some are from our own hills in Coorg, some are from growers we have spent years getting to know. When one runs out it stays out until it is good again."
-          />
+          <div className="club-coffees__head">
+            <SectionHead
+              kicker="Our coffees"
+              title={
+                <>
+                  Distinct Origins. <em>Unforgettable Cups.</em>
+                </>
+              }
+              lede="Carefully sourced from the hills of Coorg, our coffees are released in small batches. Each lot has its own character, shaped by the land, the people and the way it is grown."
+            />
+            <Reveal className="club-coffees__aside" delay={0.14}>
+              <p>
+                Different Coffees.
+                <br />
+                A Deeper Connection.
+              </p>
+            </Reveal>
+          </div>
 
           <RevealGroup className="club-coffees__grid" each={0.1}>
             {COFFEES.map((c) => (
