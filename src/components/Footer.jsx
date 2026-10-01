@@ -4,6 +4,7 @@ import wordmark from '../assets/brand/mistroot-wordmark.png';
 import Reveal, { RevealGroup, RevealItem } from './Reveal';
 import { EASE_OUT } from '../lib/motion';
 import { InstagramIcon } from './Icons';
+import { BUSINESS, mailtoHref, telHref } from '../data/business';
 import './Footer.css';
 
 const SOCIALS = [
@@ -49,9 +50,9 @@ export default function Footer() {
               className="footer__wordmark"
             />
             <p className="footer__blurb">
-              Three generations of coffee in the hills of Coorg, now a club for anyone
-              curious enough to taste it properly. Sourced from our own hills and beyond,
-              roasted in small batches, shared slowly.
+              MistRoot (Mist Root) Coffee is three generations of coffee in the hills of
+              Coorg, now a club for anyone curious enough to taste it properly. Sourced
+              from our own hills and beyond, roasted in small batches, shared slowly.
             </p>
             <ul className="footer__socials">
               {SOCIALS.map(({ label, href, Icon }) => (
@@ -105,26 +106,32 @@ export default function Footer() {
           <RevealItem className="footer__col footer__col--find">
             <h2 className="footer__col-title">Find us</h2>
             <address>
-              MistRoot Estate
+              {BUSINESS.address.street}
               <br />
-              Brahmagiri Range, Kodagu (Coorg)
+              {BUSINESS.address.locality}
               <br />
-              Karnataka 571 247
+              {BUSINESS.address.region} {BUSINESS.address.postalCode}
             </address>
             <p className="footer__hours">
-              Tasting room · Thu–Sun · 08:00–17:00
+              Tasting room · {BUSINESS.hours.short} · {BUSINESS.hours.opens}–{BUSINESS.hours.closes}
               <br />
-              <a href="tel:+917022919007" className="footer__phone">
-                +91 70229 19007
+              <a href={telHref} className="footer__phone">
+                {BUSINESS.phoneDisplay}
+              </a>
+              <br />
+              <a href={mailtoHref} className="footer__phone">
+                {BUSINESS.email}
               </a>
             </p>
           </RevealItem>
         </RevealGroup>
 
         <Reveal className="footer__base" preset="fadeIn">
-          <p>© {new Date().getFullYear()} MistRoot Coffee Estates LLP</p>
+          <p>
+            © {new Date().getFullYear()} {BUSINESS.name}
+          </p>
           <p className="footer__base-mid">
-            Elevation 800 – 1,200 m · 12.3833° N, 75.5167° E
+            Elevation {BUSINESS.elevation} · {BUSINESS.geoDisplay}
           </p>
           <p>Mist. Mountains. Memories.</p>
         </Reveal>

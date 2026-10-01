@@ -5,6 +5,7 @@ import PageHero from '../components/PageHero';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { ArrowUpRight, Compass, InstagramIcon } from '../components/Icons';
+import { BUSINESS } from '../data/business';
 import './Contact.css';
 
 const SUBJECTS = [
@@ -27,17 +28,21 @@ const SOCIALS = [
 const CHANNELS = [
   {
     title: 'The estate',
-    lines: ['MistRoot Estate', 'Brahmagiri Range, Kodagu (Coorg)', 'Karnataka 571 247'],
-    note: '12.3833° N, 75.5167° E · 800–1,200 m',
+    lines: [
+      BUSINESS.address.street,
+      BUSINESS.address.locality,
+      `${BUSINESS.address.region} ${BUSINESS.address.postalCode}`,
+    ],
+    note: `${BUSINESS.geoDisplay} · ${BUSINESS.elevation}`,
   },
   {
     title: 'Tasting room',
-    lines: ['Thursday – Sunday', '08:00 – 17:00', 'Closed through heavy monsoon (Jun–Jul)'],
+    lines: [BUSINESS.hours.days, `${BUSINESS.hours.opens} – ${BUSINESS.hours.closes}`, BUSINESS.hours.closure],
     note: 'Walk-ins welcome; experiences by booking',
   },
   {
     title: 'Direct',
-    lines: ['mistrootcoffeeclub@gmail.com', '+91 70229 19007'],
+    lines: [BUSINESS.email, BUSINESS.phoneDisplay],
     note: 'We answer within two working days',
   },
 ];
@@ -123,8 +128,8 @@ export default function Contact() {
         lede="There is no call centre. Messages land in an inbox that four people share, between a roast and a drying-bed turn."
         meta={[
           { label: 'Reply within', value: '2 working days' },
-          { label: 'Tasting room', value: 'Thu – Sun' },
-          { label: 'Phone', value: '+91 70229 19007' },
+          { label: 'Tasting room', value: BUSINESS.hours.short },
+          { label: 'Phone', value: BUSINESS.phoneDisplay },
         ]}
       />
 

@@ -7,6 +7,7 @@ import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
+import { BUSINESS } from '../data/business';
 import {
   ArrowRight,
   Basket,
@@ -67,7 +68,7 @@ const INVITES = [
   {
     Icon: Basket,
     name: 'Harvest Days',
-    line: 'Pick with the crew from November to February. Your basket gets weighed.',
+    line: `Pick with the crew in ${BUSINESS.harvest.months}. Your basket gets weighed.`,
   },
   {
     Icon: Cup,

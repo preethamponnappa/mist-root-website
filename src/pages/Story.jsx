@@ -9,6 +9,7 @@ import ButtonLink from '../components/ButtonLink';
 import heroVideo from '../../assests/video/hero_section.mp4';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { Droplet, Hourglass, Leaf, Mountain } from '../components/Icons';
+import { BUSINESS } from '../data/business';
 import './Story.css';
 
 const LESSONS = [
@@ -86,8 +87,9 @@ export default function Story() {
         lede="Three generations of coffee. One new way of experiencing it."
         meta={[
           { label: 'Home', value: 'Coorg, Karnataka' },
-          { label: 'Generations', value: 'Three' },
-          { label: 'Grown at', value: '800 – 1,200 m' },
+          { label: 'Since', value: BUSINESS.founded },
+          { label: 'Generations', value: BUSINESS.generations },
+          { label: 'Grown at', value: BUSINESS.elevation },
           { label: 'Now', value: 'A coffee club' },
         ]}
       />

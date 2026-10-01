@@ -8,6 +8,7 @@ import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { Basket, Compass, Cup, Droplet } from '../components/Icons';
+import { BUSINESS } from '../data/business';
 import './Experiences.css';
 
 const EXPERIENCES = [
@@ -47,12 +48,12 @@ const EXPERIENCES = [
     Icon: Basket,
     name: 'Harvest Experience',
     sub: 'Pick with the crew, get your basket weighed',
-    body: 'From November to February you can join a picking pass. You are given a basket, a row and a supervisor who will politely reject anything under-ripe. Most guests fill about four kilos in three hours; the crew average is nineteen. At the end your cherry goes through the pulper with the day’s intake and we write your name on the drying bed it lands in.',
+    body: 'In December and January you can join a picking pass. You are given a basket, a row and a supervisor who will politely reject anything under-ripe. Most guests fill about four kilos in three hours; the crew average is nineteen. At the end your cherry goes through the pulper with the day’s intake and we write your name on the drying bed it lands in.',
     detail: [
       { k: 'Duration', v: 'Half day' },
       { k: 'Starts', v: '07:00, by booking' },
       { k: 'Group', v: '2–6 people' },
-      { k: 'Season', v: 'Nov – Feb' },
+      { k: 'Season', v: BUSINESS.harvest.short },
       { k: 'From', v: '₹3,200' },
     ],
   },
@@ -67,7 +68,7 @@ const EXPERIENCES = [
       { k: 'Duration', v: 'Full day, 12 hrs' },
       { k: 'Starts', v: '05:45, second Sat' },
       { k: 'Group', v: '4 people max' },
-      { k: 'Season', v: 'Dec – Mar' },
+      { k: 'Season', v: BUSINESS.beanToCup.short },
       { k: 'From', v: '₹8,500' },
     ],
   },
@@ -76,7 +77,7 @@ const EXPERIENCES = [
 const PRACTICAL = [
   {
     q: 'Getting here',
-    a: 'Six hours from Bengaluru by road, an hour north-west of Madikeri. The last two kilometres are unsealed and steep — a hatchback manages it in dry weather, not in monsoon.',
+    a: `Six hours from Bengaluru by road, four from Mysuru, and an hour from Madikeri. The last two kilometres are unsealed and steep — a hatchback manages it in dry weather, not in monsoon.`,
   },
   {
     q: 'What to wear',
@@ -114,9 +115,9 @@ export default function Experiences() {
         }
         lede="Four ways in — one that comes to your city and three that bring you up to Coorg. All of them hands-on, none of them a tour. You will be given something to carry."
         meta={[
-          { label: 'Open', value: 'Thu – Sun' },
+          { label: 'Open', value: BUSINESS.hours.short },
           { label: 'First light', value: '06:15' },
-          { label: 'Harvest', value: 'Nov – Feb' },
+          { label: 'Harvest', value: BUSINESS.harvest.short },
           { label: 'Max group', value: '10' },
         ]}
       />
