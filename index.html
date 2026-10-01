@@ -1,21 +1,48 @@
 <!doctype html>
-<html lang="en">
+<html lang="en-IN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/mistroot-favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0C0A07" />
-    <meta
-      name="description"
-      content="MistRoot Coffee — three generations of coffee in the hills of Coorg, now a coffee club. Beans sourced from our own hills and beyond, brewed six ways, shared slowly."
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" type="image/svg+xml" href="/mistroot-favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <!-- The two faces above the fold. The rest load from the bundled CSS. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Josefin+Sans:wght@300;400;500;600&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/cormorant-garamond-v21-400-latin.woff2"
+      crossorigin
     />
-    <title>MistRoot Coffee — Mist. Mountains. Memories.</title>
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/josefin-sans-v34-400-latin.woff2"
+      crossorigin
+    />
+    <!--seo-->
+    <title>MistRoot Coffee</title>
+    <noscript>
+      <style>
+        /* Scroll reveals and page-entry animations never run without
+           JavaScript, so anything they would have faded in has to start
+           visible rather than stay at opacity 0. */
+        [style*='opacity:0'],
+        [style*='opacity: 0'] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        .wr__word {
+          transform: none !important;
+        }
+        .xp__panel {
+          height: auto !important;
+        }
+      </style>
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

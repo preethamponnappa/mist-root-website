@@ -293,3 +293,9 @@ button {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* The `hidden` attribute has to win over component display rules
+   (inactive tab panels are hidden this way, not unmounted). */
+[hidden] {
+  display: none !important;
+}

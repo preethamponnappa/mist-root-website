@@ -1,0 +1,21 @@
+{
+  "name": "MistRoot Coffee",
+  "short_name": "MistRoot",
+  "description": "Three generations of coffee in the hills of Coorg, now a coffee club.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "lang": "en-IN",
+  "background_color": "#0C0A07",
+  "theme_color": "#0C0A07",
+  "icons": [
+    { "src": "/favicon-32x32.png", "sizes": "32x32", "type": "image/png" },
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    {
+      "src": "/mistroot-favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

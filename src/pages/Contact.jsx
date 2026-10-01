@@ -1,17 +1,10 @@
 import { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
-import { EASE_OUT } from '../lib/motion';
-import {
-  ArrowUpRight,
-  Compass,
-  InstagramIcon,
-  JournalIcon,
-  XIcon,
-  YoutubeIcon,
-} from '../components/Icons';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
+import { ArrowUpRight, Compass, InstagramIcon } from '../components/Icons';
 import './Contact.css';
 
 const SUBJECTS = [
@@ -23,10 +16,12 @@ const SUBJECTS = [
 ];
 
 const SOCIALS = [
-  { label: 'Instagram', handle: '@mistroot.coffee', href: 'https://instagram.com', Icon: InstagramIcon },
-  { label: 'X', handle: '@mistroot', href: 'https://x.com', Icon: XIcon },
-  { label: 'Film journal', handle: 'Harvest films', href: 'https://youtube.com', Icon: YoutubeIcon },
-  { label: 'The Ledger', handle: 'Monthly letter', href: '#', Icon: JournalIcon },
+  {
+    label: 'Instagram',
+    handle: '@mistrootcoffee',
+    href: 'https://www.instagram.com/mistrootcoffee/',
+    Icon: InstagramIcon,
+  },
 ];
 
 const CHANNELS = [
@@ -49,8 +44,18 @@ const CHANNELS = [
 
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
 
+/** Netlify ties a submission to a form by this name; it has to match both the
+ *  form's name attribute and the hidden form-name field exactly. */
+const FORM_NAME = 'contact';
+
+/** Netlify Forms accepts a URL-encoded body, not JSON. */
+const encode = (data) =>
+  Object.entries(data)
+    .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
+    .join('&');
+
 export default function Contact() {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const [values, setValues] = useState({
     name: '',
     email: '',
@@ -59,7 +64,9 @@ export default function Contact() {
     message: '',
   });
   const [errors, setErrors] = useState({});
-  const [sent, setSent] = useState(false);
+  // 'idle' | 'sending' | 'sent' | 'error'
+  const [status, setStatus] = useState('idle');
+  const sent = status === 'sent';
 
   const set = (field) => (e) => {
     const v = e.target.value;
@@ -77,8 +84,9 @@ export default function Contact() {
     return next;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
+    const form = e.currentTarget;
     const next = validate();
     setErrors(next);
     if (Object.keys(next).length > 0) {
@@ -86,12 +94,25 @@ export default function Contact() {
       first?.focus();
       return;
     }
-    // No backend on this build — the estate inbox is wired up at deploy time.
-    setSent(true);
+
+    // Posting the form's own FormData keeps the body in step with the markup
+    // Netlify parsed at deploy time — form-name and the honeypot included.
+    setStatus('sending');
+    try {
+      const response = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: encode(Object.fromEntries(new FormData(form).entries())),
+      });
+      if (!response.ok) throw new Error(`Netlify answered ${response.status}`);
+      setStatus('sent');
+    } catch {
+      setStatus('error');
+    }
   };
 
   return (
-    <Page title="Contact — MistRoot Coffee">
+    <Page>
       <PageHero
         kicker="Contact"
         title={
@@ -144,7 +165,7 @@ export default function Contact() {
                     whileTap={{ scale: 0.98 }}
                     transition={{ duration: 0.32, ease: EASE_OUT }}
                     onClick={() => {
-                      setSent(false);
+                      setStatus('idle');
                       setValues({
                         name: '',
                         email: '',
@@ -161,6 +182,11 @@ export default function Contact() {
                 <motion.form
                   key="form"
                   className="form"
+                  name={FORM_NAME}
+                  method="POST"
+                  action="/"
+                  data-netlify="true"
+                  data-netlify-honeypot="bot-field"
                   onSubmit={onSubmit}
                   noValidate
                   initial={reduced ? { opacity: 0 } : { opacity: 0, y: 16 }}
@@ -168,6 +194,18 @@ export default function Contact() {
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.45, ease: EASE_OUT }}
                 >
+                  {/* Netlify reads both of these out of the prerendered HTML at
+                      deploy time. form-name routes the submission; bot-field is
+                      the honeypot — nobody sees it, so anything that arrives
+                      with it filled in is treated as spam and dropped. */}
+                  <input type="hidden" name="form-name" value={FORM_NAME} />
+                  <p className="visually-hidden">
+                    <label>
+                      Leave this field empty
+                      <input name="bot-field" tabIndex={-1} autoComplete="off" />
+                    </label>
+                  </p>
+
                   <h2 className="form__title">Send a note</h2>
 
                   <div className="form__row">
@@ -257,14 +295,34 @@ export default function Contact() {
                     <FieldError id="err-message" message={errors.message} reduced={reduced} />
                   </div>
 
+                  <AnimatePresence>
+                    {status === 'error' && (
+                      <motion.p
+                        className="field__error form__status"
+                        role="alert"
+                        initial={reduced ? { opacity: 0 } : { opacity: 0, y: -6, height: 0 }}
+                        animate={reduced ? { opacity: 1 } : { opacity: 1, y: 0, height: 'auto' }}
+                        exit={reduced ? { opacity: 0 } : { opacity: 0, y: -6, height: 0 }}
+                        transition={{ duration: 0.32, ease: EASE_OUT }}
+                      >
+                        That did not get through. Try once more, or write straight to{' '}
+                        <a href="mailto:mistrootcoffeeclub@gmail.com">
+                          mistrootcoffeeclub@gmail.com
+                        </a>
+                        .
+                      </motion.p>
+                    )}
+                  </AnimatePresence>
+
                   <motion.button
                     type="submit"
                     className="btn btn--gold form__submit"
-                    whileHover={reduced ? undefined : { y: -3 }}
+                    disabled={status === 'sending'}
+                    whileHover={reduced || status === 'sending' ? undefined : { y: -3 }}
                     whileTap={{ scale: 0.98 }}
                     transition={{ duration: 0.3, ease: EASE_OUT }}
                   >
-                    Send it up
+                    {status === 'sending' ? 'Sending…' : 'Send it up'}
                     <ArrowUpRight size={13} className="btn__arrow" />
                   </motion.button>
                 </motion.form>

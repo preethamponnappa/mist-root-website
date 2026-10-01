@@ -1,5 +1,5 @@
-import { motion, useReducedMotion } from 'motion/react';
-import { fadeUp, fadeIn, scaleIn, maskUp, still, stagger, viewportOnce } from '../lib/motion';
+import { motion } from 'motion/react';
+import { fadeUp, fadeIn, scaleIn, maskUp, still, stagger, viewportOnce, useReducedMotionSafe } from '../lib/motion';
 
 const PRESETS = { fadeUp, fadeIn, scaleIn, maskUp };
 
@@ -17,7 +17,7 @@ export default function Reveal({
   children,
   ...rest
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const Tag = motion[as] ?? motion.div;
   const base = reduced ? still : (PRESETS[preset] ?? fadeUp);
 
@@ -58,7 +58,7 @@ export function RevealGroup({
   children,
   ...rest
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const Tag = motion[as] ?? motion.div;
 
   return (
@@ -77,7 +77,7 @@ export function RevealGroup({
 
 /** Child of a RevealGroup — inherits the parent's stagger instead of its own viewport. */
 export function RevealItem({ as = 'div', preset = 'fadeUp', className, children, ...rest }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const Tag = motion[as] ?? motion.div;
   return (
     <Tag className={className} variants={reduced ? still : (PRESETS[preset] ?? fadeUp)} {...rest}>

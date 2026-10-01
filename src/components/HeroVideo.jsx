@@ -1,15 +1,16 @@
 import { useEffect, useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import heroVideo from '../../assests/video/hero_section.mp4';
+import heroPoster from '../assets/hero-poster.webp';
 import lockup from '../assets/brand/mistroot-lockup.png';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import ButtonLink from './ButtonLink';
 import { ArrowDown } from './Icons';
 import './HeroVideo.css';
 
 /** Words rise one after another from behind their own baseline. */
 function WordReveal({ text, className, delay = 0 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const words = text.split(' ');
   return (
     <span className={className}>
@@ -19,7 +20,7 @@ function WordReveal({ text, className, delay = 0 }) {
             className="wr__word"
             initial={reduced ? { y: 0 } : { y: '112%' }}
             animate={{ y: 0 }}
-            transition={{ duration: 0.95, ease: EASE_OUT, delay: delay + i * 0.055 }}
+            transition={{ duration: 0.7, ease: EASE_OUT, delay: delay + i * 0.05 }}
           >
             {w}
           </motion.span>
@@ -32,15 +33,33 @@ function WordReveal({ text, className, delay = 0 }) {
 export default function HeroVideo() {
   const heroRef = useRef(null);
   const videoRef = useRef(null);
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
 
-  // Some browsers ignore the JSX `muted` prop on first paint; enforce it, then
-  // start playback and swallow the autoplay rejection if the policy blocks it.
+  // The footage is the heaviest thing on the site, so the element ships
+  // without a source and nothing is fetched until this says so — the poster
+  // frame carries the hero until then. Three people never get the download at
+  // all: anyone who has asked for reduced motion, anyone on Data Saver, and
+  // anyone the browser reports as being on a 2G-class connection. They keep
+  // the poster, which is what the first frame looks like anyway.
+  //
+  // Playback itself stays declarative via the autoPlay attribute. Assigning
+  // the source is what starts it; a bare play() call is at the mercy of
+  // autoplay policy in a way the attribute is not.
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
+    if (!v || v.src) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const connection = navigator.connection;
+    const slowLink =
+      Boolean(connection?.saveData) || ['slow-2g', '2g'].includes(connection?.effectiveType);
+
+    if (prefersReduced || slowLink) return;
+
+    // Some browsers ignore the JSX `muted` prop on first paint; enforce it,
+    // or the autoplay policy will refuse a video it thinks has sound.
     v.muted = true;
-    v.play().catch(() => {});
+    v.src = heroVideo;
   }, []);
 
   const { scrollYProgress } = useScroll({
@@ -67,15 +86,18 @@ export default function HeroVideo() {
           className="hero__parallax"
           style={reduced ? still : { y: mediaY, scale: mediaScale, opacity: mediaFade }}
         >
+          {/* No src: the effect above assigns it, and only when it should. */}
           <video
             ref={videoRef}
             className="hero__video"
-            src={heroVideo}
+            poster={heroPoster}
+            width={1280}
+            height={720}
             autoPlay
             loop
             muted
             playsInline
-            preload="auto"
+            preload="none"
             aria-hidden="true"
             tabIndex={-1}
           />
@@ -96,7 +118,7 @@ export default function HeroVideo() {
           className="hero__eyebrow"
           initial={reduced ? false : { opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, ease: EASE_OUT, delay: 0.35 }}
+          transition={{ duration: 0.8, ease: EASE_OUT, delay: 0.1 }}
         >
           Western Ghats · Shade Grown · 800–1,200&nbsp;m
         </motion.p>
@@ -104,19 +126,23 @@ export default function HeroVideo() {
         <motion.img
           src={lockup}
           alt="MistRoot Coffee"
+          width={1000}
+          height={761}
+          fetchPriority="high"
+          decoding="async"
           className="hero__lockup"
           initial={reduced ? false : { opacity: 0, scale: 1.05, filter: 'blur(6px)' }}
           animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-          transition={{ duration: 1.5, ease: EASE_OUT, delay: 0.5 }}
+          transition={{ duration: 1, ease: EASE_OUT, delay: 0.2 }}
         />
 
         <h1 className="hero__tagline">
           {/* the split words are decorative; assistive tech reads the clean line */}
           <span className="visually-hidden">Mist. Mountains. Memories.</span>
           <span aria-hidden="true">
-            <WordReveal text="Mist. Mountains." delay={1.05} />{' '}
+            <WordReveal text="Mist. Mountains." delay={0.36} />{' '}
             <em>
-              <WordReveal text="Memories." delay={1.32} />
+              <WordReveal text="Memories." delay={0.56} />
             </em>
           </span>
         </h1>
@@ -125,7 +151,7 @@ export default function HeroVideo() {
           className="hero__actions"
           initial={reduced ? false : { opacity: 0, y: 22 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: EASE_OUT, delay: 1.7 }}
+          transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.85 }}
         >
           <ButtonLink to="/experiences">Walk the estate</ButtonLink>
           <ButtonLink to="/story" variant="ghost" arrow={false}>
@@ -139,7 +165,7 @@ export default function HeroVideo() {
           className="hero__cue-label"
           initial={reduced ? false : { opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
+          transition={{ delay: 1.1, duration: 1 }}
         >
           Scroll
         </motion.span>

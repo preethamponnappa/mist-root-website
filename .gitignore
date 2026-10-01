@@ -5,3 +5,8 @@ build/
 .env.local
 .env.*.local
 .DS_Store
+dist-ssr/
+
+# Local Netlify folder
+.netlify
+deno.lock

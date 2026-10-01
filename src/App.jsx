@@ -1,17 +1,40 @@
-import { useCallback } from 'react';
+import { Suspense, lazy, useCallback, useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
-import Home from './pages/Home';
-import Story from './pages/Story';
-import Club from './pages/Club';
-import Brewing from './pages/Brewing';
-import Experiences from './pages/Experiences';
-import Contact from './pages/Contact';
-import NotFound from './pages/NotFound';
+import Seo from './components/Seo';
 import './App.css';
+
+// Each page is its own chunk, so a visitor landing on /brewing does not pay
+// for the other five. The prerender resolves these at build time, so the HTML
+// is complete either way — splitting only affects what JavaScript is fetched.
+const loadHome = () => import('./pages/Home');
+const loadStory = () => import('./pages/Story');
+const loadClub = () => import('./pages/Club');
+const loadBrewing = () => import('./pages/Brewing');
+const loadExperiences = () => import('./pages/Experiences');
+const loadContact = () => import('./pages/Contact');
+const loadNotFound = () => import('./pages/NotFound');
+
+const Home = lazy(loadHome);
+const Story = lazy(loadStory);
+const Club = lazy(loadClub);
+const Brewing = lazy(loadBrewing);
+const Experiences = lazy(loadExperiences);
+const Contact = lazy(loadContact);
+const NotFound = lazy(loadNotFound);
+
+const ROUTE_CHUNKS = [
+  loadHome,
+  loadStory,
+  loadClub,
+  loadBrewing,
+  loadExperiences,
+  loadContact,
+  loadNotFound,
+];
 
 function App() {
   const location = useLocation();
@@ -22,26 +45,45 @@ function App() {
     window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   }, []);
 
+  // Pull the other pages down once this one is idle. Without this the first
+  // click after landing would wait on a network round trip, and the page
+  // transition would stall on an empty Suspense boundary.
+  useEffect(() => {
+    const schedule = window.requestIdleCallback ?? ((cb) => window.setTimeout(cb, 600));
+    const handle = schedule(() => {
+      for (const load of ROUTE_CHUNKS) load();
+    });
+    return () => window.cancelIdleCallback?.(handle);
+  }, []);
+
   return (
     <div className="app">
       <a className="skip-link" href="#main">
         Skip to content
       </a>
+      <Seo />
       <ScrollProgress />
       <Navbar />
 
       <main id="main" className="app__main">
-        <AnimatePresence mode="wait" initial={false} onExitComplete={handleExitComplete}>
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Home />} />
-            <Route path="/story" element={<Story />} />
-            <Route path="/club" element={<Club />} />
-            <Route path="/brewing" element={<Brewing />} />
-            <Route path="/experiences" element={<Experiences />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </AnimatePresence>
+        {/* Suspense sits outside AnimatePresence so the keyed <Routes> stays
+            its direct child — that key is what drives the page cross-fade.
+            The boundary never shows during hydration (React keeps the
+            prerendered markup until the chunk arrives) and the idle prefetch
+            above leaves it nothing to wait for afterwards. */}
+        <Suspense fallback={null}>
+          <AnimatePresence mode="wait" initial={false} onExitComplete={handleExitComplete}>
+            <Routes location={location} key={location.pathname}>
+              <Route path="/" element={<Home />} />
+              <Route path="/story" element={<Story />} />
+              <Route path="/club" element={<Club />} />
+              <Route path="/brewing" element={<Brewing />} />
+              <Route path="/experiences" element={<Experiences />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </AnimatePresence>
+        </Suspense>
       </main>
 
       <Footer />

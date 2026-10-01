@@ -1,6 +1,6 @@
-import { motion, useReducedMotion } from 'motion/react';
+import { motion } from 'motion/react';
 import Reveal from './Reveal';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import './PageHero.css';
 
 /**
@@ -8,7 +8,7 @@ import './PageHero.css';
  * baseline; the meta row draws a hairline underneath it.
  */
 export default function PageHero({ kicker, title, lede, meta = [] }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
 
   return (
     <header className="pagehero page-top">

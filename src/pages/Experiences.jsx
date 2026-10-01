@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
 import SectionHead from '../components/SectionHead';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { Basket, Compass, Cup, Droplet } from '../components/Icons';
 import './Experiences.css';
 
@@ -93,7 +93,7 @@ const PRACTICAL = [
 ];
 
 export default function Experiences() {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const [open, setOpen] = useState('popup');
   const listRef = useRef(null);
 
@@ -104,7 +104,7 @@ export default function Experiences() {
   const driftA = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <Page title="Experiences — MistRoot Coffee">
+    <Page>
       <PageHero
         kicker="Experiences"
         title={
@@ -186,38 +186,39 @@ export default function Experiences() {
                     </motion.span>
                   </button>
 
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        id={`xp-${x.id}`}
-                        className="xp__panel"
-                        initial={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                        animate={reduced ? { opacity: 1 } : { height: 'auto', opacity: 1 }}
-                        exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }}
-                        transition={{ duration: 0.55, ease: EASE_OUT }}
-                      >
-                        <div className="xp__panel-inner">
-                          <p className="xp__body">{x.body}</p>
+                  {/* Every panel stays in the markup — collapsed, never
+                      unmounted — so all four experiences and their prices are
+                      in the prerendered HTML. `inert` keeps a closed panel out
+                      of the tab order and the accessibility tree without
+                      taking it out of the document. */}
+                  <motion.div
+                    id={`xp-${x.id}`}
+                    className="xp__panel"
+                    inert={!isOpen}
+                    initial={false}
+                    animate={{ height: isOpen ? 'auto' : 0, opacity: isOpen ? 1 : 0 }}
+                    transition={reduced ? { duration: 0 } : { duration: 0.55, ease: EASE_OUT }}
+                  >
+                    <div className="xp__panel-inner">
+                      <p className="xp__body">{x.body}</p>
 
-                          <dl className="xp__detail">
-                            {x.detail.map((d) => (
-                              <div key={d.k}>
-                                <dt>{d.k}</dt>
-                                <dd>{d.v}</dd>
-                              </div>
-                            ))}
-                          </dl>
-
-                          <div className="xp__actions">
-                            <ButtonLink to="/contact">Request this date</ButtonLink>
-                            <span className="xp__note">
-                              We confirm within two working days · deposit on confirmation
-                            </span>
+                      <dl className="xp__detail">
+                        {x.detail.map((d) => (
+                          <div key={d.k}>
+                            <dt>{d.k}</dt>
+                            <dd>{d.v}</dd>
                           </div>
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        ))}
+                      </dl>
+
+                      <div className="xp__actions">
+                        <ButtonLink to="/contact">Request this date</ButtonLink>
+                        <span className="xp__note">
+                          We confirm within two working days · deposit on confirmation
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
 
                   <motion.span
                     className="xp__underline"

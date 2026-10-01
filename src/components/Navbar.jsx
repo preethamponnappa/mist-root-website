@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from 'motion/react';
+import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
 import mark from '../assets/brand/mistroot-mark.png';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { ArrowUpRight } from './Icons';
 import './Navbar.css';
 
@@ -24,7 +24,7 @@ const labelStack = {
 };
 
 function DeskLink({ to, label }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   return (
     <NavLink to={to} end={to === '/'} className="navlink">
       {({ isActive }) => (
@@ -59,7 +59,7 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const { scrollY } = useScroll();
   const { pathname } = useLocation();
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const [seenPath, setSeenPath] = useState(pathname);
 
   useMotionValueEvent(scrollY, 'change', (v) => setScrolled(v > 48));
@@ -95,6 +95,8 @@ export default function Navbar() {
             <motion.img
               src={mark}
               alt=""
+              width={560}
+              height={342}
               className="brand__mark"
               whileHover={{ scale: 1.07, rotate: -1.5 }}
               transition={{ duration: 0.5, ease: EASE_OUT }}

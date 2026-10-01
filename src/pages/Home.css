@@ -201,6 +201,8 @@
 }
 
 .ritual__name {
+  /* pinned: was an h4, now an h3 for heading order — keep the h4 metrics */
+  line-height: 1.25;
   font-size: var(--step-1);
   margin-top: var(--space-xs);
 }
@@ -262,6 +264,8 @@
 }
 
 .invite__name {
+  /* pinned: was an h4, now an h3 for heading order — keep the h4 metrics */
+  line-height: 1.25;
   font-size: var(--step-1);
 }
 

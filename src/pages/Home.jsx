@@ -1,12 +1,12 @@
 import { useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import Page from '../components/Page';
 import HeroVideo from '../components/HeroVideo';
 import SectionHead from '../components/SectionHead';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import {
   ArrowRight,
   Basket,
@@ -77,7 +77,7 @@ const INVITES = [
 ];
 
 export default function Home() {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const manifestoRef = useRef(null);
 
   const { scrollYProgress } = useScroll({
@@ -88,7 +88,7 @@ export default function Home() {
   const quoteY = useTransform(scrollYProgress, [0, 1], [60, -60]);
 
   return (
-    <Page title="MistRoot Coffee — Mist. Mountains. Memories.">
+    <Page>
       <HeroVideo />
 
       {/* ---------------------------------------------------- manifesto --- */}
@@ -241,7 +241,7 @@ export default function Home() {
                   >
                     <Drawing className="ritual__drawing" />
                   </motion.div>
-                  <h4 className="ritual__name">{name}</h4>
+                  <h3 className="ritual__name">{name}</h3>
                   <p className="ritual__line">{line}</p>
                 </motion.div>
               </RevealItem>
@@ -293,7 +293,7 @@ export default function Home() {
                     <Icon size={22} />
                   </motion.span>
                   <div>
-                    <h4 className="invite__name">{name}</h4>
+                    <h3 className="invite__name">{name}</h3>
                     <p className="invite__line">{line}</p>
                   </div>
                   <motion.span

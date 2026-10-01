@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import { motion, useReducedMotion } from 'motion/react';
-import { EASE_OUT } from '../lib/motion';
+import { motion } from 'motion/react';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { ArrowUpRight } from './Icons';
 
 const MotionLink = motion.create(Link);
@@ -28,7 +28,7 @@ export default function ButtonLink({
   children,
   ...rest
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
 
   return (
     <MotionLink

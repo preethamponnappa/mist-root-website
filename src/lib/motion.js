@@ -2,6 +2,8 @@
    One vocabulary of eases + variants so every section moves like the same brand:
    slow, weighted, never bouncy. */
 
+import { useSyncExternalStore } from 'react';
+
 export const EASE_OUT = [0.22, 1, 0.36, 1];
 export const EASE_IN_OUT = [0.65, 0, 0.35, 1];
 
@@ -57,3 +59,43 @@ export const still = {
   hidden: { opacity: 1, y: 0, scale: 1 },
   show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0 } },
 };
+
+const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
+
+function subscribeToReducedMotion(onChange) {
+  if (typeof window === 'undefined' || !window.matchMedia) return () => {};
+  const query = window.matchMedia(REDUCED_MOTION_QUERY);
+  query.addEventListener('change', onChange);
+  return () => query.removeEventListener('change', onChange);
+}
+
+function readReducedMotion() {
+  if (typeof window === 'undefined' || !window.matchMedia) return false;
+  return window.matchMedia(REDUCED_MOTION_QUERY).matches;
+}
+
+/** The prerender has no media queries, so it always renders the full-motion markup. */
+function readReducedMotionOnServer() {
+  return false;
+}
+
+/**
+ * Hydration-safe `prefers-reduced-motion`.
+ *
+ * Motion's own `useReducedMotion()` returns `null` while server rendering but
+ * the real preference on the client's very first render, so a reduced-motion
+ * visitor would hydrate against markup the prerender never produced. Going
+ * through `useSyncExternalStore` makes React use the server snapshot for both
+ * the prerender and hydration, then settle to the true preference immediately
+ * after — no mismatch, and it still reacts live when the OS setting changes.
+ *
+ * Use this everywhere instead of importing `useReducedMotion` from
+ * `motion/react` directly.
+ */
+export function useReducedMotionSafe() {
+  return useSyncExternalStore(
+    subscribeToReducedMotion,
+    readReducedMotion,
+    readReducedMotionOnServer,
+  );
+}
