@@ -3,10 +3,16 @@ import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
+import SectionHead from '../components/SectionHead';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { ArrowUpRight, Compass, InstagramIcon } from '../components/Icons';
-import { BUSINESS } from '../data/business';
+import {
+  BUSINESS,
+  directionsUrl,
+  mapEmbedUrl,
+  whatsappEnquiryUrl,
+} from '../data/business';
 import { useIsHydrated } from '../lib/hydration';
 import './Contact.css';
 
@@ -438,6 +444,80 @@ export default function Contact() {
               </ul>
             </Reveal>
           </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------- map --- */}
+      <section className="section section--raised contact-map">
+        <div className="shell">
+          <SectionHead
+            kicker="Finding us"
+            title={
+              <>
+                Up the ridge, <em>past the last tar road.</em>
+              </>
+            }
+            lede={`The estate sits in the ${BUSINESS.location}, at ${BUSINESS.elevation}. ${BUSINESS.driveTimes
+              .map((d) => `${d.duration} from ${d.from}`)
+              .join(', ')}.`}
+          />
+
+          <Reveal className="contact-map__frame" delay={0.1}>
+            {/* Loaded lazily and only on request of the viewer's browser —
+                Google sets cookies, so it should not run before the page does. */}
+            <iframe
+              src={mapEmbedUrl}
+              title={`Map showing ${BUSINESS.name} in ${BUSINESS.location}`}
+              width="100%"
+              height="420"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </Reveal>
+
+          <Reveal className="contact-map__actions" delay={0.16}>
+            <address className="contact-map__address">
+              {BUSINESS.address.street}
+              <br />
+              {BUSINESS.address.locality}
+              <br />
+              {BUSINESS.address.region} {BUSINESS.address.postalCode}, {BUSINESS.address.country}
+              <br />
+              <span className="contact-map__geo numeral">{BUSINESS.geoDisplay}</span>
+            </address>
+
+            <p className="contact-map__hours">
+              <strong>{BUSINESS.hours.days}</strong>
+              <br />
+              {BUSINESS.hours.opens} – {BUSINESS.hours.closes}
+              <br />
+              {BUSINESS.hours.closure}
+            </p>
+
+            <p className="contact-map__links">
+              <a
+                className="btn btn--gold js-get-directions"
+                id="get-directions"
+                href={directionsUrl}
+                target="_blank"
+                rel="noopener"
+              >
+                Get directions
+                <ArrowUpRight size={13} className="btn__arrow" />
+              </a>
+              <a
+                className="btn btn--ghost js-whatsapp-enquiry"
+                id="whatsapp-visit"
+                href={whatsappEnquiryUrl('visiting the estate')}
+                target="_blank"
+                rel="noopener"
+              >
+                Ask on WhatsApp
+              </a>
+            </p>
+          </Reveal>
         </div>
       </section>
     </Page>

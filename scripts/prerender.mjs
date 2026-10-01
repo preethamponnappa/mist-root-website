@@ -186,6 +186,8 @@ const csp = [
   // Fonts are self-hosted; nothing is fetched from Google any more.
   "font-src 'self'",
   "media-src 'self'",
+  // The contact page embeds a Google map; nothing else is framed.
+  "frame-src https://www.google.com",
   "connect-src 'self'",
   "manifest-src 'self'",
   // 'upgrade-insecure-requests' is deliberately absent: browsers ignore it in
