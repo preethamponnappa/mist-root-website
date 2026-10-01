@@ -126,7 +126,14 @@
 
 .club-coffees__grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  /* Two, not four: at four the cards were 946px tall, more than a laptop
+     viewport, so no whole tile was ever on screen.
+
+     minmax(0, 1fr) rather than 1fr, because a bare 1fr track refuses to
+     shrink below its content's min-width — the "Order on WhatsApp" button
+     does not wrap, so the columns pushed the grid wider than the page and
+     the last card fell off the right edge behind a horizontal scrollbar. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(1rem, 1.6vw, 1.5rem);
   margin-top: clamp(2.5rem, 5vw, 4.5rem);
 }
@@ -287,12 +294,6 @@
 }
 
 /* ========================================================== responsive === */
-@media (max-width: 1080px) {
-  .club-coffees__grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
 @media (max-width: 860px) {
   .club-coffees__head {
     grid-template-columns: 1fr;
@@ -320,9 +321,9 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 760px) {
   .club-coffees__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -332,7 +333,9 @@
 
 .coffee__spec {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Four across while the card is wide enough; two when it is not. Each pair
+     of rows this saves is ~55px off a card that was already too tall. */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.6rem var(--space-sm);
   margin-top: var(--space-sm);
   padding-top: var(--space-sm);
@@ -358,7 +361,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-  gap: var(--space-sm);
+  gap: var(--space-xs) var(--space-sm);
   margin-top: var(--space-sm);
   padding-top: var(--space-sm);
   border-top: 1px solid rgba(245, 234, 217, 0.1);
@@ -422,12 +425,62 @@
 }
 
 .coffee__order {
-  flex: 1 1 100%;
+  flex: 0 0 auto;
   justify-content: center;
+  white-space: nowrap;
 }
 
-@media (min-width: 700px) {
-  .coffee__order {
-    flex: 0 0 auto;
+/* Narrow cards: stack the spec in pairs and let the button take the full
+   width, which reads better than three cramped columns. */
+@media (max-width: 620px) {
+  .coffee__spec {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .coffee__order {
+    flex: 1 1 100%;
+  }
+}
+
+/* The two-up cards between 760px and about 1100px are nearly as narrow as a
+   phone card, so they get the same treatment. */
+@media (min-width: 761px) and (max-width: 1100px) {
+  .coffee__spec {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .coffee__order {
+    flex: 1 1 100%;
+  }
+}
+
+/* ------------------------------------------------- compact the card --- */
+/* The card carries a lot: name, origin, profile, a paragraph, tasting notes,
+   four specs, a pairing, a price, a grind choice and a button. At four columns
+   that stacked up to 946px — taller than a laptop viewport. These rules buy
+   back the easy vertical space without dropping anything the customer needs. */
+
+/* "Best brewed" sat on its own line above the value for no reason. */
+.coffee__brew {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+}
+
+.coffee__brew span {
+  display: inline;
+  margin-bottom: 0;
+  flex: none;
+}
+
+/* The grind label reads fine beside its control. */
+.coffee__grind {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.coffee__grind select {
+  padding-block: 0.45rem;
+  background-position: calc(100% - 1rem) 0.95em, calc(100% - 0.7rem) 0.95em;
 }

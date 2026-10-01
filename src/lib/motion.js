@@ -7,8 +7,17 @@ import { useSyncExternalStore } from 'react';
 export const EASE_OUT = [0.22, 1, 0.36, 1];
 export const EASE_IN_OUT = [0.65, 0, 0.35, 1];
 
-/** Reveals share a viewport contract: fire once, a little before fully on-screen. */
-export const viewportOnce = { once: true, amount: 0.25, margin: '0px 0px -12% 0px' };
+/**
+ * Reveals share a viewport contract: fire once, a little before fully on-screen.
+ *
+ * `amount: 'some'` rather than a fraction, deliberately. A fraction asks for
+ * that proportion of the element to be on screen at once, which an element
+ * taller than the viewport can never satisfy — the coffee grid on /club is
+ * 3,200px of stacked cards on a phone, so a 0.25 threshold left it invisible
+ * at every scroll position. The negative bottom margin is what keeps the
+ * "a little before" feel: the trigger line sits at 88% of the viewport height.
+ */
+export const viewportOnce = { once: true, amount: 'some', margin: '0px 0px -12% 0px' };
 
 export const fadeUp = {
   hidden: { opacity: 0, y: 34 },
