@@ -4,14 +4,7 @@ import Page from '../components/Page';
 import PageHero from '../components/PageHero';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
-import {
-  ArrowUpRight,
-  Compass,
-  InstagramIcon,
-  JournalIcon,
-  XIcon,
-  YoutubeIcon,
-} from '../components/Icons';
+import { ArrowUpRight, Compass, InstagramIcon } from '../components/Icons';
 import './Contact.css';
 
 const SUBJECTS = [
@@ -23,10 +16,12 @@ const SUBJECTS = [
 ];
 
 const SOCIALS = [
-  { label: 'Instagram', handle: '@mistroot.coffee', href: 'https://instagram.com', Icon: InstagramIcon },
-  { label: 'X', handle: '@mistroot', href: 'https://x.com', Icon: XIcon },
-  { label: 'Film journal', handle: 'Harvest films', href: 'https://youtube.com', Icon: YoutubeIcon },
-  { label: 'The Ledger', handle: 'Monthly letter', href: '#', Icon: JournalIcon },
+  {
+    label: 'Instagram',
+    handle: '@mistrootcoffee',
+    href: 'https://www.instagram.com/mistrootcoffee/',
+    Icon: InstagramIcon,
+  },
 ];
 
 const CHANNELS = [

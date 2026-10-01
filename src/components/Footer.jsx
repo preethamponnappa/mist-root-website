@@ -3,14 +3,11 @@ import { motion } from 'motion/react';
 import wordmark from '../assets/brand/mistroot-wordmark.png';
 import Reveal, { RevealGroup, RevealItem } from './Reveal';
 import { EASE_OUT } from '../lib/motion';
-import { InstagramIcon, JournalIcon, XIcon, YoutubeIcon } from './Icons';
+import { InstagramIcon } from './Icons';
 import './Footer.css';
 
 const SOCIALS = [
-  { label: 'Instagram', href: 'https://instagram.com', Icon: InstagramIcon },
-  { label: 'X', href: 'https://x.com', Icon: XIcon },
-  { label: 'Film journal', href: 'https://youtube.com', Icon: YoutubeIcon },
-  { label: 'The Ledger', href: '#', Icon: JournalIcon },
+  { label: 'Instagram', href: 'https://www.instagram.com/mistrootcoffee/', Icon: InstagramIcon },
 ];
 
 const COLUMNS = [
