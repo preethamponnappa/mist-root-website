@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import {
   ArrowUpRight,
   Compass,
@@ -50,7 +50,7 @@ const CHANNELS = [
 const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
 
 export default function Contact() {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const [values, setValues] = useState({
     name: '',
     email: '',
@@ -91,7 +91,7 @@ export default function Contact() {
   };
 
   return (
-    <Page title="Contact — MistRoot Coffee">
+    <Page>
       <PageHero
         kicker="Contact"
         title={

@@ -109,7 +109,7 @@ function Intensity({ level, name }) {
 
 export default function Club() {
   return (
-    <Page title="The Coffee Club — MistRoot Coffee">
+    <Page>
       <PageHero
         kicker="The MistRoot Coffee Club"
         title={

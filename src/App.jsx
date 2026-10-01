@@ -4,6 +4,7 @@ import { AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
+import Seo from './components/Seo';
 import Home from './pages/Home';
 import Story from './pages/Story';
 import Club from './pages/Club';
@@ -27,6 +28,7 @@ function App() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
+      <Seo />
       <ScrollProgress />
       <Navbar />
 

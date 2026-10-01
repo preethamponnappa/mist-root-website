@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { AnimatePresence, motion, useScroll, useTransform } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
 import SectionHead from '../components/SectionHead';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { Basket, Compass, Cup, Droplet } from '../components/Icons';
 import './Experiences.css';
 
@@ -93,7 +93,7 @@ const PRACTICAL = [
 ];
 
 export default function Experiences() {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const [open, setOpen] = useState('popup');
   const listRef = useRef(null);
 
@@ -104,7 +104,7 @@ export default function Experiences() {
   const driftA = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <Page title="Experiences — MistRoot Coffee">
+    <Page>
       <PageHero
         kicker="Experiences"
         title={

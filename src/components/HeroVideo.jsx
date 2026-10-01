@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'motion/react';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import heroVideo from '../../assests/video/hero_section.mp4';
 import lockup from '../assets/brand/mistroot-lockup.png';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import ButtonLink from './ButtonLink';
 import { ArrowDown } from './Icons';
 import './HeroVideo.css';
 
 /** Words rise one after another from behind their own baseline. */
 function WordReveal({ text, className, delay = 0 }) {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const words = text.split(' ');
   return (
     <span className={className}>
@@ -32,7 +32,7 @@ function WordReveal({ text, className, delay = 0 }) {
 export default function HeroVideo() {
   const heroRef = useRef(null);
   const videoRef = useRef(null);
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
 
   // Some browsers ignore the JSX `muted` prop on first paint; enforce it, then
   // start playback and swallow the autoplay rejection if the policy blocks it.

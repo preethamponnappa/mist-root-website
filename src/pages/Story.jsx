@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'motion/react';
+import { motion, useScroll, useTransform } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
 import SectionHead from '../components/SectionHead';
@@ -7,7 +7,7 @@ import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
 import heroVideo from '../../assests/video/hero_section.mp4';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { Droplet, Hourglass, Leaf, Mountain } from '../components/Icons';
 import './Story.css';
 
@@ -58,7 +58,7 @@ const JOURNEY = [
 ];
 
 export default function Story() {
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const trackRef = useRef(null);
   const bandRef = useRef(null);
 
@@ -75,7 +75,7 @@ export default function Story() {
   const bandScale = useTransform(bandProgress, [0, 0.5, 1], [1.12, 1.02, 1.12]);
 
   return (
-    <Page title="Our Story — MistRoot Coffee">
+    <Page>
       <PageHero
         kicker="Our story"
         title={

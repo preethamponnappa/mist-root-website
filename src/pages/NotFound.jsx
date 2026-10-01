@@ -5,7 +5,7 @@ import './NotFound.css';
 
 export default function NotFound() {
   return (
-    <Page title="Lost on the ridge — MistRoot Coffee">
+    <Page>
       <section className="section page-top notfound">
         <div className="shell notfound__inner">
           <Reveal as="p" className="eyebrow eyebrow--bare">

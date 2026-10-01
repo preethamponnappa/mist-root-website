@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { AnimatePresence, motion } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
 import SectionHead from '../components/SectionHead';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
-import { EASE_OUT } from '../lib/motion';
+import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import {
   AeroPressDrawing,
   ColdBrewDrawing,
@@ -155,11 +155,11 @@ const WATER = [
 
 export default function Brewing() {
   const [active, setActive] = useState(METHODS[0].id);
-  const reduced = useReducedMotion();
+  const reduced = useReducedMotionSafe();
   const method = METHODS.find((m) => m.id === active);
 
   return (
-    <Page title="Brewing — MistRoot Coffee">
+    <Page>
       <PageHero
         kicker="Brewing"
         title={
