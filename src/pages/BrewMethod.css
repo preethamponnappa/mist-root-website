@@ -1,0 +1,130 @@
+/* One brewing method on its own page. Reuses the brew__ primitives from
+   Brewing.css for the illustration, spec list and pairing line. */
+
+.brewmethod__inner {
+  display: grid;
+  grid-template-columns: 0.8fr 1.4fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+.brewmethod__art {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  position: sticky;
+  top: calc(var(--nav-h, 5rem) + var(--space-md));
+}
+
+.brewmethod__heading {
+  font-size: var(--step-1);
+  color: var(--cream);
+}
+
+.brewmethod__heading + * {
+  margin-top: var(--space-sm);
+}
+
+.brewmethod__spec {
+  grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr));
+  border-top: none;
+  padding-top: 0;
+}
+
+.brewmethod__steps {
+  list-style: none;
+  margin: 0 0 var(--space-md);
+  padding: 0;
+  counter-reset: step;
+}
+
+.brewmethod__steps li {
+  display: grid;
+  grid-template-columns: 6.5rem 1fr;
+  gap: var(--space-sm);
+  padding: var(--space-sm) 0;
+  border-top: 1px solid rgba(245, 234, 217, 0.1);
+}
+
+.brewmethod__time {
+  color: var(--gold-deep);
+}
+
+.brewmethod__text {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.65;
+  color: var(--cream-70);
+}
+
+.brewmethod__pair {
+  margin-top: var(--space-sm);
+}
+
+.brewmethod__cta {
+  margin-top: var(--space-md);
+}
+
+/* ------------------------------------------------------- the others --- */
+.brewmethod-more__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: var(--space-sm);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.methodcard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  padding: var(--space-sm);
+  border: 1px solid rgba(245, 234, 217, 0.1);
+  border-radius: 2px;
+  text-align: center;
+  color: inherit;
+  transition: border-color 0.3s ease;
+}
+
+.methodcard:hover,
+.methodcard:focus-visible {
+  border-color: rgba(200, 164, 90, 0.5);
+}
+
+.methodcard__art {
+  width: 4.5rem;
+  height: auto;
+  color: var(--gold-deep);
+}
+
+.methodcard__name {
+  font-family: var(--font-serif);
+  font-size: var(--step-0);
+  color: var(--cream);
+}
+
+.methodcard__meta {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  color: var(--cream-30);
+}
+
+.brewmethod-more__foot {
+  margin-top: var(--space-md);
+}
+
+@media (max-width: 860px) {
+  .brewmethod__inner {
+    grid-template-columns: 1fr;
+  }
+
+  .brewmethod__art {
+    position: static;
+  }
+
+  .brewmethod__steps li {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+}

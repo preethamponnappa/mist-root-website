@@ -9,7 +9,8 @@
  * <div id="root">.
  *
  * It also emits dist/sitemap.xml so the sitemap can never drift from the route
- * list, and prints any route whose copy is still marked TODO-COPY.
+ * list, writes llms.txt, and fails if any page's title or description has
+ * drifted outside the length Google will show.
  */
 import { execFileSync } from 'node:child_process';
 import crypto from 'node:crypto';
@@ -18,6 +19,13 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { ALL_PAGES, ROUTES, SITE, canonicalFor } from '../src/lib/seo.js';
+import { structuredDataFor } from '../src/lib/structured-data.js';
+import {
+  BUSINESS,
+  COFFEES,
+  EXPERIENCES,
+  formatPrice,
+} from '../src/data/business.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -67,6 +75,20 @@ function headFor(page) {
     `<meta name="twitter:description" content="${attr(page.description)}" />`,
     `<meta name="twitter:image" content="${attr(image)}" />`,
   ];
+
+  // JSON-LD last, so the human-readable tags stay at the top of the head. It is
+  // built from the same facts the page renders — structured data that disagrees
+  // with the visible page is worse than none at all.
+  if (!page.noindex) {
+    const json = JSON.stringify(structuredDataFor(page.path), null, 2);
+    JSON.parse(json); // proves it is valid before it ships
+    tags.push(
+      '<script type="application/ld+json">\n' +
+        // A literal </script> inside the payload would end the element early.
+        json.replace(/</g, '\\u003c') +
+        '\n    </script>',
+    );
+  }
 
   if (page.noindex) tags.push(`<meta name="robots" content="noindex, follow" />`);
 
@@ -128,10 +150,14 @@ for (const page of ALL_PAGES) {
     .replace(ROOT_PLACEHOLDER, `<div id="root">${appHtml}</div>`);
 
   // React's Suspense runtime arrives as a couple of inline <script> blocks.
-  // Hashing them is what lets the CSP stay free of 'unsafe-inline' for
-  // scripts, and doing it here means the hashes follow React's version
-  // instead of being pasted into netlify.toml and going stale.
-  for (const [, body] of html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)) {
+  // Hashing them is what lets the CSP stay free of 'unsafe-inline' for scripts,
+  // and doing it here means the hashes follow React's version instead of being
+  // pasted into netlify.toml and going stale. JSON-LD is skipped: it carries a
+  // type the browser never executes, so CSP does not apply to it.
+  for (const [, attrs, body] of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
+    const executable =
+      !/\bsrc=/.test(attrs) && !/type=["']application\/ld\+json["']/.test(attrs);
+    if (!executable) continue;
     inlineScriptHashes.add(`sha256-${crypto.createHash('sha256').update(body, 'utf8').digest('base64')}`);
   }
 
@@ -186,6 +212,8 @@ const csp = [
   // Fonts are self-hosted; nothing is fetched from Google any more.
   "font-src 'self'",
   "media-src 'self'",
+  // The contact page embeds a Google map; nothing else is framed.
+  "frame-src https://www.google.com",
   "connect-src 'self'",
   "manifest-src 'self'",
   // 'upgrade-insecure-requests' is deliberately absent: browsers ignore it in
@@ -202,7 +230,82 @@ fs.writeFileSync(
 );
 console.log(`  wrote dist/_headers (CSP report-only, ${inlineScriptHashes.size} script hashes)`);
 
-const unconfirmed = ALL_PAGES.filter((page) => page.todo).map((page) => page.path);
-if (unconfirmed.length) {
-  console.log(`\n  TODO-COPY: title/description still unconfirmed for ${unconfirmed.join(', ')}`);
+/**
+ * llms.txt — a plain-text brief for language models, in the emerging
+ * llmstxt.org convention. Generated from the same facts as everything else so
+ * it cannot contradict the site, and deliberately short: it states what we
+ * sell, where we are and how to buy, and nothing it cannot support.
+ */
+const llms = [
+  `# ${BUSINESS.name}`,
+  '',
+  `> A family coffee business in the ${BUSINESS.location}, Karnataka, India. Three generations have grown coffee here since the ${BUSINESS.founded}; today we sell our own estate coffees and run tastings and estate visits.`,
+  '',
+  `Also written as ${BUSINESS.alternateNames.join(' or ')}.`,
+  '',
+  '## Where we are',
+  '',
+  `- Estate: ${BUSINESS.address.street}, ${BUSINESS.address.locality}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}, ${BUSINESS.address.country}`,
+  `- Coordinates: ${BUSINESS.geoDisplay}`,
+  `- Elevation: ${BUSINESS.elevation}`,
+  `- Driving time: ${BUSINESS.driveTimes.map((d) => `${d.duration} from ${d.from}`).join('; ')}`,
+  `- Tasting room: ${BUSINESS.hours.days}, ${BUSINESS.hours.opens}–${BUSINESS.hours.closes}. ${BUSINESS.hours.closure}.`,
+  '',
+  '## Coffees',
+  '',
+  `All are grown in the ${BUSINESS.location} and sold in ${COFFEES[0].weight} bags.`,
+  '',
+  ...COFFEES.map(
+    (c) =>
+      `- ${c.name} — ${c.variety}, ${c.process.toLowerCase()} process, ${c.roast.toLowerCase()} roast, ${c.weight}, ${formatPrice(c.price)}`,
+  ),
+  '',
+  '## Experiences',
+  '',
+  ...EXPERIENCES.map((x) => `- ${x.name} — ${x.season}`),
+  '',
+  `The harvest runs in ${BUSINESS.harvest.months}. The bean-to-cup day runs ${BUSINESS.beanToCup.months}.`,
+  '',
+  '## How to order',
+  '',
+  `There is no online checkout yet. Orders are placed over WhatsApp on ${BUSINESS.phoneDisplay}, or by email. Each coffee on ${canonicalFor('/club')} has an order link that opens WhatsApp with the coffee, weight and grind already written in.`,
+  '',
+  '## Contact',
+  '',
+  `- Email: ${BUSINESS.email}`,
+  `- WhatsApp and phone: ${BUSINESS.phoneDisplay}`,
+  ...BUSINESS.socials.map((s) => `- ${s.label}: ${s.url}`),
+  '',
+  '## Pages',
+  '',
+  ...ROUTES.map((route) => `- [${route.title}](${canonicalFor(route.path)}): ${route.description}`),
+  '',
+].join('\n');
+
+fs.writeFileSync(path.join(dist, 'llms.txt'), llms);
+console.log(`  wrote dist/llms.txt (${llms.split('\n').length} lines)`);
+
+// Titles and descriptions are written to fit what Google shows before it
+// truncates. Checked here so a later edit cannot quietly drift out of range.
+const TITLE_MAX = 60;
+const DESCRIPTION_MIN = 140;
+const DESCRIPTION_MAX = 160;
+
+const outOfRange = ALL_PAGES.flatMap((page) => {
+  const problems = [];
+  if (page.title.length > TITLE_MAX) {
+    problems.push(`title is ${page.title.length} characters, max ${TITLE_MAX}`);
+  }
+  if (page.description.length < DESCRIPTION_MIN || page.description.length > DESCRIPTION_MAX) {
+    problems.push(
+      `description is ${page.description.length} characters, wanted ${DESCRIPTION_MIN}-${DESCRIPTION_MAX}`,
+    );
+  }
+  return problems.map((problem) => `${page.path}: ${problem}`);
+});
+
+if (outOfRange.length) {
+  console.error('  Metadata out of range:');
+  for (const problem of outOfRange) console.error('    ' + problem);
+  process.exit(1);
 }

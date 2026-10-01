@@ -294,3 +294,61 @@
   opacity: 0.55;
   cursor: progress;
 }
+
+/* ------------------------------------------------------------- map --- */
+.contact-map__frame {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  overflow: hidden;
+  border: 1px solid rgba(245, 234, 217, 0.12);
+  border-radius: 2px;
+  line-height: 0;
+}
+
+.contact-map__frame iframe {
+  display: block;
+  /* The map is a bright rectangle in a dark page; take the edge off it. */
+  filter: grayscale(0.35) brightness(0.88) contrast(1.05);
+}
+
+.contact-map__actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+  align-items: start;
+  margin-top: var(--space-md);
+}
+
+.contact-map__address,
+.contact-map__hours {
+  margin: 0;
+  font-style: normal;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.7;
+  color: var(--cream-70);
+}
+
+.contact-map__hours strong {
+  color: var(--cream);
+  font-weight: 500;
+}
+
+.contact-map__geo {
+  display: inline-block;
+  margin-top: 0.4rem;
+  color: var(--gold-deep);
+}
+
+.contact-map__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  margin: 0;
+}
+
+@media (max-width: 860px) {
+  .contact-map__actions {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+}

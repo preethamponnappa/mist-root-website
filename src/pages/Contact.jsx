@@ -1,10 +1,19 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
+import SectionHead from '../components/SectionHead';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { ArrowUpRight, Compass, InstagramIcon } from '../components/Icons';
+import {
+  BUSINESS,
+  directionsUrl,
+  mapEmbedUrl,
+  whatsappEnquiryUrl,
+} from '../data/business';
+import { useIsHydrated } from '../lib/hydration';
 import './Contact.css';
 
 const SUBJECTS = [
@@ -27,17 +36,21 @@ const SOCIALS = [
 const CHANNELS = [
   {
     title: 'The estate',
-    lines: ['MistRoot Estate', 'Brahmagiri Range, Kodagu (Coorg)', 'Karnataka 571 247'],
-    note: '12.3833° N, 75.5167° E · 800–1,200 m',
+    lines: [
+      BUSINESS.address.street,
+      BUSINESS.address.locality,
+      `${BUSINESS.address.region} ${BUSINESS.address.postalCode}`,
+    ],
+    note: `${BUSINESS.geoDisplay} · ${BUSINESS.elevation}`,
   },
   {
     title: 'Tasting room',
-    lines: ['Thursday – Sunday', '08:00 – 17:00', 'Closed through heavy monsoon (Jun–Jul)'],
+    lines: [BUSINESS.hours.days, `${BUSINESS.hours.opens} – ${BUSINESS.hours.closes}`, BUSINESS.hours.closure],
     note: 'Walk-ins welcome; experiences by booking',
   },
   {
     title: 'Direct',
-    lines: ['mistrootcoffeeclub@gmail.com', '+91 70229 19007'],
+    lines: [BUSINESS.email, BUSINESS.phoneDisplay],
     note: 'We answer within two working days',
   },
 ];
@@ -64,6 +77,28 @@ export default function Contact() {
     message: '',
   });
   const [errors, setErrors] = useState({});
+
+  // /contact?experience=Estate%20Walks arrives from the experiences page. The
+  // query is only read after hydration — the prerendered contact.html is the
+  // same file whatever the query says, so reading it during the first render
+  // would describe markup that file never had.
+  const hydrated = useIsHydrated();
+  const [searchParams] = useSearchParams();
+  const requestedExperience = hydrated ? searchParams.get('experience') : null;
+
+  // Seeding during render rather than in an effect: this is the pattern React
+  // documents for adjusting state when a prop changes, and it lands before the
+  // browser paints rather than causing a second visible pass.
+  const [seeded, setSeeded] = useState(false);
+  if (requestedExperience && !seeded) {
+    setSeeded(true);
+    setValues((prev) => ({
+      ...prev,
+      subject: 'Book an experience',
+      message:
+        prev.message || `I would like to request a date for ${requestedExperience}.`,
+    }));
+  }
   // 'idle' | 'sending' | 'sent' | 'error'
   const [status, setStatus] = useState('idle');
   const sent = status === 'sent';
@@ -123,8 +158,8 @@ export default function Contact() {
         lede="There is no call centre. Messages land in an inbox that four people share, between a roast and a drying-bed turn."
         meta={[
           { label: 'Reply within', value: '2 working days' },
-          { label: 'Tasting room', value: 'Thu – Sun' },
-          { label: 'Phone', value: '+91 70229 19007' },
+          { label: 'Tasting room', value: BUSINESS.hours.short },
+          { label: 'Phone', value: BUSINESS.phoneDisplay },
         ]}
       />
 
@@ -207,6 +242,15 @@ export default function Contact() {
                   </p>
 
                   <h2 className="form__title">Send a note</h2>
+
+                  {/* Always rendered so Netlify registers the field at build
+                      time; empty unless the visitor came from an experience. */}
+                  <input type="hidden" name="experience" value={requestedExperience ?? ''} />
+                  {requestedExperience && (
+                    <p className="form__requested">
+                      Requesting <strong>{requestedExperience}</strong>
+                    </p>
+                  )}
 
                   <div className="form__row">
                     <div className="field">
@@ -400,6 +444,80 @@ export default function Contact() {
               </ul>
             </Reveal>
           </div>
+        </div>
+      </section>
+
+      {/* ---------------------------------------------------------- map --- */}
+      <section className="section section--raised contact-map">
+        <div className="shell">
+          <SectionHead
+            kicker="Finding us"
+            title={
+              <>
+                Up the ridge, <em>past the last tar road.</em>
+              </>
+            }
+            lede={`The estate sits in the ${BUSINESS.location}, at ${BUSINESS.elevation}. ${BUSINESS.driveTimes
+              .map((d) => `${d.duration} from ${d.from}`)
+              .join(', ')}.`}
+          />
+
+          <Reveal className="contact-map__frame" delay={0.1}>
+            {/* Loaded lazily and only on request of the viewer's browser —
+                Google sets cookies, so it should not run before the page does. */}
+            <iframe
+              src={mapEmbedUrl}
+              title={`Map showing ${BUSINESS.name} in ${BUSINESS.location}`}
+              width="100%"
+              height="420"
+              style={{ border: 0 }}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </Reveal>
+
+          <Reveal className="contact-map__actions" delay={0.16}>
+            <address className="contact-map__address">
+              {BUSINESS.address.street}
+              <br />
+              {BUSINESS.address.locality}
+              <br />
+              {BUSINESS.address.region} {BUSINESS.address.postalCode}, {BUSINESS.address.country}
+              <br />
+              <span className="contact-map__geo numeral">{BUSINESS.geoDisplay}</span>
+            </address>
+
+            <p className="contact-map__hours">
+              <strong>{BUSINESS.hours.days}</strong>
+              <br />
+              {BUSINESS.hours.opens} – {BUSINESS.hours.closes}
+              <br />
+              {BUSINESS.hours.closure}
+            </p>
+
+            <p className="contact-map__links">
+              <a
+                className="btn btn--gold js-get-directions"
+                id="get-directions"
+                href={directionsUrl}
+                target="_blank"
+                rel="noopener"
+              >
+                Get directions
+                <ArrowUpRight size={13} className="btn__arrow" />
+              </a>
+              <a
+                className="btn btn--ghost js-whatsapp-enquiry"
+                id="whatsapp-visit"
+                href={whatsappEnquiryUrl('visiting the estate')}
+                target="_blank"
+                rel="noopener"
+              >
+                Ask on WhatsApp
+              </a>
+            </p>
+          </Reveal>
         </div>
       </section>
     </Page>

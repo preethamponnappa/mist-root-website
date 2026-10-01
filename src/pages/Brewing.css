@@ -319,3 +319,7 @@
     grid-template-columns: 1fr;
   }
 }
+
+.brew__permalink {
+  margin-top: var(--space-sm);
+}
