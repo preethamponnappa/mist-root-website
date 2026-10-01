@@ -1,0 +1,81 @@
+/* The regional guide. Still a draft, and the styling says so: unverified
+   claims are flagged on screen rather than left for someone to notice. */
+
+.coorg-notice {
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--gold);
+  background: rgba(200, 164, 90, 0.07);
+}
+
+.coorg-notice p {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.7;
+  color: var(--cream-70);
+}
+
+.coorg-notice strong {
+  color: var(--gold-bright);
+  font-weight: 500;
+}
+
+.verify {
+  position: relative;
+  border-bottom: 1px dashed rgba(224, 138, 99, 0.75);
+}
+
+.verify__flag {
+  display: inline-block;
+  margin-right: 0.45em;
+  padding: 0.1em 0.4em;
+  border-radius: 2px;
+  background: rgba(224, 138, 99, 0.16);
+  color: #e08a63;
+  font-family: var(--font-sans);
+  font-size: 0.7em;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  vertical-align: 0.1em;
+}
+
+.coorg-section__inner {
+  display: grid;
+  grid-template-columns: 0.9fr 1.4fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: start;
+}
+
+.coorg-section__body {
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.coorg-section__body p {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  line-height: 1.75;
+  color: var(--cream-70);
+}
+
+.coorg-close__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.coorg-close__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+@media (max-width: 860px) {
+  .coorg-section__inner {
+    grid-template-columns: 1fr;
+    gap: var(--space-sm);
+  }
+}

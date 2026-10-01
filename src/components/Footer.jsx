@@ -5,6 +5,7 @@ import Reveal, { RevealGroup, RevealItem } from './Reveal';
 import { EASE_OUT } from '../lib/motion';
 import { InstagramIcon } from './Icons';
 import { BUSINESS, mailtoHref, telHref } from '../data/business';
+import { METHODS } from '../data/brewing';
 import './Footer.css';
 
 const SOCIALS = [
@@ -26,10 +27,17 @@ const COLUMNS = [
     title: 'The Coffee',
     links: [
       { label: 'The current release', to: '/club' },
-      { label: 'Brew recipes', to: '/brewing' },
       { label: 'Harvest calendar', to: '/experiences' },
-      { label: 'Coorg & Brahmagiri', to: '/story' },
+      // Was pointing at /story, which is about the family rather than the region.
+      { label: 'Coorg coffee guide', to: '/coorg-coffee' },
     ],
+  },
+  {
+    title: 'Brew it',
+    links: METHODS.map((method) => ({
+      label: method.name,
+      to: `/brewing/${method.id}`,
+    })),
   },
 ];
 

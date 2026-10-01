@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
 import Seo from './components/Seo';
+import { METHODS } from './data/brewing';
 import './App.css';
 
 // Each page is its own chunk, so a visitor landing on /brewing does not pay
@@ -16,6 +17,8 @@ const loadClub = () => import('./pages/Club');
 const loadBrewing = () => import('./pages/Brewing');
 const loadExperiences = () => import('./pages/Experiences');
 const loadContact = () => import('./pages/Contact');
+const loadBrewMethod = () => import('./pages/BrewMethod');
+const loadCoorgCoffee = () => import('./pages/CoorgCoffee');
 const loadNotFound = () => import('./pages/NotFound');
 
 const Home = lazy(loadHome);
@@ -24,6 +27,8 @@ const Club = lazy(loadClub);
 const Brewing = lazy(loadBrewing);
 const Experiences = lazy(loadExperiences);
 const Contact = lazy(loadContact);
+const BrewMethod = lazy(loadBrewMethod);
+const CoorgCoffee = lazy(loadCoorgCoffee);
 const NotFound = lazy(loadNotFound);
 
 const ROUTE_CHUNKS = [
@@ -33,6 +38,8 @@ const ROUTE_CHUNKS = [
   loadBrewing,
   loadExperiences,
   loadContact,
+  loadBrewMethod,
+  loadCoorgCoffee,
   loadNotFound,
 ];
 
@@ -80,6 +87,17 @@ function App() {
               <Route path="/brewing" element={<Brewing />} />
               <Route path="/experiences" element={<Experiences />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/coorg-coffee" element={<CoorgCoffee />} />
+              {/* Registered one by one rather than as /brewing/:method, so an
+                  unknown method falls through to the 404 instead of rendering
+                  an empty recipe. */}
+              {METHODS.map((method) => (
+                <Route
+                  key={method.id}
+                  path={`/brewing/${method.id}`}
+                  element={<BrewMethod methodId={method.id} />}
+                />
+              ))}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>
