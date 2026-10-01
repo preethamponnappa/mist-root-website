@@ -8,7 +8,7 @@ import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { Basket, Compass, Cup, Droplet } from '../components/Icons';
-import { BUSINESS } from '../data/business';
+import { BUSINESS, experienceById } from '../data/business';
 import './Experiences.css';
 
 const EXPERIENCES = [
@@ -16,14 +16,14 @@ const EXPERIENCES = [
     no: '01',
     id: 'popup',
     Icon: Droplet,
-    name: 'Pop-Ups & Brew Sessions',
+    name: experienceById('popup').name,
     sub: 'The club, wherever we can carry it',
     body: 'A grinder, six brewers, whatever is in the current release and a table you are welcome to crowd around. We pour the same coffee two ways so you can taste what the method did, and we will happily settle the argument about whether you actually dislike black coffee. No booking, no jargon, no minimum knowledge.',
     detail: [
       { k: 'Duration', v: 'Drop in' },
       { k: 'Where', v: 'Bengaluru & Coorg' },
       { k: 'Group', v: 'Anyone' },
-      { k: 'Season', v: 'Announced monthly' },
+      { k: 'Season', v: experienceById('popup').season },
       { k: 'From', v: 'Free' },
     ],
   },
@@ -31,14 +31,14 @@ const EXPERIENCES = [
     no: '02',
     id: 'walk',
     Icon: Compass,
-    name: 'Estate Walks',
+    name: experienceById('walk').name,
     sub: 'The two-hour version of everything',
     body: 'We leave the tasting room at 06:15, while the cloud is still lying in the valley below the pulping shed. You will walk the shade blocks that go into Highland Reserve, put your hand on a rosewood that predates the estate by a century, and learn to tell a ripe cherry from a nearly-ripe one by squeezing it. It ends at the nursery with a cup of whatever came off the drum that week.',
     detail: [
       { k: 'Duration', v: '2 hours' },
       { k: 'Starts', v: '06:15, Thu–Sun' },
       { k: 'Group', v: '2–10 people' },
-      { k: 'Season', v: 'Year round' },
+      { k: 'Season', v: experienceById('walk').season },
       { k: 'From', v: '₹1,400' },
     ],
   },
@@ -46,7 +46,7 @@ const EXPERIENCES = [
     no: '03',
     id: 'harvest',
     Icon: Basket,
-    name: 'Harvest Experience',
+    name: experienceById('harvest').name,
     sub: 'Pick with the crew, get your basket weighed',
     body: 'In December and January you can join a picking pass. You are given a basket, a row and a supervisor who will politely reject anything under-ripe. Most guests fill about four kilos in three hours; the crew average is nineteen. At the end your cherry goes through the pulper with the day’s intake and we write your name on the drying bed it lands in.',
     detail: [
@@ -61,7 +61,7 @@ const EXPERIENCES = [
     no: '04',
     id: 'bean',
     Icon: Cup,
-    name: 'Bean-to-Cup Journey',
+    name: experienceById('bean').name,
     sub: 'One cherry, followed all the way down',
     body: 'The long one. You start at the tree at first light and finish at the cupping table after dark, having pulped, fermented, turned a drying bed, sorted by hand, roasted a 500 g sample and cupped it blind against two of our production lots. Lunch is on the drying yard. Twelve guests a month, no more, because there is only one drum.',
     detail: [

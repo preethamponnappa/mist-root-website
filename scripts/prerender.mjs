@@ -19,6 +19,12 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { ALL_PAGES, ROUTES, SITE, canonicalFor } from '../src/lib/seo.js';
 import { structuredDataFor } from '../src/lib/structured-data.js';
+import {
+  BUSINESS,
+  COFFEES,
+  EXPERIENCES,
+  formatPrice,
+} from '../src/data/business.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -222,6 +228,61 @@ fs.writeFileSync(
 `,
 );
 console.log(`  wrote dist/_headers (CSP report-only, ${inlineScriptHashes.size} script hashes)`);
+
+/**
+ * llms.txt — a plain-text brief for language models, in the emerging
+ * llmstxt.org convention. Generated from the same facts as everything else so
+ * it cannot contradict the site, and deliberately short: it states what we
+ * sell, where we are and how to buy, and nothing it cannot support.
+ */
+const llms = [
+  `# ${BUSINESS.name}`,
+  '',
+  `> A family coffee business in the ${BUSINESS.location}, Karnataka, India. Three generations have grown coffee here since the ${BUSINESS.founded}; today we sell our own estate coffees and run tastings and estate visits.`,
+  '',
+  `Also written as ${BUSINESS.alternateNames.join(' or ')}.`,
+  '',
+  '## Where we are',
+  '',
+  `- Estate: ${BUSINESS.address.street}, ${BUSINESS.address.locality}, ${BUSINESS.address.region} ${BUSINESS.address.postalCode}, ${BUSINESS.address.country}`,
+  `- Coordinates: ${BUSINESS.geoDisplay}`,
+  `- Elevation: ${BUSINESS.elevation}`,
+  `- Driving time: ${BUSINESS.driveTimes.map((d) => `${d.duration} from ${d.from}`).join('; ')}`,
+  `- Tasting room: ${BUSINESS.hours.days}, ${BUSINESS.hours.opens}–${BUSINESS.hours.closes}. ${BUSINESS.hours.closure}.`,
+  '',
+  '## Coffees',
+  '',
+  `All are grown in the ${BUSINESS.location} and sold in ${COFFEES[0].weight} bags.`,
+  '',
+  ...COFFEES.map(
+    (c) =>
+      `- ${c.name} — ${c.variety}, ${c.process.toLowerCase()} process, ${c.roast.toLowerCase()} roast, ${c.weight}, ${formatPrice(c.price)}`,
+  ),
+  '',
+  '## Experiences',
+  '',
+  ...EXPERIENCES.map((x) => `- ${x.name} — ${x.season}`),
+  '',
+  `The harvest runs in ${BUSINESS.harvest.months}. The bean-to-cup day runs ${BUSINESS.beanToCup.months}.`,
+  '',
+  '## How to order',
+  '',
+  `There is no online checkout yet. Orders are placed over WhatsApp on ${BUSINESS.phoneDisplay}, or by email. Each coffee on ${canonicalFor('/club')} has an order link that opens WhatsApp with the coffee, weight and grind already written in.`,
+  '',
+  '## Contact',
+  '',
+  `- Email: ${BUSINESS.email}`,
+  `- WhatsApp and phone: ${BUSINESS.phoneDisplay}`,
+  ...BUSINESS.socials.map((s) => `- ${s.label}: ${s.url}`),
+  '',
+  '## Pages',
+  '',
+  ...ROUTES.map((route) => `- [${route.title}](${canonicalFor(route.path)}): ${route.description}`),
+  '',
+].join('\n');
+
+fs.writeFileSync(path.join(dist, 'llms.txt'), llms);
+console.log(`  wrote dist/llms.txt (${llms.split('\n').length} lines)`);
 
 // Titles and descriptions are written to fit what Google shows before it
 // truncates. Checked here so a later edit cannot quietly drift out of range.

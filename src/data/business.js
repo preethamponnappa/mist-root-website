@@ -143,6 +143,21 @@ export const COFFEES = [
   },
 ];
 
+/**
+ * What we run and when. Names live here because they appear on the experiences
+ * page, in the booking links and in llms.txt, and must read the same in all
+ * three. Everything else about each one — duration, group size, price — stays
+ * with the editorial copy on the page.
+ */
+export const EXPERIENCES = [
+  { id: 'popup', name: 'Pop-Ups & Brew Sessions', season: 'Announced monthly' },
+  { id: 'walk', name: 'Estate Walks', season: 'Year round' },
+  { id: 'harvest', name: 'Harvest Experience', season: 'December and January' },
+  { id: 'bean', name: 'Bean-to-Cup Journey', season: 'December to March' },
+];
+
+export const experienceById = (id) => EXPERIENCES.find((x) => x.id === id);
+
 export const CURRENCY = 'INR';
 /** Rupee amounts are written with a thin space after the symbol nowhere else. */
 export const formatPrice = (amount) => `₹${amount.toLocaleString('en-IN')}`;
