@@ -202,7 +202,27 @@ fs.writeFileSync(
 );
 console.log(`  wrote dist/_headers (CSP report-only, ${inlineScriptHashes.size} script hashes)`);
 
-const unconfirmed = ALL_PAGES.filter((page) => page.todo).map((page) => page.path);
-if (unconfirmed.length) {
-  console.log(`\n  TODO-COPY: title/description still unconfirmed for ${unconfirmed.join(', ')}`);
+// Titles and descriptions are written to fit what Google shows before it
+// truncates. Checked here so a later edit cannot quietly drift out of range.
+const TITLE_MAX = 60;
+const DESCRIPTION_MIN = 140;
+const DESCRIPTION_MAX = 160;
+
+const outOfRange = ALL_PAGES.flatMap((page) => {
+  const problems = [];
+  if (page.title.length > TITLE_MAX) {
+    problems.push(`title is ${page.title.length} characters, max ${TITLE_MAX}`);
+  }
+  if (page.description.length < DESCRIPTION_MIN || page.description.length > DESCRIPTION_MAX) {
+    problems.push(
+      `description is ${page.description.length} characters, wanted ${DESCRIPTION_MIN}-${DESCRIPTION_MAX}`,
+    );
+  }
+  return problems.map((problem) => `${page.path}: ${problem}`);
+});
+
+if (outOfRange.length) {
+  console.error('  Metadata out of range:');
+  for (const problem of outOfRange) console.error('    ' + problem);
+  process.exit(1);
 }

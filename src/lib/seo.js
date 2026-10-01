@@ -10,21 +10,25 @@
  * Keep it plain data with no imports — the build script loads it directly in
  * Node, so it must stay free of JSX and asset imports.
  *
- * TODO-COPY: every entry flagged `todo: true` below is draft wording awaiting
- * sign-off. The flag never reaches the markup; `npm run build` prints the list
- * of routes still unconfirmed so they can't be forgotten.
+ * Titles are kept at 60 characters or under and descriptions between 140 and
+ * 160, which is roughly what Google will show before truncating. The build
+ * checks both and fails if either drifts out of range.
  */
+
+// Extension included deliberately: scripts/prerender.mjs loads this file
+// directly in Node, which does not resolve extensionless specifiers.
+import { BUSINESS } from '../data/business.js';
 
 export const SITE = {
   origin: 'https://mistrootcoffee.com',
-  name: 'MistRoot Coffee',
+  name: BUSINESS.name,
   locale: 'en_IN',
   lang: 'en-IN',
   themeColor: '#0C0A07',
   ogImage: '/og/mistroot-og.png',
   ogImageWidth: 1200,
   ogImageHeight: 630,
-  ogImageAlt: 'MistRoot Coffee',
+  ogImageAlt: BUSINESS.name,
 };
 
 /** Routes that get prerendered, in sitemap order. */
@@ -35,10 +39,9 @@ export const ROUTES = [
     file: 'index.html',
     priority: '1.0',
     changefreq: 'monthly',
-    todo: true, // TODO-COPY
-    title: 'MistRoot Coffee — Specialty Coffee from Coorg',
+    title: "MistRoot Coffee Club — Specialty Coffee from Coorg",
     description:
-      'Three generations of coffee growing in the hills of Coorg, now a coffee club. Beans sourced from our own hills and beyond, brewed six ways, shared slowly.',
+      "Three generations of coffee growing in the Brahmagiri Range, Kodagu (Coorg). Four estate coffees, six ways to brew them, and the club built around sharing them.",
   },
   {
     path: '/story',
@@ -46,10 +49,9 @@ export const ROUTES = [
     file: 'story.html',
     priority: '0.8',
     changefreq: 'yearly',
-    todo: true, // TODO-COPY
-    title: 'Our Story — Three Generations of Coffee in Coorg | MistRoot',
+    title: "Our Story — Three Generations of Coorg Coffee",
     description:
-      'Rooted in Coorg, made for the journey. Three generations of coffee growing in the Brahmagiri range, and one new way of experiencing it.',
+      "Our family has grown coffee in the Brahmagiri Range of Kodagu since the 1940s. Three generations on, MistRoot is a club built around how that coffee is shared.",
   },
   {
     path: '/club',
@@ -57,10 +59,9 @@ export const ROUTES = [
     file: 'club.html',
     priority: '0.9',
     changefreq: 'monthly',
-    todo: true, // TODO-COPY
-    title: 'The MistRoot Coffee Club — Coorg Coffee, Sourced and Shared',
+    title: "The Coffee Club — Our Coorg Coffees and Prices",
     description:
-      'How we source, brew and share coffee from Coorg — and the four coffees in the current MistRoot lineup.',
+      "Four coffees from the Brahmagiri Range in Coorg: Arabica and Robusta, naturally processed, medium roast, 250 g from ₹500. Order on WhatsApp for now.",
   },
   {
     path: '/brewing',
@@ -68,10 +69,9 @@ export const ROUTES = [
     file: 'brewing.html',
     priority: '0.8',
     changefreq: 'monthly',
-    todo: true, // TODO-COPY
-    title: 'Brewing Guides — Six Ways to Brew Coorg Coffee | MistRoot',
+    title: "Brewing Guides — Six Ways to Brew Coorg Coffee",
     description:
-      'Pour over, AeroPress, French press, moka pot, cold brew and espresso — dialled-in recipes for every MistRoot coffee, with doses, temperatures and timings.',
+      "Pour over, AeroPress, French press, moka pot, cold brew and espresso. Doses, water temperatures and timings for every MistRoot coffee grown in Kodagu (Coorg).",
   },
   {
     path: '/experiences',
@@ -79,10 +79,9 @@ export const ROUTES = [
     file: 'experiences.html',
     priority: '0.8',
     changefreq: 'monthly',
-    todo: true, // TODO-COPY
-    title: 'Estate Experiences in Coorg — Walks, Harvest & Bean-to-Cup | MistRoot',
+    title: "Estate Experiences in Coorg — Walks and Harvest",
     description:
-      'Estate walks, the harvest experience and the bean-to-cup journey — spend a day with coffee where it grows, in Coorg.',
+      "Pop-ups, estate walks, the December and January harvest, and the bean-to-cup day. Spend time with coffee where it grows, in the Brahmagiri Range of Coorg.",
   },
   {
     path: '/contact',
@@ -90,10 +89,9 @@ export const ROUTES = [
     file: 'contact.html',
     priority: '0.6',
     changefreq: 'yearly',
-    todo: true, // TODO-COPY
-    title: 'Contact MistRoot Coffee — Coorg, Karnataka',
+    title: "Contact MistRoot Coffee Club — Kodagu, Coorg",
     description:
-      'Get in touch with MistRoot Coffee in Kodagu (Coorg) — email, phone, estate address and the enquiry form.',
+      "The tasting room is open Thursday to Sunday, 08:00 to 17:00, in the Brahmagiri Range of Kodagu (Coorg). Email, WhatsApp, directions and the enquiry form.",
   },
 ];
 
@@ -106,9 +104,9 @@ export const NOT_FOUND = {
   source: 'src/pages/NotFound.jsx',
   file: '404.html',
   noindex: true,
-  todo: true, // TODO-COPY
-  title: 'Page Not Found — MistRoot Coffee',
-  description: 'That page has wandered off the ridge. Find your way back to MistRoot Coffee.',
+  title: "Page Not Found — MistRoot Coffee Club",
+  description:
+    "That page has wandered off the ridge. Head back to MistRoot Coffee Club — the Coorg coffees, the brewing guides and the estate experiences are all still here.",
 };
 
 export const ALL_PAGES = [...ROUTES, NOT_FOUND];
