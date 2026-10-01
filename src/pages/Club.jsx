@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { motion } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
@@ -6,7 +7,12 @@ import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
 import { EASE_OUT } from '../lib/motion';
-import { Cup, Droplet, Mountain } from '../components/Icons';
+import { ArrowUpRight, Cup, Droplet, Mountain } from '../components/Icons';
+import {
+  COFFEES,
+  formatPrice,
+  whatsappOrderUrl,
+} from '../data/business';
 import './Club.css';
 
 const PILLARS = [
@@ -54,48 +60,46 @@ const PILLARS = [
   },
 ];
 
-const COFFEES = [
-  {
-    no: '01',
-    name: 'MistRoot Highland Reserve',
-    origin: 'Coorg · Arabica AAA · Plantation',
+/**
+ * Tasting copy only. Variety, process, roast, weight and price are claims we
+ * make to a customer, so they come from src/data/business.js and are not
+ * repeated here.
+ */
+const TASTING = {
+  'highland-reserve': {
     profile: 'Elegant · Complex · Refined',
     notes: ['Floral', 'Citrus', 'Honey'],
     intensity: 2,
     brew: 'Pour Over',
     copy: 'Our finest Arabica, grown in the high-altitude plantations of Coorg. Handpicked and carefully processed to bring out a clean, layered cup with floral notes and a lingering sweetness.',
   },
-  {
-    no: '02',
-    name: 'MistRoot Highland Arabica',
-    origin: 'Coorg · Arabica AA',
+  'highland-arabica': {
     profile: 'Smooth · Balanced · Versatile',
     notes: ['Chocolate', 'Nutty', 'Caramel'],
     intensity: 2,
     brew: 'AeroPress · Pour Over',
     copy: 'A well-rounded Arabica with bright acidity, gentle sweetness and a smooth finish. Perfect for everyday brewing, yet special enough to savour slowly.',
   },
-  {
-    no: '03',
-    name: 'MistRoot Forest Reserve',
-    origin: 'Coorg · Robusta AAA',
+  'forest-reserve': {
     profile: 'Bold · Rich · Full-bodied',
     notes: ['Dark chocolate', 'Spice', 'Earthy'],
     intensity: 4,
     brew: 'French Press · Cold Brew',
     copy: 'A premium Robusta with depth and character. Grown under native shade, it delivers a strong cup with rich crema, earthy notes and a comforting finish.',
   },
-  {
-    no: '04',
-    name: 'MistRoot Estate Robusta',
-    origin: 'Coorg · Robusta AA',
+  'estate-robusta': {
     profile: 'Bold · Smooth · Dependable',
     notes: ['Cocoa', 'Malt', 'Roasted nut'],
     intensity: 3,
     brew: 'Espresso · Moka Pot',
     copy: 'A classic Robusta with a rich, full-bodied profile. Low acidity, with deep chocolate notes — ideal for espresso, milk-based drinks or a strong morning cup.',
   },
-];
+};
+
+const LINEUP = COFFEES.map((coffee) => ({ ...coffee, ...TASTING[coffee.id] }));
+
+/** What a customer can ask us to do to the beans before they ship. */
+const GRINDS = ['Whole bean', 'Pour over', 'AeroPress', 'French press', 'Moka pot', 'Espresso'];
 
 // role="img" is what makes the aria-label legal here: the four ticks are a
 // picture of the intensity, and the label is their text alternative.
@@ -110,6 +114,121 @@ function Intensity({ level, name }) {
         <span key={i} className={`coffee__tick ${i <= level ? 'is-on' : ''}`} />
       ))}
     </span>
+  );
+}
+
+/**
+ * One coffee, with everything needed to buy it.
+ *
+ * There is no checkout yet, so the order button is a wa.me link carrying a
+ * pre-filled message. It is a real <a href> with a working default, so it is
+ * crawlable and works without JavaScript; the grind selector only rewrites
+ * which message it carries.
+ */
+function CoffeeCard({ coffee }) {
+  const [grind, setGrind] = useState(GRINDS[0]);
+
+  return (
+    <motion.article
+      className="coffee"
+      id={coffee.id}
+      initial="rest"
+      whileHover="hover"
+      animate="rest"
+      variants={{
+        rest: { y: 0 },
+        hover: { y: -10, transition: { duration: 0.5, ease: EASE_OUT } },
+      }}
+    >
+      <div className="coffee__grain" aria-hidden="true" />
+
+      <header className="coffee__head">
+        <span className="numeral">{coffee.no}</span>
+        <Intensity level={coffee.intensity} name={coffee.name} />
+      </header>
+
+      <h3 className="coffee__name">{coffee.name}</h3>
+      <p className="coffee__origin">Coorg · {coffee.variety}</p>
+      <p className="coffee__profile">{coffee.profile}</p>
+      <p className="coffee__copy">{coffee.copy}</p>
+
+      <ul className="coffee__notes">
+        {coffee.notes.map((n) => (
+          <li key={n}>{n}</li>
+        ))}
+      </ul>
+
+      <dl className="coffee__spec">
+        <div>
+          <dt>Variety</dt>
+          <dd>{coffee.variety}</dd>
+        </div>
+        <div>
+          <dt>Process</dt>
+          <dd>{coffee.process}</dd>
+        </div>
+        <div>
+          <dt>Roast</dt>
+          <dd>{coffee.roast}</dd>
+        </div>
+        <div>
+          <dt>Weight</dt>
+          <dd>{coffee.weight}</dd>
+        </div>
+      </dl>
+
+      <p className="coffee__brew">
+        <span>Best brewed</span>
+        {coffee.brew}
+      </p>
+
+      <div className="coffee__buy">
+        <p className="coffee__price">
+          <span className="coffee__price-value display">{formatPrice(coffee.price)}</span>
+          <span className="coffee__price-unit">per {coffee.weight}</span>
+        </p>
+
+        <label className="coffee__grind" htmlFor={`grind-${coffee.id}`}>
+          <span>Grind</span>
+          <select
+            id={`grind-${coffee.id}`}
+            value={grind}
+            onChange={(e) => setGrind(e.target.value)}
+          >
+            {GRINDS.map((g) => (
+              <option key={g} value={g}>
+                {g}
+              </option>
+            ))}
+          </select>
+        </label>
+
+        <a
+          className="btn btn--gold coffee__order js-order-whatsapp"
+          id={`order-${coffee.id}`}
+          data-coffee={coffee.id}
+          data-price={coffee.price}
+          href={whatsappOrderUrl(coffee, grind)}
+          target="_blank"
+          rel="noopener"
+        >
+          Order on WhatsApp
+          <ArrowUpRight size={13} className="btn__arrow" />
+        </a>
+      </div>
+
+      <motion.span
+        className="coffee__rule"
+        variants={{
+          rest: { scaleX: 0.12, opacity: 0.4 },
+          hover: {
+            scaleX: 1,
+            opacity: 1,
+            transition: { duration: 0.6, ease: EASE_OUT },
+          },
+        }}
+      />
+    </motion.article>
   );
 }
 
@@ -212,53 +331,9 @@ export default function Club() {
           </div>
 
           <RevealGroup className="club-coffees__grid" each={0.1}>
-            {COFFEES.map((c) => (
-              <RevealItem key={c.name}>
-                <motion.article
-                  className="coffee"
-                  initial="rest"
-                  whileHover="hover"
-                  animate="rest"
-                  variants={{
-                    rest: { y: 0 },
-                    hover: { y: -10, transition: { duration: 0.5, ease: EASE_OUT } },
-                  }}
-                >
-                  <div className="coffee__grain" aria-hidden="true" />
-
-                  <header className="coffee__head">
-                    <span className="numeral">{c.no}</span>
-                    <Intensity level={c.intensity} name={c.name} />
-                  </header>
-
-                  <h3 className="coffee__name">{c.name}</h3>
-                  <p className="coffee__origin">{c.origin}</p>
-                  <p className="coffee__profile">{c.profile}</p>
-                  <p className="coffee__copy">{c.copy}</p>
-
-                  <ul className="coffee__notes">
-                    {c.notes.map((n) => (
-                      <li key={n}>{n}</li>
-                    ))}
-                  </ul>
-
-                  <p className="coffee__brew">
-                    <span>Best brewed</span>
-                    {c.brew}
-                  </p>
-
-                  <motion.span
-                    className="coffee__rule"
-                    variants={{
-                      rest: { scaleX: 0.12, opacity: 0.4 },
-                      hover: {
-                        scaleX: 1,
-                        opacity: 1,
-                        transition: { duration: 0.6, ease: EASE_OUT },
-                      },
-                    }}
-                  />
-                </motion.article>
+            {LINEUP.map((c) => (
+              <RevealItem key={c.id}>
+                <CoffeeCard coffee={c} />
               </RevealItem>
             ))}
           </RevealGroup>
