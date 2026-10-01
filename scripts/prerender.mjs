@@ -23,6 +23,7 @@ const dist = path.join(root, 'dist');
 const ssrDist = path.join(root, 'dist-ssr');
 
 const template = fs.readFileSync(path.join(dist, 'index.html'), 'utf8');
+const manifest = JSON.parse(fs.readFileSync(path.join(dist, '.vite/manifest.json'), 'utf8'));
 const { render } = await import(pathToFileURL(path.join(ssrDist, 'entry-server.js')).href);
 
 const ROOT_PLACEHOLDER = '<div id="root"></div>';
@@ -68,6 +69,22 @@ function headFor(page) {
   return tags.join('\n    ');
 }
 
+/**
+ * The page components are loaded with React.lazy, so Vite fetches their chunk
+ * at runtime rather than listing it in index.html. Naming it here lets the
+ * browser start that download alongside the main bundle instead of after it.
+ */
+function modulePreloadsFor(source) {
+  const entry = source && manifest[source];
+  if (!entry) return '';
+
+  const files = new Set([entry.file, ...(entry.imports ?? []).map((key) => manifest[key]?.file)]);
+  return [...files]
+    .filter(Boolean)
+    .map((file) => `\n    <link rel="modulepreload" crossorigin href="/${file}" />`)
+    .join('');
+}
+
 /** Last commit touching the page's source, so lastmod tracks content not builds. */
 function lastModified(source) {
   if (!source) return null;
@@ -85,9 +102,9 @@ function lastModified(source) {
 const today = new Date().toISOString().slice(0, 10);
 
 for (const page of ALL_PAGES) {
-  const appHtml = render(page.path);
+  const appHtml = await render(page.path);
   const html = template
-    .replace(/<!--seo-->[\s\S]*?<\/title>/, headFor(page))
+    .replace(/<!--seo-->[\s\S]*?<\/title>/, headFor(page) + modulePreloadsFor(page.source))
     .replace(ROOT_PLACEHOLDER, `<div id="root">${appHtml}</div>`);
 
   const target = path.join(dist, page.file);

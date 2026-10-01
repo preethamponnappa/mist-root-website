@@ -103,6 +103,7 @@ export const ROUTES = [
  */
 export const NOT_FOUND = {
   path: '/404',
+  source: 'src/pages/NotFound.jsx',
   file: '404.html',
   noindex: true,
   todo: true, // TODO-COPY
