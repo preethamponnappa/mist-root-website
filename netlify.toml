@@ -5,16 +5,16 @@
 [build.environment]
   NODE_VERSION = "22"
 
-# Routing note: every route is prerendered to its own file by
-# scripts/prerender.mjs (dist/story.html, dist/club.html, …), so Netlify serves
-# real HTML for each path directly. The old catch-all rewrite to /index.html is
-# deliberately gone — it turned every typo into a soft 404 that answered 200.
-# Unmatched paths now fall through to dist/404.html, which Netlify serves with a
-# genuine 404 status.
+# --------------------------------------------------------------- routing ---
+# Every route is prerendered to its own file by scripts/prerender.mjs
+# (dist/story.html, dist/club.html, …), so Netlify serves real HTML for each
+# path directly. The old catch-all rewrite to /index.html is deliberately gone
+# — it turned every typo into a soft 404 that answered 200. Unmatched paths now
+# fall through to dist/404.html, which Netlify serves with a genuine 404.
 
 # Canonicalise away the trailing slash. Listed one route at a time rather than
-# as a pattern so the root can never match and loop on itself. Keep in sync with
-# ROUTES in src/lib/seo.js.
+# as a pattern so the root can never match and loop on itself. Keep in sync
+# with ROUTES in src/lib/seo.js.
 [[redirects]]
   from = "/story/"
   to = "/story"
@@ -45,8 +45,32 @@
   status = 301
   force = true
 
+# --------------------------------------------------------------- headers ---
+# Content-Security-Policy is deliberately not here: it carries hashes of
+# React's inline bootstrap scripts, so scripts/prerender.mjs generates it into
+# dist/_headers where it stays in step with the build.
+
+# Defaults for every response, HTML included. HTML has to revalidate on each
+# visit, otherwise a deploy would never reach anyone holding a cached copy.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Cross-Origin-Opener-Policy = "same-origin"
+    Permissions-Policy = "accelerometer=(), camera=(), display-capture=(), encrypted-media=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=(), autoplay=(self), fullscreen=(self)"
+
+# Everything below carries a content hash or a font version in its filename, so
+# a changed file is a changed URL and these can be cached indefinitely.
 [[headers]]
   for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
@@ -54,8 +78,10 @@
   for = "/sitemap.xml"
   [headers.values]
     Content-Type = "application/xml; charset=utf-8"
+    Cache-Control = "public, max-age=3600"
 
 [[headers]]
   for = "/robots.txt"
   [headers.values]
     Content-Type = "text/plain; charset=utf-8"
+    Cache-Control = "public, max-age=3600"

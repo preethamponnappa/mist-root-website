@@ -35,15 +35,19 @@ export default function HeroVideo() {
   const videoRef = useRef(null);
   const reduced = useReducedMotionSafe();
 
-  // The footage is the heaviest thing on the site, so it is not marked
-  // autoplay and nothing is fetched until we ask for it — the poster frame
-  // carries the hero until then. Three people never get the download at all:
-  // anyone who has asked for reduced motion, anyone on Data Saver, and anyone
-  // the browser reports as being on a 2G-class connection. They keep the
-  // poster, which is what the first frame looks like anyway.
+  // The footage is the heaviest thing on the site, so the element ships
+  // without a source and nothing is fetched until this says so — the poster
+  // frame carries the hero until then. Three people never get the download at
+  // all: anyone who has asked for reduced motion, anyone on Data Saver, and
+  // anyone the browser reports as being on a 2G-class connection. They keep
+  // the poster, which is what the first frame looks like anyway.
+  //
+  // Playback itself stays declarative via the autoPlay attribute. Assigning
+  // the source is what starts it; a bare play() call is at the mercy of
+  // autoplay policy in a way the attribute is not.
   useEffect(() => {
     const v = videoRef.current;
-    if (!v) return;
+    if (!v || v.src) return;
 
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const connection = navigator.connection;
@@ -53,9 +57,9 @@ export default function HeroVideo() {
     if (prefersReduced || slowLink) return;
 
     // Some browsers ignore the JSX `muted` prop on first paint; enforce it,
-    // then swallow the rejection if autoplay policy blocks us anyway.
+    // or the autoplay policy will refuse a video it thinks has sound.
     v.muted = true;
-    v.play().catch(() => {});
+    v.src = heroVideo;
   }, []);
 
   const { scrollYProgress } = useScroll({
@@ -82,13 +86,14 @@ export default function HeroVideo() {
           className="hero__parallax"
           style={reduced ? still : { y: mediaY, scale: mediaScale, opacity: mediaFade }}
         >
+          {/* No src: the effect above assigns it, and only when it should. */}
           <video
             ref={videoRef}
             className="hero__video"
-            src={heroVideo}
             poster={heroPoster}
             width={1280}
             height={720}
+            autoPlay
             loop
             muted
             playsInline
