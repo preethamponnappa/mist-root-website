@@ -9,7 +9,8 @@
  * <div id="root">.
  *
  * It also emits dist/sitemap.xml so the sitemap can never drift from the route
- * list, and prints any route whose copy is still marked TODO-COPY.
+ * list, writes llms.txt, and fails if any page's title or description has
+ * drifted outside the length Google will show.
  */
 import { execFileSync } from 'node:child_process';
 import crypto from 'node:crypto';
