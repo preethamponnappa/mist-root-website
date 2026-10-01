@@ -95,6 +95,8 @@ export default function Navbar() {
             <motion.img
               src={mark}
               alt=""
+              width={560}
+              height={342}
               className="brand__mark"
               whileHover={{ scale: 1.07, rotate: -1.5 }}
               transition={{ duration: 0.5, ease: EASE_OUT }}

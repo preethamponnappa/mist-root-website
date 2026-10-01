@@ -50,6 +50,8 @@
 
 /* --- link columns ------------------------------------------------------- */
 .footer__col-title {
+  /* pinned: these were h4s, now h2s for heading order — keep the h4 metrics */
+  line-height: 1.25;
   font-family: var(--font-sans);
   font-size: var(--step--2);
   font-weight: 500;

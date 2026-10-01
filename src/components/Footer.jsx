@@ -39,7 +39,15 @@ export default function Footer() {
       <div className="shell shell--wide footer__inner">
         <RevealGroup className="footer__grid" each={0.08}>
           <RevealItem className="footer__brand">
-            <img src={wordmark} alt="MistRoot Coffee" className="footer__wordmark" />
+            <img
+              src={wordmark}
+              alt="MistRoot Coffee"
+              width={1000}
+              height={198}
+              loading="lazy"
+              decoding="async"
+              className="footer__wordmark"
+            />
             <p className="footer__blurb">
               Three generations of coffee in the hills of Coorg, now a club for anyone
               curious enough to taste it properly. Sourced from our own hills and beyond,
@@ -67,7 +75,7 @@ export default function Footer() {
 
           {COLUMNS.map((col) => (
             <RevealItem className="footer__col" key={col.title}>
-              <h4 className="footer__col-title">{col.title}</h4>
+              <h2 className="footer__col-title">{col.title}</h2>
               <ul>
                 {col.links.map((l) => (
                   <li key={l.label}>
@@ -95,7 +103,7 @@ export default function Footer() {
           ))}
 
           <RevealItem className="footer__col footer__col--find">
-            <h4 className="footer__col-title">Find us</h4>
+            <h2 className="footer__col-title">Find us</h2>
             <address>
               MistRoot Estate
               <br />

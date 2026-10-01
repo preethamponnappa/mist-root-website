@@ -241,7 +241,7 @@ export default function Home() {
                   >
                     <Drawing className="ritual__drawing" />
                   </motion.div>
-                  <h4 className="ritual__name">{name}</h4>
+                  <h3 className="ritual__name">{name}</h3>
                   <p className="ritual__line">{line}</p>
                 </motion.div>
               </RevealItem>
@@ -293,7 +293,7 @@ export default function Home() {
                     <Icon size={22} />
                   </motion.span>
                   <div>
-                    <h4 className="invite__name">{name}</h4>
+                    <h3 className="invite__name">{name}</h3>
                     <p className="invite__line">{line}</p>
                   </div>
                   <motion.span

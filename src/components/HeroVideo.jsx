@@ -104,6 +104,10 @@ export default function HeroVideo() {
         <motion.img
           src={lockup}
           alt="MistRoot Coffee"
+          width={1000}
+          height={761}
+          fetchPriority="high"
+          decoding="async"
           className="hero__lockup"
           initial={reduced ? false : { opacity: 0, scale: 1.05, filter: 'blur(6px)' }}
           animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
