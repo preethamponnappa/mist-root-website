@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AnimatePresence, motion } from 'motion/react';
+import { motion } from 'motion/react';
 import Page from '../components/Page';
 import PageHero from '../components/PageHero';
 import SectionHead from '../components/SectionHead';
@@ -153,10 +153,102 @@ const WATER = [
   { label: 'Rest after roast', value: '7–14 days', note: '3 days for espresso' },
 ];
 
+/**
+ * One method recipe.
+ *
+ * All six panels are rendered into the page rather than just the selected
+ * one, so every recipe is present in the prerendered HTML. Inactive panels
+ * carry the `hidden` attribute — what the ARIA tabs pattern asks for, and
+ * enough to keep them out of the accessibility tree and out of tab order.
+ */
+function BrewPanel({ method, isActive, reduced }) {
+  return (
+    <motion.div
+      id={`panel-${method.id}`}
+      role="tabpanel"
+      aria-labelledby={`tab-${method.id}`}
+      className="brew__panel"
+      hidden={!isActive}
+      initial={false}
+      animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0, y: reduced ? 0 : -16 }}
+      transition={{ duration: 0.45, ease: EASE_OUT }}
+    >
+      <div className="brew__art">
+        <method.Drawing className="brew__drawing" />
+        <span className="brew__art-caption">{method.tagline}</span>
+      </div>
+
+      <div className="brew__detail">
+        <h2 className="brew__name">{method.name}</h2>
+        <p className="brew__body">{method.body}</p>
+
+        <dl className="brew__spec">
+          <div>
+            <dt>Ratio</dt>
+            <dd>{method.ratio}</dd>
+          </div>
+          <div>
+            <dt>Dose</dt>
+            <dd>{method.dose}</dd>
+          </div>
+          <div>
+            <dt>Water</dt>
+            <dd>{method.temp}</dd>
+          </div>
+          <div>
+            <dt>Total time</dt>
+            <dd>{method.time}</dd>
+          </div>
+        </dl>
+
+        <div className="brew__grind">
+          <div className="brew__grind-head">
+            <span>Grind</span>
+            <strong>{method.grind}</strong>
+          </div>
+          <div className="brew__grind-scale" aria-hidden="true">
+            <motion.span
+              className="brew__grind-pin"
+              initial={false}
+              animate={{ left: `${method.grindPos}%` }}
+              transition={{ duration: 0.6, ease: EASE_OUT }}
+            />
+          </div>
+          <div className="brew__grind-ends" aria-hidden="true">
+            <span>Fine</span>
+            <span>Coarse</span>
+          </div>
+        </div>
+
+        <p className="brew__pair">
+          <Flame size={16} />
+          Cupped best with <strong>{method.best}</strong>
+        </p>
+      </div>
+
+      <ol className="brew__steps">
+        {method.steps.map((s, i) => (
+          <motion.li
+            key={s.t}
+            className="brew__step"
+            initial={false}
+            animate={
+              isActive ? { opacity: 1, x: 0 } : { opacity: 0, x: reduced ? 0 : 18 }
+            }
+            transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.12 + i * 0.06 }}
+          >
+            <span className="brew__step-time">{s.t}</span>
+            <span className="brew__step-text">{s.d}</span>
+          </motion.li>
+        ))}
+      </ol>
+    </motion.div>
+  );
+}
+
 export default function Brewing() {
   const [active, setActive] = useState(METHODS[0].id);
   const reduced = useReducedMotionSafe();
-  const method = METHODS.find((m) => m.id === active);
 
   return (
     <Page>
@@ -205,87 +297,9 @@ export default function Brewing() {
             </div>
           </Reveal>
 
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={method.id}
-              id={`panel-${method.id}`}
-              role="tabpanel"
-              aria-labelledby={`tab-${method.id}`}
-              className="brew__panel"
-              initial={reduced ? { opacity: 0 } : { opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={reduced ? { opacity: 0 } : { opacity: 0, y: -16 }}
-              transition={{ duration: 0.45, ease: EASE_OUT }}
-            >
-              <div className="brew__art">
-                <method.Drawing className="brew__drawing" />
-                <span className="brew__art-caption">{method.tagline}</span>
-              </div>
-
-              <div className="brew__detail">
-                <h2 className="brew__name">{method.name}</h2>
-                <p className="brew__body">{method.body}</p>
-
-                <dl className="brew__spec">
-                  <div>
-                    <dt>Ratio</dt>
-                    <dd>{method.ratio}</dd>
-                  </div>
-                  <div>
-                    <dt>Dose</dt>
-                    <dd>{method.dose}</dd>
-                  </div>
-                  <div>
-                    <dt>Water</dt>
-                    <dd>{method.temp}</dd>
-                  </div>
-                  <div>
-                    <dt>Total time</dt>
-                    <dd>{method.time}</dd>
-                  </div>
-                </dl>
-
-                <div className="brew__grind">
-                  <div className="brew__grind-head">
-                    <span>Grind</span>
-                    <strong>{method.grind}</strong>
-                  </div>
-                  <div className="brew__grind-scale" aria-hidden="true">
-                    <motion.span
-                      className="brew__grind-pin"
-                      initial={false}
-                      animate={{ left: `${method.grindPos}%` }}
-                      transition={{ duration: 0.6, ease: EASE_OUT }}
-                    />
-                  </div>
-                  <div className="brew__grind-ends" aria-hidden="true">
-                    <span>Fine</span>
-                    <span>Coarse</span>
-                  </div>
-                </div>
-
-                <p className="brew__pair">
-                  <Flame size={16} />
-                  Cupped best with <strong>{method.best}</strong>
-                </p>
-              </div>
-
-              <ol className="brew__steps">
-                {method.steps.map((s, i) => (
-                  <motion.li
-                    key={s.t}
-                    className="brew__step"
-                    initial={reduced ? false : { opacity: 0, x: 18 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.12 + i * 0.06 }}
-                  >
-                    <span className="brew__step-time">{s.t}</span>
-                    <span className="brew__step-text">{s.d}</span>
-                  </motion.li>
-                ))}
-              </ol>
-            </motion.div>
-          </AnimatePresence>
+          {METHODS.map((m) => (
+            <BrewPanel key={m.id} method={m} isActive={active === m.id} reduced={reduced} />
+          ))}
         </div>
       </section>
 
