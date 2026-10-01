@@ -12,50 +12,23 @@
 # — it turned every typo into a soft 404 that answered 200. Unmatched paths now
 # fall through to dist/404.html, which Netlify serves with a genuine 404.
 
-# Canonicalise away the trailing slash. Listed one route at a time rather than
-# as a pattern so the root can never match and loop on itself. Keep in sync
-# with ROUTES in src/lib/seo.js.
-[[redirects]]
-  from = "/story/"
-  to = "/story"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/club/"
-  to = "/club"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/brewing/"
-  to = "/brewing"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/experiences/"
-  to = "/experiences"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/contact/"
-  to = "/contact"
-  status = 301
-  force = true
+# No trailing-slash rules here on purpose. Netlify matches a redirect source
+# with and without its trailing slash, so an explicit "/story/" -> "/story"
+# rule with force = true also matches /story and 301s it to itself. Netlify
+# already normalises /story/ to /story for a flat story.html, which is verified
+# in the notes below; the canonical tag on every page is the backstop.
 
 # --------------------------------------------------------------- headers ---
 # Content-Security-Policy is deliberately not here: it carries hashes of
 # React's inline bootstrap scripts, so scripts/prerender.mjs generates it into
 # dist/_headers where it stays in step with the build.
 
-# Defaults for every response, HTML included. HTML has to revalidate on each
-# visit, otherwise a deploy would never reach anyone holding a cached copy.
+# Security headers on every response. Deliberately no Cache-Control here: a
+# catch-all Cache-Control competes with the per-directory rules below, and
+# Netlify already serves HTML as must-revalidate, which is what HTML wants.
 [[headers]]
   for = "/*"
   [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
