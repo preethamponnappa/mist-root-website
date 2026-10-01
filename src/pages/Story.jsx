@@ -58,6 +58,25 @@ const JOURNEY = [
   },
 ];
 
+/**
+ * The three generations, from the facts sheet. Deliberately spare — these are
+ * real people and nothing is claimed about them that was not given.
+ */
+const GENERATIONS = [
+  {
+    label: 'First',
+    members: BUSINESS.family.filter((m) => m.generation === 'First'),
+  },
+  {
+    label: 'Second',
+    members: BUSINESS.family.filter((m) => m.generation === 'Second'),
+  },
+  {
+    label: 'Third',
+    members: BUSINESS.family.filter((m) => m.generation === 'Third'),
+  },
+];
+
 export default function Story() {
   const reduced = useReducedMotionSafe();
   const trackRef = useRef(null);
@@ -121,6 +140,39 @@ export default function Story() {
               remember.
             </Reveal>
           </div>
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------- family --- */}
+      <section className="section section--raised story-family">
+        <div className="shell">
+          <SectionHead
+            kicker="The family"
+            title={
+              <>
+                Three generations, <em>one hillside.</em>
+              </>
+            }
+            lede={`Our family has grown coffee in the ${BUSINESS.location} since the ${BUSINESS.founded}.`}
+          />
+
+          <RevealGroup className="story-family__grid" each={0.1}>
+            {GENERATIONS.map((generation) => (
+              <RevealItem className="generation" key={generation.label}>
+                <span className="numeral generation__label">
+                  {generation.label} generation
+                </span>
+                <ul className="generation__people">
+                  {generation.members.map((member) => (
+                    <li key={member.name}>
+                      <span className="generation__name">{member.name}</span>
+                      <span className="generation__relation">{member.relation}</span>
+                    </li>
+                  ))}
+                </ul>
+              </RevealItem>
+            ))}
+          </RevealGroup>
         </div>
       </section>
 
