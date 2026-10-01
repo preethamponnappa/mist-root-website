@@ -188,7 +188,9 @@ const csp = [
   "media-src 'self'",
   "connect-src 'self'",
   "manifest-src 'self'",
-  'upgrade-insecure-requests',
+  // 'upgrade-insecure-requests' is deliberately absent: browsers ignore it in
+  // a report-only policy and log an error saying so. Add it when this becomes
+  // Content-Security-Policy proper.
 ].join('; ');
 
 fs.writeFileSync(

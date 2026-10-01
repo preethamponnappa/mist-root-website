@@ -97,9 +97,15 @@ const COFFEES = [
   },
 ];
 
+// role="img" is what makes the aria-label legal here: the four ticks are a
+// picture of the intensity, and the label is their text alternative.
 function Intensity({ level, name }) {
   return (
-    <span className="coffee__meter" aria-label={`Intensity ${level} of 4 — ${name}`}>
+    <span
+      className="coffee__meter"
+      role="img"
+      aria-label={`Intensity ${level} of 4 — ${name}`}
+    >
       {[1, 2, 3, 4].map((i) => (
         <span key={i} className={`coffee__tick ${i <= level ? 'is-on' : ''}`} />
       ))}
