@@ -281,3 +281,16 @@
     gap: 0;
   }
 }
+
+.form__status {
+  margin: 0;
+}
+
+.form__status a {
+  color: inherit;
+}
+
+.form__submit[disabled] {
+  opacity: 0.55;
+  cursor: progress;
+}
