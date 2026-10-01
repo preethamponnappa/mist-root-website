@@ -1,4 +1,5 @@
 /* MistRoot Coffee — global entry stylesheet.
    Tokens first, then the base layer; every component sheet builds on these. */
+@import './styles/fonts.css';
 @import './styles/tokens.css';
 @import './styles/base.css';
