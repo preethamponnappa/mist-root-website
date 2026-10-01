@@ -18,6 +18,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import { ALL_PAGES, ROUTES, SITE, canonicalFor } from '../src/lib/seo.js';
+import { structuredDataFor } from '../src/lib/structured-data.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -67,6 +68,20 @@ function headFor(page) {
     `<meta name="twitter:description" content="${attr(page.description)}" />`,
     `<meta name="twitter:image" content="${attr(image)}" />`,
   ];
+
+  // JSON-LD last, so the human-readable tags stay at the top of the head. It is
+  // built from the same facts the page renders — structured data that disagrees
+  // with the visible page is worse than none at all.
+  if (!page.noindex) {
+    const json = JSON.stringify(structuredDataFor(page.path), null, 2);
+    JSON.parse(json); // proves it is valid before it ships
+    tags.push(
+      '<script type="application/ld+json">\n' +
+        // A literal </script> inside the payload would end the element early.
+        json.replace(/</g, '\\u003c') +
+        '\n    </script>',
+    );
+  }
 
   if (page.noindex) tags.push(`<meta name="robots" content="noindex, follow" />`);
 
@@ -128,10 +143,14 @@ for (const page of ALL_PAGES) {
     .replace(ROOT_PLACEHOLDER, `<div id="root">${appHtml}</div>`);
 
   // React's Suspense runtime arrives as a couple of inline <script> blocks.
-  // Hashing them is what lets the CSP stay free of 'unsafe-inline' for
-  // scripts, and doing it here means the hashes follow React's version
-  // instead of being pasted into netlify.toml and going stale.
-  for (const [, body] of html.matchAll(/<script(?![^>]*\bsrc=)[^>]*>([\s\S]*?)<\/script>/g)) {
+  // Hashing them is what lets the CSP stay free of 'unsafe-inline' for scripts,
+  // and doing it here means the hashes follow React's version instead of being
+  // pasted into netlify.toml and going stale. JSON-LD is skipped: it carries a
+  // type the browser never executes, so CSP does not apply to it.
+  for (const [, attrs, body] of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)) {
+    const executable =
+      !/\bsrc=/.test(attrs) && !/type=["']application\/ld\+json["']/.test(attrs);
+    if (!executable) continue;
     inlineScriptHashes.add(`sha256-${crypto.createHash('sha256').update(body, 'utf8').digest('base64')}`);
   }
 
