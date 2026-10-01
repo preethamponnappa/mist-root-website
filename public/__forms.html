@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en-IN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Form definitions</title>
+  </head>
+  <body>
+    <!--
+      Netlify registers a form by parsing the deployed HTML at build time. The
+      real form lives on /contact and is prerendered, so in principle that is
+      enough — but detection is easy to miss when a framework renders the
+      markup, and when it misses, submissions return 404 with no clue why.
+
+      This file is the pattern Netlify recommends for exactly that case: a
+      plain, static copy of the field set, with nothing for a parser to trip
+      over. It is never linked and never indexed; it exists only to be read at
+      deploy time.
+
+      Keep the field names in step with the form in src/pages/Contact.jsx.
+      A field that is missing here is a field that arrives empty in the inbox.
+    -->
+    <form name="contact" data-netlify="true" data-netlify-honeypot="bot-field" hidden>
+      <input type="hidden" name="form-name" value="contact" />
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="text" name="subject" />
+      <input type="text" name="people" />
+      <textarea name="message"></textarea>
+      <input type="text" name="experience" />
+      <input type="text" name="bot-field" />
+    </form>
+  </body>
+</html>
