@@ -213,7 +213,16 @@ export default function Experiences() {
                       </dl>
 
                       <div className="xp__actions">
-                        <ButtonLink to="/contact">Request this date</ButtonLink>
+                        {/* Carries the experience into the contact form, so the
+                            enquiry arrives knowing which one it is about. */}
+                        <ButtonLink
+                          to={`/contact?experience=${encodeURIComponent(x.name)}`}
+                          id={`request-${x.id}`}
+                          className="js-request-experience"
+                          data-experience={x.id}
+                        >
+                          Request this date
+                        </ButtonLink>
                         <span className="xp__note">
                           We confirm within two working days · deposit on confirmation
                         </span>
