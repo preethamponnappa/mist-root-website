@@ -6,13 +6,15 @@
  * windows, a cupping session that does not run. Pages import from here so a
  * correction only ever has to be made once.
  *
- * Keep it plain data with no imports: `scripts/prerender.mjs` loads it directly
- * in Node to build the JSON-LD and the sitemap, so it must stay free of JSX and
- * asset imports.
+ * Keep it plain data: `scripts/prerender.mjs` loads it directly in Node to
+ * build the JSON-LD and the sitemap, so it must stay free of JSX and asset
+ * imports, and its one import carries an explicit .js extension.
  *
  * Nothing in this file may be changed without a corresponding change to the
  * facts sheet it came from.
  */
+
+import { formatPrice, grindById, sizeLabel } from '../../shared/catalog.js';
 
 export const BUSINESS = {
   /** The registered trading name. Used for the organisation in structured data. */
@@ -91,57 +93,8 @@ export const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination
 /** Embeddable map centred on the estate. The `output=embed` form needs no API key. */
 export const mapEmbedUrl = `https://www.google.com/maps?q=${BUSINESS.geo.latitude},${BUSINESS.geo.longitude}&z=12&output=embed`;
 
-/**
- * The lineup, as sold. Every field here is a claim we make to a customer, so
- * none of it is inferred — name, variety, process, roast, weight and price all
- * come straight from the facts sheet.
- */
-export const COFFEES = [
-  {
-    id: 'highland-reserve',
-    no: '01',
-    name: 'MistRoot Highland Reserve',
-    variety: 'Arabica AAA',
-    process: 'Natural',
-    roast: 'Medium',
-    weight: '250 g',
-    weightGrams: 250,
-    price: 600,
-  },
-  {
-    id: 'highland-arabica',
-    no: '02',
-    name: 'MistRoot Highland Arabica',
-    variety: 'Arabica AA',
-    process: 'Natural',
-    roast: 'Medium',
-    weight: '250 g',
-    weightGrams: 250,
-    price: 500,
-  },
-  {
-    id: 'forest-reserve',
-    no: '03',
-    name: 'MistRoot Forest Reserve',
-    variety: 'Robusta AAA',
-    process: 'Natural',
-    roast: 'Medium',
-    weight: '250 g',
-    weightGrams: 250,
-    price: 600,
-  },
-  {
-    id: 'estate-robusta',
-    no: '04',
-    name: 'MistRoot Estate Robusta',
-    variety: 'Robusta AA',
-    process: 'Natural',
-    roast: 'Medium',
-    weight: '250 g',
-    weightGrams: 250,
-    price: 500,
-  },
-];
+// The coffees themselves — names, variants, prices — live in shared/catalog.js,
+// which the shop, the prerender and the serverless functions all import.
 
 /**
  * What we run and when. Names live here because they appear on the experiences
@@ -158,25 +111,19 @@ export const EXPERIENCES = [
 
 export const experienceById = (id) => EXPERIENCES.find((x) => x.id === id);
 
-export const CURRENCY = 'INR';
-/** Rupee amounts are written with a thin space after the symbol nowhere else. */
-export const formatPrice = (amount) => `₹${amount.toLocaleString('en-IN')}`;
-
-/** Look a coffee up by id; used by the brewing pairings. */
-export const coffeeById = (id) => COFFEES.find((c) => c.id === id);
-
 /**
- * Pre-filled WhatsApp order link. Ordering runs through WhatsApp until there is
- * a real checkout, so this is the buy button.
+ * Pre-filled WhatsApp order link for one variant. Ordering runs through
+ * WhatsApp until checkout is live, so this is still a working buy button.
  */
-export function whatsappOrderUrl(coffee, grind = 'Whole bean') {
+export function whatsappOrderUrl(product, variant, quantity = 1) {
   const message = [
     `Hello ${BUSINESS.name},`,
     '',
-    `I would like to order ${coffee.name}.`,
-    `Weight: ${coffee.weight}`,
-    `Grind: ${grind}`,
-    `Price: ${formatPrice(coffee.price)}`,
+    `I would like to order ${quantity} × ${product.name}.`,
+    `Size: ${sizeLabel(variant.sizeGrams)}`,
+    `Grind: ${grindById(variant.grind).label}`,
+    `SKU: ${variant.sku}`,
+    `Price: ${formatPrice(variant.pricePaise * quantity)}`,
   ].join('\n');
   return `https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent(message)}`;
 }

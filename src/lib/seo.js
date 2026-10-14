@@ -19,6 +19,13 @@
 // directly in Node, which does not resolve extensionless specifiers.
 import { BUSINESS } from '../data/business.js';
 import { METHODS } from '../data/brewing.js';
+import {
+  CURRENCY,
+  activeProducts,
+  paiseToDecimal,
+  priceRange,
+  productBySlug,
+} from '../../shared/catalog.js';
 
 export const SITE = {
   origin: 'https://mistrootcoffee.com',
@@ -43,6 +50,16 @@ export const ROUTES = [
     title: "MistRoot Coffee Club — Specialty Coffee from Coorg",
     description:
       "Three generations of coffee growing in the Brahmagiri Range, Kodagu (Coorg). Four estate coffees, six ways to brew them, and the club built around sharing them.",
+  },
+  {
+    path: '/shop',
+    source: 'src/pages/Shop.jsx', // drives <lastmod> in the sitemap
+    file: 'shop.html',
+    priority: '0.9',
+    changefreq: 'weekly',
+    title: "Shop MistRoot Coffee — Arabica and Robusta from Coorg",
+    description:
+      "Buy MistRoot coffee from Coorg: two Arabicas and two Robustas, naturally processed and medium roasted, in 250 g, 500 g and 1 kg bags. Free shipping over ₹999.",
   },
   {
     path: '/story',
@@ -140,6 +157,40 @@ export const BREW_ROUTES = METHODS.map((method) => ({
 ROUTES.push(...BREW_ROUTES);
 
 /**
+ * Written out per coffee for the same reason as the brew descriptions. Prices
+ * are left out on purpose: they live in shared/catalog.js and would drift here.
+ */
+const PRODUCT_DESCRIPTIONS = {
+  'highland-reserve':
+    'Highland Reserve is our finest Arabica AAA from Coorg: floral, citrus and honey in the cup. Naturally processed, medium roast, whole bean or ground to order.',
+  'highland-arabica':
+    'Highland Arabica is an Arabica AA from Coorg for every day: chocolate, nuts and caramel, with a smooth finish. Natural process, medium roast, ground to order.',
+  'forest-reserve':
+    'Forest Reserve is a Robusta AAA from Coorg: dark chocolate, spice and an earthy finish, with rich crema. Natural process, medium roast, ground to order.',
+  'estate-robusta':
+    'Estate Robusta is a Robusta AA from Coorg with cocoa, malt and roasted nut, made for espresso and milk drinks. Natural process, medium roast, ground to order.',
+};
+
+/**
+ * One page per coffee on sale, generated from the catalogue so a new coffee
+ * cannot ship without its page, sitemap entry and metadata. The prerender fails
+ * if a new coffee has no description above.
+ */
+export const PRODUCT_ROUTES = activeProducts().map((product) => ({
+  path: `/shop/${product.slug}`,
+  source: 'shared/catalog.js',
+  file: `shop/${product.slug}.html`,
+  productSlug: product.slug,
+  ogType: 'product',
+  priority: '0.8',
+  changefreq: 'weekly',
+  title: `${product.name} — ${product.species} ${product.grade} from Coorg`,
+  description: PRODUCT_DESCRIPTIONS[product.slug] ?? '',
+}));
+
+ROUTES.push(...PRODUCT_ROUTES);
+
+/**
  * The 404 page is prerendered like the others but stays out of the sitemap and
  * out of the index.
  */
@@ -164,4 +215,15 @@ export function canonicalFor(routePath) {
 export function pageFor(pathname) {
   const clean = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
   return ROUTES.find((r) => r.path === clean) ?? NOT_FOUND;
+}
+
+/** Open Graph product tags for a product page — the lowest price it sells at. Empty elsewhere. */
+export function productMetaFor(page) {
+  const product = page.productSlug && productBySlug(page.productSlug);
+  const range = product && priceRange(product);
+  if (!range) return [];
+  return [
+    ['product:price:amount', paiseToDecimal(range.minPaise)],
+    ['product:price:currency', CURRENCY],
+  ];
 }

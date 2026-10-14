@@ -7,12 +7,19 @@ import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
 import { EASE_OUT } from '../lib/motion';
+import Intensity from '../components/Intensity';
 import { ArrowUpRight, Cup, Droplet, Mountain } from '../components/Icons';
+import { whatsappOrderUrl } from '../data/business';
+import { methodById } from '../data/brewing';
 import {
-  COFFEES,
+  GRINDS,
+  SIZES,
+  activeProducts,
+  defaultVariant,
+  findVariant,
   formatPrice,
-  whatsappOrderUrl,
-} from '../data/business';
+  sizeLabel,
+} from '../../shared/catalog';
 import './Club.css';
 
 const PILLARS = [
@@ -60,78 +67,30 @@ const PILLARS = [
   },
 ];
 
-/**
- * Tasting copy only. Variety, process, roast, weight and price are claims we
- * make to a customer, so they come from src/data/business.js and are not
- * repeated here.
- */
-const TASTING = {
-  'highland-reserve': {
-    profile: 'Elegant · Complex · Refined',
-    notes: ['Floral', 'Citrus', 'Honey'],
-    intensity: 2,
-    brew: 'Pour Over',
-    copy: 'Our finest Arabica, grown in the high-altitude plantations of Coorg. Handpicked and carefully processed to bring out a clean, layered cup with floral notes and a lingering sweetness.',
-  },
-  'highland-arabica': {
-    profile: 'Smooth · Balanced · Versatile',
-    notes: ['Chocolate', 'Nutty', 'Caramel'],
-    intensity: 2,
-    brew: 'AeroPress · Pour Over',
-    copy: 'A well-rounded Arabica with bright acidity, gentle sweetness and a smooth finish. Perfect for everyday brewing, yet special enough to savour slowly.',
-  },
-  'forest-reserve': {
-    profile: 'Bold · Rich · Full-bodied',
-    notes: ['Dark chocolate', 'Spice', 'Earthy'],
-    intensity: 4,
-    brew: 'French Press · Cold Brew',
-    copy: 'A premium Robusta with depth and character. Grown under native shade, it delivers a strong cup with rich crema, earthy notes and a comforting finish.',
-  },
-  'estate-robusta': {
-    profile: 'Bold · Smooth · Dependable',
-    notes: ['Cocoa', 'Malt', 'Roasted nut'],
-    intensity: 3,
-    brew: 'Espresso · Moka Pot',
-    copy: 'A classic Robusta with a rich, full-bodied profile. Low acidity, with deep chocolate notes — ideal for espresso, milk-based drinks or a strong morning cup.',
-  },
-};
+/** Every size we sell, as one short range: "250 g – 1 kg". */
+const SIZE_RANGE = `${sizeLabel(SIZES[0])} – ${sizeLabel(SIZES.at(-1))}`;
 
-const LINEUP = COFFEES.map((coffee) => ({ ...coffee, ...TASTING[coffee.id] }));
-
-/** What a customer can ask us to do to the beans before they ship. */
-const GRINDS = ['Whole bean', 'Pour over', 'AeroPress', 'French press', 'Moka pot', 'Espresso'];
-
-// role="img" is what makes the aria-label legal here: the four ticks are a
-// picture of the intensity, and the label is their text alternative.
-function Intensity({ level, name }) {
-  return (
-    <span
-      className="coffee__meter"
-      role="img"
-      aria-label={`Intensity ${level} of 4 — ${name}`}
-    >
-      {[1, 2, 3, 4].map((i) => (
-        <span key={i} className={`coffee__tick ${i <= level ? 'is-on' : ''}`} />
-      ))}
-    </span>
-  );
-}
+/** "Pour Over", "AeroPress · Pour Over" — the methods a coffee suits, by name. */
+const brewNames = (product) => product.brewMethods.map((id) => methodById(id).name).join(' · ');
 
 /**
  * One coffee, with everything needed to buy it.
  *
  * There is no checkout yet, so the order button is a wa.me link carrying a
- * pre-filled message. It is a real <a href> with a working default, so it is
- * crawlable and works without JavaScript; the grind selector only rewrites
- * which message it carries.
+ * pre-filled message for the smallest bag. It is a real <a href> with a
+ * working default, so it is crawlable and works without JavaScript; the grind
+ * selector only rewrites which message it carries. Other sizes are on the
+ * coffee's shop page.
  */
 function CoffeeCard({ coffee }) {
-  const [grind, setGrind] = useState(GRINDS[0]);
+  const base = defaultVariant(coffee);
+  const [grind, setGrind] = useState(base.grind);
+  const variant = findVariant(coffee, base.sizeGrams, grind) ?? base;
 
   return (
     <motion.article
       className="coffee"
-      id={coffee.id}
+      id={coffee.slug}
       initial="rest"
       whileHover="hover"
       animate="rest"
@@ -148,12 +107,14 @@ function CoffeeCard({ coffee }) {
       </header>
 
       <h3 className="coffee__name">{coffee.name}</h3>
-      <p className="coffee__origin">Coorg · {coffee.variety}</p>
+      <p className="coffee__origin">
+        Coorg · {coffee.species} {coffee.grade}
+      </p>
       <p className="coffee__profile">{coffee.profile}</p>
-      <p className="coffee__copy">{coffee.copy}</p>
+      <p className="coffee__copy">{coffee.description}</p>
 
       <ul className="coffee__notes">
-        {coffee.notes.map((n) => (
+        {coffee.tastingNotes.map((n) => (
           <li key={n}>{n}</li>
         ))}
       </ul>
@@ -161,7 +122,9 @@ function CoffeeCard({ coffee }) {
       <dl className="coffee__spec">
         <div>
           <dt>Variety</dt>
-          <dd>{coffee.variety}</dd>
+          <dd>
+            {coffee.species} {coffee.grade}
+          </dd>
         </div>
         <div>
           <dt>Process</dt>
@@ -172,32 +135,32 @@ function CoffeeCard({ coffee }) {
           <dd>{coffee.roast}</dd>
         </div>
         <div>
-          <dt>Weight</dt>
-          <dd>{coffee.weight}</dd>
+          <dt>Sizes</dt>
+          <dd>{SIZE_RANGE}</dd>
         </div>
       </dl>
 
       <p className="coffee__brew">
         <span>Best brewed</span>
-        {coffee.brew}
+        {brewNames(coffee)}
       </p>
 
       <div className="coffee__buy">
         <p className="coffee__price">
-          <span className="coffee__price-value display">{formatPrice(coffee.price)}</span>
-          <span className="coffee__price-unit">per {coffee.weight}</span>
+          <span className="coffee__price-value display">{formatPrice(variant.pricePaise)}</span>
+          <span className="coffee__price-unit">per {sizeLabel(variant.sizeGrams)}</span>
         </p>
 
-        <label className="coffee__grind" htmlFor={`grind-${coffee.id}`}>
+        <label className="coffee__grind" htmlFor={`grind-${coffee.slug}`}>
           <span>Grind</span>
           <select
-            id={`grind-${coffee.id}`}
+            id={`grind-${coffee.slug}`}
             value={grind}
             onChange={(e) => setGrind(e.target.value)}
           >
             {GRINDS.map((g) => (
-              <option key={g} value={g}>
-                {g}
+              <option key={g.id} value={g.id}>
+                {g.label}
               </option>
             ))}
           </select>
@@ -205,10 +168,11 @@ function CoffeeCard({ coffee }) {
 
         <a
           className="btn btn--gold coffee__order js-order-whatsapp"
-          id={`order-${coffee.id}`}
-          data-coffee={coffee.id}
-          data-price={coffee.price}
-          href={whatsappOrderUrl(coffee, grind)}
+          id={`order-${coffee.slug}`}
+          data-coffee={coffee.slug}
+          data-sku={variant.sku}
+          data-price-paise={variant.pricePaise}
+          href={whatsappOrderUrl(coffee, variant)}
           target="_blank"
           rel="noopener"
         >
@@ -216,6 +180,10 @@ function CoffeeCard({ coffee }) {
           <ArrowUpRight size={13} className="btn__arrow" />
         </a>
       </div>
+
+      <ArrowLink to={`/shop/${coffee.slug}`} className="coffee__more">
+        All sizes and grinds
+      </ArrowLink>
 
       <motion.span
         className="coffee__rule"
@@ -331,8 +299,8 @@ export default function Club() {
           </div>
 
           <RevealGroup className="club-coffees__grid" each={0.1}>
-            {LINEUP.map((c) => (
-              <RevealItem key={c.id}>
+            {activeProducts().map((c) => (
+              <RevealItem key={c.slug}>
                 <CoffeeCard coffee={c} />
               </RevealItem>
             ))}

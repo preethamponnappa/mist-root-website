@@ -1,0 +1,231 @@
+/* ================================================================ grid === */
+/* Mobile first: one card, then two, then all four in a row once each card is
+   wide enough to hold its bag and its name without crowding. */
+.shop-list__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(1rem, 1.6vw, 1.5rem);
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+}
+
+@media (min-width: 560px) {
+  .shop-list__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .shop-list__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.shop-list__grid > * {
+  height: 100%;
+}
+
+.shop-list__foot {
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+/* ================================================================ card === */
+/* The release-list rows on Home, given a bag: same numeral, same gold origin
+   line, same italic profile, same rule that draws across on hover. */
+.shop-card {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(170deg, var(--ink-card), rgba(var(--ink-rgb), 0.85));
+  border: 1px solid var(--cream-12);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+/* One visible focus ring for the whole card, drawn when its link is focused. */
+.shop-card:has(.shop-card__link:focus-visible) {
+  outline: 2px solid var(--gold-bright);
+  outline-offset: 4px;
+}
+
+.shop-card__art {
+  padding: var(--space-sm) var(--space-md) 0;
+  border-bottom: 1px solid var(--cream-06);
+}
+
+.shop-card__art .bag-art {
+  max-width: 240px;
+  margin-inline: auto;
+}
+
+.shop-card__body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: var(--space-sm);
+}
+
+.shop-card__no {
+  font-size: var(--step--2);
+}
+
+.shop-card__name {
+  margin-top: 0.4rem;
+  font-size: var(--step-1);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+.shop-card__link {
+  color: inherit;
+}
+
+.shop-card__link:focus-visible {
+  outline: none;
+}
+
+/* Stretch the link's hit area over the whole card. */
+.shop-card__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.shop-card__origin {
+  margin-top: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  letter-spacing: var(--tracking-mid);
+  text-transform: uppercase;
+  color: var(--gold-deep);
+}
+
+.shop-card__profile {
+  margin-top: 0.6rem;
+  font-size: var(--step--1);
+  font-style: italic;
+  color: var(--gold-bright);
+}
+
+.shop-card__notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: var(--space-xs) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shop-card__notes li {
+  font-family: var(--font-sans);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cream-70);
+  border: 1px solid var(--cream-12);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+}
+
+.shop-card__foot {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  margin-top: auto;
+  padding-top: var(--space-sm);
+}
+
+.shop-card__price {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.shop-card__from {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--cream-30);
+}
+
+.shop-card__amount {
+  font-size: var(--step-1);
+  color: var(--gold-bright);
+  line-height: 1.1;
+}
+
+.shop-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  letter-spacing: var(--tracking-mid);
+  text-transform: uppercase;
+  color: var(--cream-70);
+}
+
+.shop-card__arrow {
+  display: inline-flex;
+  color: var(--gold);
+}
+
+.shop-card__rule {
+  display: block;
+  height: 1px;
+  background: linear-gradient(90deg, var(--gold), transparent);
+  transform-origin: left center;
+}
+
+.shop-card.is-sold-out .shop-card__art {
+  opacity: 0.5;
+}
+
+/* ============================================================ promises === */
+.shop-promises__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 760px) {
+  .shop-promises__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.shop-promise {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--cream-12);
+}
+
+.shop-promise__icon {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 0.4rem;
+  border: 1px solid var(--cream-12);
+  border-radius: 999px;
+  color: var(--gold);
+}
+
+.shop-promise__title {
+  font-size: var(--step-1);
+  line-height: 1.25;
+}
+
+.shop-promise__line {
+  font-size: var(--step--1);
+  color: var(--cream-50);
+  max-width: 36ch;
+}

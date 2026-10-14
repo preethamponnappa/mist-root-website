@@ -18,14 +18,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { ALL_PAGES, ROUTES, SITE, canonicalFor } from '../src/lib/seo.js';
+import { ALL_PAGES, ROUTES, SITE, canonicalFor, productMetaFor } from '../src/lib/seo.js';
 import { structuredDataFor } from '../src/lib/structured-data.js';
+import { BUSINESS, EXPERIENCES } from '../src/data/business.js';
 import {
-  BUSINESS,
-  COFFEES,
-  EXPERIENCES,
+  activeProducts,
   formatPrice,
-} from '../src/data/business.js';
+  priceRange,
+  sizesSentence,
+} from '../shared/catalog.js';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const dist = path.join(root, 'dist');
@@ -60,7 +61,7 @@ function headFor(page) {
     `<title>${attr(page.title)}</title>`,
     `<meta name="description" content="${attr(page.description)}" />`,
     `<link rel="canonical" href="${attr(url)}" />`,
-    `<meta property="og:type" content="website" />`,
+    `<meta property="og:type" content="${attr(page.ogType ?? 'website')}" />`,
     `<meta property="og:site_name" content="${attr(SITE.name)}" />`,
     `<meta property="og:locale" content="${attr(SITE.locale)}" />`,
     `<meta property="og:title" content="${attr(page.title)}" />`,
@@ -74,6 +75,9 @@ function headFor(page) {
     `<meta name="twitter:title" content="${attr(page.title)}" />`,
     `<meta name="twitter:description" content="${attr(page.description)}" />`,
     `<meta name="twitter:image" content="${attr(image)}" />`,
+    ...productMetaFor(page).map(
+      ([property, value]) => `<meta property="${property}" content="${attr(value)}" />`,
+    ),
   ];
 
   // JSON-LD last, so the human-readable tags stay at the top of the head. It is
@@ -253,12 +257,12 @@ const llms = [
   '',
   '## Coffees',
   '',
-  `All are grown in the ${BUSINESS.location} and sold in ${COFFEES[0].weight} bags.`,
+  `All are grown in the ${BUSINESS.location} and sold in ${sizesSentence()} bags, whole bean or ground to order.`,
   '',
-  ...COFFEES.map(
-    (c) =>
-      `- ${c.name} — ${c.variety}, ${c.process.toLowerCase()} process, ${c.roast.toLowerCase()} roast, ${c.weight}, ${formatPrice(c.price)}`,
-  ),
+  ...activeProducts().map((p) => {
+    const { minPaise } = priceRange(p);
+    return `- [${p.name}](${canonicalFor(`/shop/${p.slug}`)}) — ${p.species} ${p.grade}, ${p.process.toLowerCase()} process, ${p.roast.toLowerCase()} roast, from ${formatPrice(minPaise)}`;
+  }),
   '',
   '## Experiences',
   '',
@@ -268,7 +272,7 @@ const llms = [
   '',
   '## How to order',
   '',
-  `There is no online checkout yet. Orders are placed over WhatsApp on ${BUSINESS.phoneDisplay}, or by email. Each coffee on ${canonicalFor('/club')} has an order link that opens WhatsApp with the coffee, weight and grind already written in.`,
+  `Every coffee has a page in the shop at ${canonicalFor('/shop')}. Online checkout is not open yet, so orders are placed over WhatsApp on ${BUSINESS.phoneDisplay}, or by email. Each product page has an order link that opens WhatsApp with the coffee, size, grind and quantity already written in.`,
   '',
   '## Contact',
   '',

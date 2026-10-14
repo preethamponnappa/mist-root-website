@@ -2,14 +2,22 @@
  * JSON-LD, built from the same facts the pages render.
  *
  * Structured data that disagrees with the visible page is worse than none at
- * all, so every value here comes from src/data/business.js rather than being
- * written out again. `scripts/prerender.mjs` calls this and puts the result in
+ * all, so every value here comes from src/data/business.js and
+ * shared/catalog.js rather than being written out again. `scripts/prerender.mjs` calls this and puts the result in
  * the head of each static file, which is where crawlers look.
  *
  * Extensions are included in the import paths: this is loaded directly in Node
  * by the build, which does not resolve extensionless specifiers.
  */
-import { BUSINESS, COFFEES } from '../data/business.js';
+import { BUSINESS } from '../data/business.js';
+import {
+  CURRENCY,
+  SIZES,
+  activeProducts,
+  paiseToDecimal,
+  productBySlug,
+  sizeLabel,
+} from '../../shared/catalog.js';
 import { SITE, canonicalFor } from './seo.js';
 
 const ORGANISATION_ID = `${SITE.origin}/#organisation`;
@@ -84,40 +92,101 @@ export const localBusiness = {
   sameAs,
 };
 
+const shopUrl = (product) => canonicalFor(`/shop/${product.slug}`);
+const imageUrls = (product) => product.images.map((image) => `${SITE.origin}${image.src}`);
+
 /**
- * One Product per coffee.
+ * One ProductGroup per coffee, varying by size — the shape Google documents for
+ * products sold in variants. Each size is a Product with its own Offer. Grind
+ * is not modelled as a variant: it is done to order, never changes the price,
+ * and is not one of the properties `variesBy` accepts.
+ *
+ * Each Offer URL carries `?size=`, which the product page reads to preselect
+ * that size, so the price on the landing page matches the price declared here.
  *
  * No aggregateRating: there are no reviews on the page, and inventing them
- * would be both false and a manual-action risk. `availability` is stated as in
- * stock because there is no stock system to read — if a lot sells out, this is
- * the line to change.
+ * would be both false and a manual-action risk. Availability comes from the
+ * variants' `inStock` flags; there is no live stock system behind it.
  */
-export function productFor(coffee) {
+export function productGroupFor(product) {
+  const url = shopUrl(product);
+  const images = imageUrls(product);
+
+  const hasVariant = SIZES.flatMap((sizeGrams) => {
+    const options = product.variants.filter((v) => v.sizeGrams === sizeGrams);
+    if (options.length === 0) return [];
+    const inStock = options.filter((v) => v.inStock);
+    const pricePaise = Math.min(...(inStock.length ? inStock : options).map((v) => v.pricePaise));
+
+    return [
+      {
+        '@type': 'Product',
+        '@id': `${url}#${sizeGrams}g`,
+        name: `${product.name}, ${sizeLabel(sizeGrams)}`,
+        size: sizeLabel(sizeGrams),
+        image: images,
+        weight: { '@type': 'QuantitativeValue', value: sizeGrams, unitCode: 'GRM' },
+        offers: {
+          '@type': 'Offer',
+          url: `${url}?size=${sizeGrams}`,
+          price: paiseToDecimal(pricePaise),
+          priceCurrency: CURRENCY,
+          availability: inStock.length
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+          itemCondition: 'https://schema.org/NewCondition',
+          seller: { '@id': ORGANISATION_ID },
+        },
+      },
+    ];
+  });
+
   return {
-    '@type': 'Product',
-    '@id': `${canonicalFor('/club')}#${coffee.id}`,
-    name: coffee.name,
-    description: `${coffee.variety}, ${coffee.process.toLowerCase()} processed, ${coffee.roast.toLowerCase()} roast. ${coffee.weight} grown in the ${BUSINESS.location}.`,
+    '@type': 'ProductGroup',
+    '@id': `${url}#product`,
+    name: product.name,
+    description: product.description,
+    url,
+    image: images,
     brand: { '@type': 'Brand', name: BUSINESS.name },
     category: 'Coffee',
-    weight: {
-      '@type': 'QuantitativeValue',
-      value: coffee.weightGrams,
-      unitCode: 'GRM',
-    },
+    productGroupID: `MR-${product.skuCode}`,
+    variesBy: ['https://schema.org/size'],
     additionalProperty: [
-      { '@type': 'PropertyValue', name: 'Variety', value: coffee.variety },
-      { '@type': 'PropertyValue', name: 'Process', value: coffee.process },
-      { '@type': 'PropertyValue', name: 'Roast', value: coffee.roast },
+      { '@type': 'PropertyValue', name: 'Species', value: product.species },
+      { '@type': 'PropertyValue', name: 'Grade', value: product.grade },
+      { '@type': 'PropertyValue', name: 'Process', value: product.process },
+      { '@type': 'PropertyValue', name: 'Roast', value: product.roast },
+      { '@type': 'PropertyValue', name: 'Origin', value: product.origin },
+      { '@type': 'PropertyValue', name: 'Altitude', value: product.altitude },
+      { '@type': 'PropertyValue', name: 'Tasting notes', value: product.tastingNotes.join(', ') },
     ],
-    offers: {
-      '@type': 'Offer',
-      url: `${canonicalFor('/club')}#${coffee.id}`,
-      price: String(coffee.price),
-      priceCurrency: 'INR',
-      availability: 'https://schema.org/InStock',
-      seller: { '@id': ORGANISATION_ID },
-    },
+    hasVariant,
+  };
+}
+
+function breadcrumbsFor(product) {
+  return {
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE.origin}/` },
+      { '@type': 'ListItem', position: 2, name: 'Shop', item: canonicalFor('/shop') },
+      { '@type': 'ListItem', position: 3, name: product.name, item: shopUrl(product) },
+    ],
+  };
+}
+
+/** The shop index as an ordered list pointing at each product page. */
+function shopListing() {
+  return {
+    '@type': 'ItemList',
+    '@id': `${canonicalFor('/shop')}#coffees`,
+    itemListElement: activeProducts().map((product, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: shopUrl(product),
+      name: product.name,
+    })),
   };
 }
 
@@ -129,7 +198,11 @@ export function structuredDataFor(routePath) {
   const graph = [organisation, website];
 
   if (routePath === '/contact') graph.push(localBusiness);
-  if (routePath === '/club') graph.push(...COFFEES.map(productFor));
+  if (routePath === '/shop') graph.push(shopListing());
+
+  const slug = routePath.startsWith('/shop/') ? routePath.slice('/shop/'.length) : null;
+  const product = slug && productBySlug(slug);
+  if (product?.isActive) graph.push(productGroupFor(product), breadcrumbsFor(product));
 
   return { '@context': 'https://schema.org', '@graph': graph };
 }

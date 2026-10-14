@@ -1,4 +1,5 @@
 import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'motion/react';
 import Page from '../components/Page';
 import HeroVideo from '../components/HeroVideo';
@@ -8,6 +9,7 @@ import ArrowLink from '../components/ArrowLink';
 import ButtonLink from '../components/ButtonLink';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { BUSINESS } from '../data/business';
+import { activeProducts } from '../../shared/catalog';
 import {
   ArrowRight,
   Basket,
@@ -19,38 +21,22 @@ import {
 } from '../components/Icons';
 import './Home.css';
 
-const LOTS = [
-  {
-    no: '01',
-    name: 'MistRoot Highland Reserve',
-    origin: 'Coorg · Arabica AAA',
-    profile: 'Elegant · Complex · Refined',
-  },
-  {
-    no: '02',
-    name: 'MistRoot Highland Arabica',
-    origin: 'Coorg · Arabica AA',
-    profile: 'Smooth · Balanced · Versatile',
-  },
-  {
-    no: '03',
-    name: 'MistRoot Forest Reserve',
-    origin: 'Coorg · Robusta AAA',
-    profile: 'Bold · Rich · Full-bodied',
-  },
-  {
-    no: '04',
-    name: 'MistRoot Estate Robusta',
-    origin: 'Coorg · Robusta AA',
-    profile: 'Bold · Smooth · Dependable',
-  },
-];
+/** The release list, straight from the catalogue so it cannot drift from the shop. */
+const LOTS = activeProducts().map((product) => ({
+  slug: product.slug,
+  no: product.no,
+  name: product.name,
+  origin: `Coorg · ${product.species} ${product.grade}`,
+  profile: product.profile,
+}));
+
+const MotionLink = motion.create(Link);
 
 const FACTS = [
   { value: '3', unit: 'generations', label: 'Of Coorg coffee behind us' },
   { value: '6', unit: 'methods', label: 'On the brew bar' },
   { value: '14', unit: 'species', label: 'Native shade canopy' },
-  { value: '4', unit: 'coffees', label: 'In the current release' },
+  { value: String(LOTS.length), unit: 'coffees', label: 'In the current release' },
 ];
 
 const RITUALS = [
@@ -148,11 +134,13 @@ export default function Home() {
 
           <RevealGroup className="lots__list" each={0.08}>
             {LOTS.map((lot) => (
-              <RevealItem key={lot.name}>
-                <motion.div
+              <RevealItem key={lot.slug}>
+                <MotionLink
+                  to={`/shop/${lot.slug}`}
                   className="lot"
                   initial="rest"
                   whileHover="hover"
+                  whileFocus="hover"
                   animate="rest"
                 >
                   <span className="numeral lot__no">{lot.no}</span>
@@ -178,15 +166,14 @@ export default function Home() {
                       },
                     }}
                   />
-                </motion.div>
+                </MotionLink>
               </RevealItem>
             ))}
           </RevealGroup>
 
           <Reveal delay={0.2} className="lots__cta">
-            <ButtonLink to="/club" variant="ghost">
-              Meet the Coffee Club
-            </ButtonLink>
+            <ButtonLink to="/shop">Shop the coffees</ButtonLink>
+            <ArrowLink to="/club">Or meet the Coffee Club</ArrowLink>
           </Reveal>
         </div>
       </section>

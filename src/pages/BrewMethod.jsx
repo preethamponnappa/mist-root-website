@@ -88,12 +88,12 @@ export default function BrewMethod({ methodId }) {
 
             <p className="brew__pair brewmethod__pair">
               <Flame size={16} />
-              Cupped best with <strong>{coffee.name}</strong> — {coffee.variety},{' '}
-              {method.temp} water, {coffee.weight} from the {BUSINESS.location}.
+              Cupped best with <strong>{coffee.name}</strong> — {coffee.species} {coffee.grade},{' '}
+              {method.temp} water, grown in the {BUSINESS.location}.
             </p>
 
             <Reveal delay={0.1} className="brewmethod__cta">
-              <ArrowLink to="/club">See the coffees</ArrowLink>
+              <ArrowLink to={`/shop/${coffee.slug}`}>Shop {coffee.shortName}</ArrowLink>
             </Reveal>
           </div>
         </div>
