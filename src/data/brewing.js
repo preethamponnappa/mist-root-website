@@ -8,7 +8,7 @@
  * The illustration is named rather than imported; the pages map the name to a
  * component from src/components/Icons.jsx.
  */
-import { coffeeById } from './business.js';
+import { productBySlug } from '../../shared/catalog.js';
 
 export const METHODS = [
   {
@@ -139,7 +139,7 @@ export const METHODS = [
   },
 ];
 
-/** The coffee each method suits best, resolved from the shared lineup. */
-export const bestCoffeeFor = (method) => coffeeById(method.bestCoffeeId);
+/** The coffee each method suits best, resolved from the catalogue (`bestCoffeeId` is a product slug). */
+export const bestCoffeeFor = (method) => productBySlug(method.bestCoffeeId);
 
 export const methodById = (id) => METHODS.find((m) => m.id === id);

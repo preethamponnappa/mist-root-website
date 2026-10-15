@@ -53,6 +53,62 @@ export function ArrowDown({ size = 16, ...p }) {
   );
 }
 
+export function Plus({ size = 16, ...p }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" {...p}>
+      <g {...line}>
+        <path d="M12 5v14M5 12h14" />
+      </g>
+    </svg>
+  );
+}
+
+export function Minus({ size = 16, ...p }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" {...p}>
+      <g {...line}>
+        <path d="M5 12h14" />
+      </g>
+    </svg>
+  );
+}
+
+export function Check({ size = 16, ...p }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" {...p}>
+      <g {...line}>
+        <path d="m5 12.5 4.5 4.5L19 7.5" />
+      </g>
+    </svg>
+  );
+}
+
+/* A kraft bag, gusseted, top rolled once. */
+export function Bag({ size = 20, ...p }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" {...p}>
+      <g {...line}>
+        <path d="M6.5 7.5h11l1.5 13h-14z" />
+        <path d="M7 7.5 8 3.5h8l1 4" />
+        <path d="M9.5 11.5a2.5 2.5 0 0 0 5 0" />
+      </g>
+    </svg>
+  );
+}
+
+export function Truck({ size = 20, ...p }) {
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} aria-hidden="true" {...p}>
+      <g {...line}>
+        <path d="M2.5 6.5h11v10h-11z" />
+        <path d="M13.5 9.5h4l3 3.5v3.5h-7" />
+        <circle cx="6.5" cy="17.5" r="1.75" />
+        <circle cx="16.5" cy="17.5" r="1.75" />
+      </g>
+    </svg>
+  );
+}
+
 export function Mountain({ size = 28, ...p }) {
   return (
     <svg viewBox="0 0 32 32" width={size} height={size} aria-hidden="true" {...p}>

@@ -26,6 +26,7 @@ const COLUMNS = [
   {
     title: 'The Coffee',
     links: [
+      { label: 'Shop', to: '/shop' },
       { label: 'The current release', to: '/club' },
       { label: 'Harvest calendar', to: '/experiences' },
       // Was pointing at /story, which is about the family rather than the region.

@@ -243,7 +243,9 @@
 }
 
 /* --- responsive --------------------------------------------------------- */
-@media (max-width: 1080px) {
+/* Seven links plus the CTA need about 1,230px; below that the CTA goes (the
+   same destination is still in the links as Contact). */
+@media (max-width: 1240px) {
   .nav__cta {
     display: none;
   }

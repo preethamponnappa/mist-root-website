@@ -1,0 +1,15 @@
+.intensity {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.intensity__tick {
+  width: 12px;
+  height: 2px;
+  background: var(--cream-12);
+  border-radius: 2px;
+}
+
+.intensity__tick.is-on {
+  background: var(--gold);
+}

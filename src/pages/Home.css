@@ -51,8 +51,8 @@
 }
 
 /* ================================================================ lots === */
-/* A teaser, not the full catalogue — the four coffees get proper cards on the
-   Coffee Club page. Here they read as a release list you scan and click. */
+/* A teaser, not the full catalogue — each row links to the coffee's page in
+   the shop. Here they read as a release list you scan and click. */
 .lots__list {
   margin-top: clamp(2.5rem, 5vw, 4rem);
   border-top: 1px solid var(--cream-06);
@@ -60,6 +60,7 @@
 
 .lot {
   position: relative;
+  color: inherit;
   display: grid;
   grid-template-columns: 3.5rem minmax(0, 1fr) auto;
   align-items: baseline;
@@ -107,6 +108,10 @@
 }
 
 .lots__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-sm);
   margin-top: clamp(2rem, 4vw, 3rem);
 }
 

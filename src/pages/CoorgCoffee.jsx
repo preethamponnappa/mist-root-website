@@ -3,7 +3,8 @@ import PageHero from '../components/PageHero';
 import SectionHead from '../components/SectionHead';
 import Reveal, { RevealGroup, RevealItem } from '../components/Reveal';
 import ArrowLink from '../components/ArrowLink';
-import { BUSINESS, COFFEES } from '../data/business';
+import { BUSINESS } from '../data/business';
+import { activeProducts, sizesSentence } from '../../shared/catalog';
 import './CoorgCoffee.css';
 
 /**
@@ -44,7 +45,7 @@ const SECTIONS = [
     title: 'Arabica and Robusta',
     paragraphs: [
       {
-        text: `Both species grow here. We sell four lots: ${COFFEES.map((c) => `${c.name} (${c.variety})`).join(', ')} — all naturally processed and medium roasted, in ${COFFEES[0].weight} bags.`,
+        text: `Both species grow here. We sell four lots: ${activeProducts().map((p) => `${p.name} (${p.species} ${p.grade})`).join(', ')} — all naturally processed and medium roasted, in ${sizesSentence()} bags.`,
         verified: true,
       },
       {
@@ -149,7 +150,7 @@ export default function CoorgCoffee() {
           />
           <RevealGroup className="coorg-close__links" each={0.08}>
             <RevealItem>
-              <ArrowLink to="/club">See the coffees</ArrowLink>
+              <ArrowLink to="/shop">Shop the coffees</ArrowLink>
             </RevealItem>
             <RevealItem>
               <ArrowLink to="/brewing">How we brew them</ArrowLink>

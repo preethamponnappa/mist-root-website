@@ -1,0 +1,109 @@
+/* Drawn coffee bag. Colours come from tokens via `stop-color` / `fill` so the
+   illustration sits in the same palette as everything around it. */
+.bag-art {
+  --bag-accent: var(--gold);
+  width: 100%;
+  height: auto;
+}
+
+.bag-art--robusta {
+  --bag-accent: var(--gold-deep);
+}
+
+.bag-art__glow-in {
+  stop-color: rgba(var(--gold-rgb), 0.16);
+}
+.bag-art__glow-out {
+  stop-color: rgba(var(--gold-rgb), 0);
+}
+
+.bag-art__body-edge {
+  stop-color: var(--bark);
+}
+.bag-art__body-mid {
+  stop-color: var(--bark-soft);
+}
+
+.bag-art__shadow {
+  fill: rgba(0, 0, 0, 0.55);
+}
+
+.bag-art__body {
+  stroke: var(--cream-12);
+  stroke-width: 1;
+}
+
+.bag-art__fold {
+  fill: var(--bark);
+  stroke: var(--cream-12);
+  stroke-width: 1;
+}
+
+.bag-art__crimp {
+  fill: none;
+  stroke: var(--cream-30);
+  stroke-width: 1;
+  stroke-linejoin: round;
+}
+
+.bag-art__valve {
+  fill: none;
+  stroke: var(--cream-30);
+  stroke-width: 1;
+}
+
+.bag-art__label {
+  fill: var(--ink);
+}
+
+.bag-art__label-rule {
+  fill: none;
+  stroke: var(--bag-accent);
+  stroke-width: 0.75;
+  opacity: 0.8;
+}
+
+.bag-art text {
+  text-anchor: middle;
+}
+
+.bag-art__brand {
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 0.32em;
+  fill: var(--cream);
+}
+
+.bag-art__no {
+  font-family: var(--font-sans);
+  font-size: 7px;
+  letter-spacing: 0.24em;
+  fill: var(--bag-accent);
+}
+
+.bag-art__name {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 19px;
+  fill: var(--cream);
+}
+
+.bag-art__rule {
+  stroke: var(--bag-accent);
+  stroke-width: 0.75;
+}
+
+.bag-art__meta {
+  font-family: var(--font-sans);
+  font-size: 7px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  fill: var(--cream-70);
+}
+
+.bag-art__meta--quiet {
+  /* Smaller and tighter: "Medium roast · 250 g" must clear the label rule. */
+  font-size: 6.5px;
+  letter-spacing: 0.14em;
+  fill: var(--cream-50);
+}

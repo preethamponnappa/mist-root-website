@@ -6,12 +6,15 @@ import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
 import Seo from './components/Seo';
 import { METHODS } from './data/brewing';
+import { activeProducts } from '../shared/catalog';
 import './App.css';
 
 // Each page is its own chunk, so a visitor landing on /brewing does not pay
-// for the other five. The prerender resolves these at build time, so the HTML
+// for the others. The prerender resolves these at build time, so the HTML
 // is complete either way — splitting only affects what JavaScript is fetched.
 const loadHome = () => import('./pages/Home');
+const loadShop = () => import('./pages/Shop');
+const loadProduct = () => import('./pages/Product');
 const loadStory = () => import('./pages/Story');
 const loadClub = () => import('./pages/Club');
 const loadBrewing = () => import('./pages/Brewing');
@@ -22,6 +25,8 @@ const loadCoorgCoffee = () => import('./pages/CoorgCoffee');
 const loadNotFound = () => import('./pages/NotFound');
 
 const Home = lazy(loadHome);
+const Shop = lazy(loadShop);
+const Product = lazy(loadProduct);
 const Story = lazy(loadStory);
 const Club = lazy(loadClub);
 const Brewing = lazy(loadBrewing);
@@ -33,6 +38,8 @@ const NotFound = lazy(loadNotFound);
 
 const ROUTE_CHUNKS = [
   loadHome,
+  loadShop,
+  loadProduct,
   loadStory,
   loadClub,
   loadBrewing,
@@ -82,6 +89,16 @@ function App() {
           <AnimatePresence mode="wait" initial={false} onExitComplete={handleExitComplete}>
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Home />} />
+              <Route path="/shop" element={<Shop />} />
+              {/* One route per coffee, like the brew methods below, so an
+                  unknown or retired slug is a real 404. */}
+              {activeProducts().map((product) => (
+                <Route
+                  key={product.slug}
+                  path={`/shop/${product.slug}`}
+                  element={<Product slug={product.slug} />}
+                />
+              ))}
               <Route path="/story" element={<Story />} />
               <Route path="/club" element={<Club />} />
               <Route path="/brewing" element={<Brewing />} />

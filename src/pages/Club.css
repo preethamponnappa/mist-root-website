@@ -172,22 +172,6 @@
   margin-bottom: var(--space-sm);
 }
 
-.coffee__meter {
-  display: inline-flex;
-  gap: 4px;
-}
-
-.coffee__tick {
-  width: 12px;
-  height: 2px;
-  background: var(--cream-12);
-  border-radius: 2px;
-}
-
-.coffee__tick.is-on {
-  background: var(--gold);
-}
-
 .coffee__name {
   font-size: var(--step-2);
   letter-spacing: -0.01em;
@@ -422,6 +406,11 @@
 .coffee__grind select:focus-visible {
   outline: 2px solid var(--gold);
   outline-offset: 2px;
+}
+
+.coffee__more {
+  align-self: flex-start;
+  margin-top: var(--space-xs);
 }
 
 .coffee__order {
