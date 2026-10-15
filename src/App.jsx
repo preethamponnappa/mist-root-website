@@ -4,6 +4,7 @@ import { AnimatePresence } from 'motion/react';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollProgress from './components/ScrollProgress';
+import CartDrawer from './components/CartDrawer';
 import Seo from './components/Seo';
 import { METHODS } from './data/brewing';
 import { activeProducts } from '../shared/catalog';
@@ -15,6 +16,8 @@ import './App.css';
 const loadHome = () => import('./pages/Home');
 const loadShop = () => import('./pages/Shop');
 const loadProduct = () => import('./pages/Product');
+const loadCheckout = () => import('./pages/Checkout');
+const loadOrder = () => import('./pages/Order');
 const loadStory = () => import('./pages/Story');
 const loadClub = () => import('./pages/Club');
 const loadBrewing = () => import('./pages/Brewing');
@@ -27,6 +30,8 @@ const loadNotFound = () => import('./pages/NotFound');
 const Home = lazy(loadHome);
 const Shop = lazy(loadShop);
 const Product = lazy(loadProduct);
+const Checkout = lazy(loadCheckout);
+const Order = lazy(loadOrder);
 const Story = lazy(loadStory);
 const Club = lazy(loadClub);
 const Brewing = lazy(loadBrewing);
@@ -40,6 +45,8 @@ const ROUTE_CHUNKS = [
   loadHome,
   loadShop,
   loadProduct,
+  loadCheckout,
+  loadOrder,
   loadStory,
   loadClub,
   loadBrewing,
@@ -78,6 +85,7 @@ function App() {
       <Seo />
       <ScrollProgress />
       <Navbar />
+      <CartDrawer />
 
       <main id="main" className="app__main">
         {/* Suspense sits outside AnimatePresence so the keyed <Routes> stays
@@ -99,6 +107,10 @@ function App() {
                   element={<Product slug={product.slug} />}
                 />
               ))}
+              <Route path="/checkout" element={<Checkout />} />
+              {/* Genuinely dynamic: ids exist only at runtime. Netlify rewrites
+                  /order/* to one prerendered shell (see netlify.toml). */}
+              <Route path="/order/:publicId" element={<Order />} />
               <Route path="/story" element={<Story />} />
               <Route path="/club" element={<Club />} />
               <Route path="/brewing" element={<Brewing />} />

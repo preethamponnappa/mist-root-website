@@ -37,7 +37,7 @@ const manifest = JSON.parse(fs.readFileSync(path.join(dist, '.vite/manifest.json
 const { render, warm } = await import(pathToFileURL(path.join(ssrDist, 'entry-server.js')).href);
 
 // Resolve every route's lazy chunk first; see the note in src/entry-server.jsx.
-await warm(ALL_PAGES.map((page) => page.path));
+await warm(ALL_PAGES.map((page) => page.renderPath ?? page.path));
 
 const ROOT_PLACEHOLDER = '<div id="root"></div>';
 if (!template.includes(ROOT_PLACEHOLDER) || !template.includes('<!--seo-->')) {
@@ -139,7 +139,7 @@ for (const page of ALL_PAGES) {
   // a mismatch on the container's first children. Lift them into the head,
   // which is where they belong and where they start downloading sooner.
   const hoisted = [];
-  const appHtml = render(page.path).replace(/<link\b[^>]*\/>/g, (tag) => {
+  const appHtml = render(page.renderPath ?? page.path).replace(/<link\b[^>]*\/>/g, (tag) => {
     hoisted.push(tag);
     return '';
   });
@@ -206,19 +206,25 @@ const csp = [
   "base-uri 'self'",
   "object-src 'none'",
   "frame-ancestors 'none'",
-  // The contact form posts back to this origin, where Netlify intercepts it.
-  "form-action 'self'",
-  `script-src 'self' ${[...inlineScriptHashes].map((h) => `'${h}'`).join(' ')}`,
+  // The contact form posts back to this origin, where Netlify intercepts it;
+  // Razorpay's bank redirects post to its own domain.
+  "form-action 'self' https://api.razorpay.com",
+  // checkout.razorpay.com: the Razorpay Standard Checkout script, loaded on
+  // /checkout only.
+  `script-src 'self' https://checkout.razorpay.com ${[...inlineScriptHashes].map((h) => `'${h}'`).join(' ')}`,
   // 'unsafe-inline' is unavoidable: Motion animates by writing style
   // attributes, and there is a <noscript> style block in the head.
   "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data:",
+  "img-src 'self' data: https://cdn.razorpay.com",
   // Fonts are self-hosted; nothing is fetched from Google any more.
   "font-src 'self'",
   "media-src 'self'",
   // The contact page embeds a Google map; nothing else is framed.
-  "frame-src https://www.google.com",
-  "connect-src 'self'",
+  // Razorpay's checkout modal is an iframe from api.razorpay.com.
+  "frame-src https://www.google.com https://api.razorpay.com https://checkout.razorpay.com",
+  // Razorpay's script reports to its own endpoints. Report-only, so any it
+  // needs beyond these shows up in the console rather than breaking payment.
+  "connect-src 'self' https://api.razorpay.com https://lumberjack.razorpay.com",
   "manifest-src 'self'",
   // 'upgrade-insecure-requests' is deliberately absent: browsers ignore it in
   // a report-only policy and log an error saying so. Add it when this becomes

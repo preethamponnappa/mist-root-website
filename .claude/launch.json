@@ -20,6 +20,17 @@
       ],
       "port": 4173,
       "autoPort": true
+    },
+    {
+      "name": "mistroot-netlify",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "--yes",
+        "netlify-cli",
+        "dev",
+        "--offline"
+      ],
+      "port": 8888
     }
   ]
 }

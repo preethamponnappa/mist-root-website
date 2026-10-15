@@ -160,6 +160,42 @@
 }
 
 /* --- burger ------------------------------------------------------------- */
+.nav__cart {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  flex: none;
+  border: 1px solid var(--cream-12);
+  border-radius: 999px;
+  color: var(--cream);
+  transition: border-color 0.3s var(--ease-out-soft), color 0.3s var(--ease-out-soft);
+}
+
+.nav__cart:hover {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+}
+
+.nav__cart-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
 .nav__burger {
   display: none;
   width: 46px;
@@ -243,23 +279,28 @@
 }
 
 /* --- responsive --------------------------------------------------------- */
-/* Seven links plus the CTA need about 1,230px; below that the CTA goes (the
-   same destination is still in the links as Contact). */
-@media (max-width: 1240px) {
+/* Measured, not guessed: seven links, the cart and the CTA need about
+   1,300px. Below that the CTA goes (Contact is still in the links); below
+   about 1,040px the links no longer fit beside the cart and move into the
+   burger sheet. */
+@media (max-width: 1320px) {
   .nav__cta {
     display: none;
+  }
+}
+
+@media (max-width: 1080px) {
+  .nav__links {
+    display: none;
+  }
+  .nav__burger {
+    display: grid;
   }
 }
 
 @media (max-width: 900px) {
   :root {
     --nav-h: 72px;
-  }
-  .nav__links {
-    display: none;
-  }
-  .nav__burger {
-    display: grid;
   }
   .brand__mark {
     width: 34px;

@@ -204,7 +204,36 @@ export const NOT_FOUND = {
     "That page has wandered off the ridge. Head back to MistRoot Coffee Club — the Coorg coffees, the brewing guides and the estate experiences are all still here.",
 };
 
-export const ALL_PAGES = [...ROUTES, NOT_FOUND];
+/**
+ * Shop pages that are prerendered (Netlify has no catch-all, so they need a
+ * file) but are personal to one visitor: noindex, and out of the sitemap.
+ *
+ * /order/<id> is a single shell served by the `/order/*` rewrite in
+ * netlify.toml. `renderPath` is the URL the prerender renders it at, since the
+ * real ids only exist at runtime.
+ */
+export const CHECKOUT_PAGE = {
+  path: '/checkout',
+  source: 'src/pages/Checkout.jsx',
+  file: 'checkout.html',
+  noindex: true,
+  title: 'Checkout — MistRoot Coffee Club',
+  description:
+    'Check out your MistRoot coffee order from Coorg: add your shipping address, then pay securely by UPI, card, net banking or wallet through Razorpay.',
+};
+
+export const ORDER_PAGE = {
+  path: '/order',
+  renderPath: '/order/pending',
+  source: 'src/pages/Order.jsx',
+  file: 'order.html',
+  noindex: true,
+  title: 'Your Order — MistRoot Coffee Club',
+  description:
+    'The status of your MistRoot Coffee order from Coorg: what you ordered, where it is going and whether payment is confirmed. Keep this link to check back.',
+};
+
+export const ALL_PAGES = [...ROUTES, CHECKOUT_PAGE, ORDER_PAGE, NOT_FOUND];
 
 /** Absolute, canonical URL for a route. No trailing slash except the root. */
 export function canonicalFor(routePath) {
@@ -214,6 +243,8 @@ export function canonicalFor(routePath) {
 /** Look up a page by pathname; unknown paths fall back to the 404 entry. */
 export function pageFor(pathname) {
   const clean = pathname.length > 1 ? pathname.replace(/\/+$/, '') : pathname;
+  if (clean === CHECKOUT_PAGE.path) return CHECKOUT_PAGE;
+  if (clean.startsWith('/order/')) return ORDER_PAGE;
   return ROUTES.find((r) => r.path === clean) ?? NOT_FOUND;
 }
 
