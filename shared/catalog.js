@@ -97,22 +97,11 @@ const PACKAGING = {
   1000: { packedWeightKg: 1.05, lengthCm: 30, breadthCm: 18, heightCm: 8 }, // TODO confirm
 };
 
-/** Shared estate photograph — a stand-in until each coffee has its own. */
-const ESTATE_IMAGE = {
-  src: '/images/shop/estate-ridge.webp',
-  alt: 'Coffee cherries ripening on shaded bushes, with mist in the valleys of the Brahmagiri hills behind',
-  width: 854,
-  height: 480,
-}; // TODO replace with product photography
-
 /** Same for every lot today; kept per product so one can differ later. */
 const ORIGIN = 'Kodagu (Coorg), Karnataka';
 const ALTITUDE = '800–1,200 m'; // TODO confirm per lot (this is the estate's range)
 
-/**
- * Prices per size, in paise. The 250 g prices are the published ones; the
- * larger bags are placeholders.
- */
+/** Prices per size, in paise, GST-inclusive. All confirmed. */
 const SEED = [
   {
     slug: 'highland-reserve',
@@ -134,8 +123,8 @@ const SEED = [
     brewMethods: ['pour-over'],
     prices: {
       250: 60000,
-      500: 115000, // TODO confirm
-      1000: 220000, // TODO confirm
+      500: 115000,
+      1000: 220000,
     },
   },
   {
@@ -158,8 +147,8 @@ const SEED = [
     brewMethods: ['aeropress', 'pour-over'],
     prices: {
       250: 50000,
-      500: 95000, // TODO confirm
-      1000: 180000, // TODO confirm
+      500: 95000,
+      1000: 180000,
     },
   },
   {
@@ -182,8 +171,8 @@ const SEED = [
     brewMethods: ['french-press', 'cold-brew'],
     prices: {
       250: 60000,
-      500: 115000, // TODO confirm
-      1000: 220000, // TODO confirm
+      500: 115000,
+      1000: 220000,
     },
   },
   {
@@ -206,8 +195,8 @@ const SEED = [
     brewMethods: ['espresso', 'moka-pot'],
     prices: {
       250: 50000,
-      500: 95000, // TODO confirm
-      1000: 180000, // TODO confirm
+      500: 95000,
+      1000: 180000,
     },
   },
 ];
@@ -242,7 +231,9 @@ function variantsFor(seed) {
 export const PRODUCTS = SEED.map(({ prices, ...product }) => ({
   ...product,
   story: storyFor(product),
-  images: [ESTATE_IMAGE],
+  // Empty until there is real product photography: the gallery then shows only
+  // the drawn bag (BagArt). Add { src, alt, width, height } entries here.
+  images: [],
   isActive: true,
   variants: variantsFor({ ...product, prices }),
 }));

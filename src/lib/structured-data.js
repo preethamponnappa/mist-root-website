@@ -93,7 +93,12 @@ export const localBusiness = {
 };
 
 const shopUrl = (product) => canonicalFor(`/shop/${product.slug}`);
-const imageUrls = (product) => product.images.map((image) => `${SITE.origin}${image.src}`);
+// Google wants an image on every product. Until there is real photography the
+// catalogue has none, so fall back to the site's share image.
+const imageUrls = (product) =>
+  product.images.length
+    ? product.images.map((image) => `${SITE.origin}${image.src}`)
+    : [`${SITE.origin}${SITE.ogImage}`];
 
 /**
  * One ProductGroup per coffee, varying by size — the shape Google documents for
