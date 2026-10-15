@@ -102,3 +102,29 @@ export function clearCart() {
 
 /** Total number of bags across every line. */
 export const cartCount = (lines) => lines.reduce((sum, line) => sum + line.quantity, 0);
+
+// ------------------------------------------------------------ drawer ---
+// Whether the cart drawer is open. A store of its own so the navbar, the
+// product page and the drawer can share it without a provider; never part of
+// the prerender (always closed on the server).
+
+let drawerOpen = false;
+const drawerListeners = new Set();
+
+function setDrawer(next) {
+  if (drawerOpen === next) return;
+  drawerOpen = next;
+  for (const listener of drawerListeners) listener();
+}
+
+function subscribeDrawer(listener) {
+  drawerListeners.add(listener);
+  return () => drawerListeners.delete(listener);
+}
+
+export function useCartDrawer() {
+  return useSyncExternalStore(subscribeDrawer, () => drawerOpen, () => false);
+}
+
+export const openCart = () => setDrawer(true);
+export const closeCart = () => setDrawer(false);

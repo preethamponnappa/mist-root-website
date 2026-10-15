@@ -1,0 +1,124 @@
+.order {
+  padding-top: 0;
+}
+
+.order__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-lg);
+}
+
+@media (min-width: 900px) {
+  .order__inner {
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.order__heading {
+  font-size: var(--step-1);
+  margin-bottom: var(--space-xs);
+}
+
+.order__items {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding-block: 0.8rem;
+  border-bottom: 1px solid var(--cream-06);
+}
+
+.order-item > span:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.order-item__name {
+  color: var(--cream);
+}
+
+.order-item__name:hover {
+  color: var(--gold-bright);
+}
+
+.order-item__meta {
+  font-family: var(--font-sans);
+  font-size: var(--step--2);
+  letter-spacing: 0.04em;
+  color: var(--cream-50);
+}
+
+.order-item__price {
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  color: var(--cream);
+  white-space: nowrap;
+}
+
+.order__totals {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin: var(--space-xs) 0 0;
+}
+
+.order__totals > div {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-sans);
+  font-size: var(--step--1);
+  color: var(--cream-70);
+}
+
+.order__totals dd {
+  margin: 0;
+}
+
+.order__total {
+  margin-top: 0.35rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--cream-12);
+  color: var(--cream) !important;
+}
+
+.order__total dd {
+  font-size: var(--step-1);
+  color: var(--gold-bright);
+}
+
+.order__aside {
+  padding: var(--space-sm);
+  background: var(--ink-card);
+  border: 1px solid var(--cream-12);
+  border-radius: 3px;
+}
+
+.order__address {
+  color: var(--cream);
+}
+
+.order__note {
+  margin-top: var(--space-xs);
+  font-size: var(--step--1);
+  color: var(--cream-50);
+}
+
+.order__contact {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: var(--space-xs) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.order__actions {
+  grid-column: 1 / -1;
+}

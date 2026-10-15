@@ -12,7 +12,8 @@ import ProductGallery from '../components/ProductGallery';
 import { ArrowRight, ArrowUpRight, Check, Minus, Plus, Truck } from '../components/Icons';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
 import { useIsHydrated } from '../lib/hydration';
-import { addToCart, cartCount, useCart } from '../lib/cart';
+import { CHECKOUT_ENABLED } from '../lib/checkout';
+import { addToCart, cartCount, openCart, useCart } from '../lib/cart';
 import { methodById } from '../data/brewing';
 import { whatsappOrderUrl } from '../data/business';
 import {
@@ -214,6 +215,7 @@ export default function Product({ slug }) {
       capped: after - before < quantity,
       label: `${sizeLabel(variant.sizeGrams)}, ${grind.label}`,
     });
+    openCart();
   };
 
   const brewMethods = product.brewMethods.map(methodById).filter(Boolean);
@@ -326,21 +328,23 @@ export default function Product({ slug }) {
                   </span>
                 </p>
 
-                {/* Checkout is not open yet; WhatsApp still takes orders. */}
-                <p className="buy__alt">
-                  Online checkout opens soon. To order today,{' '}
-                  <a
-                    href={whatsappOrderUrl(product, variant, quantity)}
-                    target="_blank"
-                    rel="noopener"
-                    className="buy__whatsapp"
-                  >
-                    send this order on WhatsApp
-                    <ArrowUpRight size={12} />
-                    <span className="visually-hidden"> (opens in a new tab)</span>
-                  </a>
-                  .
-                </p>
+                {/* Until checkout is switched on, WhatsApp still takes orders. */}
+                {!CHECKOUT_ENABLED && (
+                  <p className="buy__alt">
+                    Online checkout opens soon. To order today,{' '}
+                    <a
+                      href={whatsappOrderUrl(product, variant, quantity)}
+                      target="_blank"
+                      rel="noopener"
+                      className="buy__whatsapp"
+                    >
+                      send this order on WhatsApp
+                      <ArrowUpRight size={12} />
+                      <span className="visually-hidden"> (opens in a new tab)</span>
+                    </a>
+                    .
+                  </p>
+                )}
               </motion.form>
             </div>
           </div>

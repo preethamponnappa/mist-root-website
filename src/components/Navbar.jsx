@@ -3,7 +3,8 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion, useMotionValueEvent, useScroll } from 'motion/react';
 import mark from '../assets/brand/mistroot-mark.png';
 import { EASE_OUT, useReducedMotionSafe } from '../lib/motion';
-import { ArrowUpRight } from './Icons';
+import { ArrowUpRight, Bag } from './Icons';
+import { cartCount, openCart, useCart } from '../lib/cart';
 import './Navbar.css';
 
 const MotionNavLink = motion.create(NavLink);
@@ -52,6 +53,28 @@ function DeskLink({ to, label }) {
         </motion.span>
       )}
     </NavLink>
+  );
+}
+
+/**
+ * Opens the cart drawer. The count comes from the cart store, which is empty
+ * during prerender and hydration, so the badge appears a tick after load
+ * rather than causing a hydration mismatch.
+ */
+function CartButton() {
+  const count = cartCount(useCart());
+  return (
+    <button type="button" className="nav__cart" onClick={openCart}>
+      <Bag size={20} />
+      <span className="visually-hidden">
+        Cart{count > 0 ? `, ${count} ${count === 1 ? 'bag' : 'bags'}` : ', empty'}
+      </span>
+      {count > 0 && (
+        <span className="nav__cart-count" aria-hidden="true">
+          {count > 99 ? '99+' : count}
+        </span>
+      )}
+    </button>
   );
 }
 
@@ -138,6 +161,8 @@ export default function Navbar() {
                 }}
               />
             </MotionNavLink>
+
+            <CartButton />
 
             <button
               type="button"

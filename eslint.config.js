@@ -14,15 +14,16 @@ export default defineConfig([
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
     ],
-    ignores: ['scripts/**'],
+    ignores: ['scripts/**', 'netlify/**', 'tests/**'],
     languageOptions: {
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
   {
-    files: ['scripts/**/*.{js,mjs}'],
+    // Node-side code: build scripts, Netlify Functions and their tests.
+    files: ['scripts/**/*.{js,mjs}', 'netlify/**/*.{js,mjs}', 'tests/**/*.{js,mjs}'],
     extends: [js.configs.recommended],
-    languageOptions: { globals: globals.node },
+    languageOptions: { globals: { ...globals.node, Netlify: 'readonly' } },
   },
 ])

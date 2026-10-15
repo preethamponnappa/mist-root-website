@@ -18,6 +18,30 @@
 # already normalises /story/ to /story for a flat story.html, which is verified
 # in the notes below; the canonical tag on every page is the backstop.
 
+# The one exception: order pages are personal and their ids exist only at
+# runtime, so every /order/<id> is served the single prerendered shell, which
+# fetches the order after hydration. A 200 rewrite, not a redirect, so the URL
+# the customer keeps is the one with their id in it.
+[[redirects]]
+  from = "/order/*"
+  to = "/order.html"
+  status = 200
+
+# ------------------------------------------------------------------ dev ---
+# `netlify dev` (npx netlify-cli dev): runs Vite and the functions behind one
+# port, applying the redirects and headers above, and reading .env.
+[dev]
+  framework = "#custom"
+  command = "npm run dev"
+  targetPort = 5173
+  port = 8888
+
+# ------------------------------------------------------------- functions ---
+# Netlify Functions live in netlify/functions (the default) and are bundled by
+# esbuild, which follows their imports into shared/ and src/data/.
+[functions]
+  node_bundler = "esbuild"
+
 # --------------------------------------------------------------- headers ---
 # Content-Security-Policy is deliberately not here: it carries hashes of
 # React's inline bootstrap scripts, so scripts/prerender.mjs generates it into
@@ -32,8 +56,10 @@
     X-Content-Type-Options = "nosniff"
     X-Frame-Options = "DENY"
     Referrer-Policy = "strict-origin-when-cross-origin"
-    Cross-Origin-Opener-Policy = "same-origin"
-    Permissions-Policy = "accelerometer=(), camera=(), display-capture=(), encrypted-media=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), usb=(), xr-spatial-tracking=(), autoplay=(self), fullscreen=(self)"
+    # same-origin-allow-popups, not same-origin: Razorpay opens bank and
+    # wallet pages in popups and needs to hear back from them.
+    Cross-Origin-Opener-Policy = "same-origin-allow-popups"
+    Permissions-Policy = 'accelerometer=(), camera=(), display-capture=(), encrypted-media=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(self "https://api.razorpay.com" "https://checkout.razorpay.com"), usb=(), xr-spatial-tracking=(), autoplay=(self), fullscreen=(self)'
 
 # Everything below carries a content hash or a font version in its filename, so
 # a changed file is a changed URL and these can be cached indefinitely.

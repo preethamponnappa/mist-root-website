@@ -128,6 +128,28 @@ export function whatsappOrderUrl(product, variant, quantity = 1) {
   return `https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent(message)}`;
 }
 
+/**
+ * Pre-filled WhatsApp order for a whole priced cart (the output of
+ * shared/pricing.js priceCart). Used by the cart drawer while online checkout
+ * is switched off.
+ */
+export function whatsappCartUrl(cart) {
+  const message = [
+    `Hello ${BUSINESS.name},`,
+    '',
+    'I would like to order:',
+    ...cart.items.map(
+      (item) =>
+        `- ${item.quantity} × ${item.name}, ${sizeLabel(item.sizeGrams)}, ${item.grindLabel} (${item.sku}) — ${formatPrice(item.lineTotalPaise)}`,
+    ),
+    '',
+    `Subtotal: ${formatPrice(cart.subtotalPaise)}`,
+    `Shipping: ${cart.shippingPaise ? formatPrice(cart.shippingPaise) : 'Free'}`,
+    `Total: ${formatPrice(cart.totalPaise)}`,
+  ].join('\n');
+  return `https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent(message)}`;
+}
+
 /** Pre-filled WhatsApp enquiry that is not about a specific coffee. */
 export function whatsappEnquiryUrl(subject) {
   const message = `Hello ${BUSINESS.name}, I would like to ask about ${subject}.`;
